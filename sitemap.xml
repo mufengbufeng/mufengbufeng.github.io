@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://mufengbufeng.github.io/suHange/LGF-1/</loc>
+    
+    <lastmod>2024-07-11</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://mufengbufeng.github.io/suHang/hello-world/</loc>
     
     <lastmod>2024-07-11</lastmod>
@@ -20,5 +29,26 @@
 
   
 
+  
+  <url>
+    <loc>https://mufengbufeng.github.io/categories/%E6%9D%82%E8%B0%88/</loc>
+    <lastmod>2024-07-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://mufengbufeng.github.io/categories/%E6%A1%86%E6%9E%B6/</loc>
+    <lastmod>2024-07-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://mufengbufeng.github.io/categories/%E6%A1%86%E6%9E%B6/Unity/</loc>
+    <lastmod>2024-07-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
   
 </urlset>
