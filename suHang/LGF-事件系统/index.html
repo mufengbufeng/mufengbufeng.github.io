@@ -16,7 +16,7 @@
 <meta property="og:description" content="我对事件的理解事件：当你操作UI组件时，点击一个按钮，滑动一次列表或者更新一个数据系统都会创建一个个事件将你的操作分发到各个系统上. 在游戏开发中事件是一个非常用的一个功能，比如我们在游戏中获得了金币，然后我们的金币展示会更新，我们商店道具是否可以购买会更新，又或者我们金币任务里面的金币进度会更新。事件提供的功能就是一个一对多的平台，可以降低我们的代码耦合性。同时在我们后续开发中如果有新增功能需要">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-07-11T15:37:05.000Z">
-<meta property="article:modified_time" content="2024-07-12T13:02:58.856Z">
+<meta property="article:modified_time" content="2024-07-12T13:18:14.358Z">
 <meta property="article:author" content="SuHang">
 <meta name="twitter:card" content="summary">
   
@@ -180,8 +180,8 @@
 </li>
 <li><p>缺点:</p>
 <ol>
-<li>可读性差：int 本身并没有任何意义，开发时要经常跳转到脚本中查看 ID 所对应代表的事件</li>
-<li>拓展性差：如果使用 int 作为唯一标识，代表脚本中必须有一个 enum 或者 class 去统一管理所有的事件Id。防止不同模块之间的事件发生冲突</li>
+<li>可读性差：int 本身并没有任何意义，开发时要经常跳转到脚本中查看 ID 所对应代表的事件，当然可以使用enum增加可读性</li>
+<li>拓展性差：如果使用 int 作为唯一标识，代表脚本中必须有一个统一的文件时使用 enum 或者 class 去统一管理所有的事件Id，去管理防止不同模块之间的事件发生冲突。而不是由各个模块自己去管理。</li>
 </ol>
 </li>
 </ul>
