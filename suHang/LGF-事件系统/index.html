@@ -16,7 +16,7 @@
 <meta property="og:description" content="我对事件的理解事件：当你操作UI组件时，点击一个按钮，滑动一次列表或者更新一个数据系统都会创建一个个事件将你的操作分发到各个系统上. 在游戏开发中事件是一个非常用的一个功能，比如我们在游戏中获得了金币，然后我们的金币展示会更新，我们商店道具是否可以购买会更新，又或者我们金币任务里面的金币进度会更新。事件提供的功能就是一个一对多的平台，可以降低我们的代码耦合性。同时在我们后续开发中如果有新增功能需要">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-07-11T15:37:05.000Z">
-<meta property="article:modified_time" content="2024-07-12T12:53:21.221Z">
+<meta property="article:modified_time" content="2024-07-12T13:02:58.856Z">
 <meta property="article:author" content="SuHang">
 <meta name="twitter:card" content="summary">
   
@@ -204,7 +204,7 @@
 </ul>
 </li>
 </ul>
-<p>在我的框架种使用的是 string 作为唯一标识，主要原因有两点：</p>
+<p>在我的框架中使用的是 string 作为唯一标识，主要原因有两点：</p>
 <ol>
 <li>string做为唯一标识确实是一种非常方便且直观,而且我希望我的框架是一个方便使用的框架</li>
 <li>我并不觉得游戏中的性能问题和内存问题会是事件系统导致的,更多还是其他系统导致的性能问题，而且就算后面要改也可以等真的需要事件系统这些内存和性能消耗的时候再同意从string -&gt; int ,我并不觉得这很难。</li>
