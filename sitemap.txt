@@ -1,3 +1,4 @@
+https://mufengbufeng.github.io/suHang/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F_%E5%9F%BA%E4%BA%8Efrp%E5%AE%9E%E7%8E%B0%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2/
 https://mufengbufeng.github.io/suHange/%E9%9A%8F%E7%AC%94-%E8%AE%B0%E5%BD%95%E6%9C%80%E8%BF%91_%E9%9D%A2%E8%AF%95/
 https://mufengbufeng.github.io/suHange/%E9%9A%8F%E7%AC%94_%E8%AE%B0%E4%B8%80%E6%AC%A1%E4%BD%8E%E8%A1%80%E7%B3%96%E6%84%9F%E5%8F%97/
 https://mufengbufeng.github.io/suHang/hello-world/
@@ -7,6 +8,8 @@ https://mufengbufeng.github.io/
 https://mufengbufeng.github.io/tags/%E9%9A%8F%E7%AC%94/
 https://mufengbufeng.github.io/tags/LGF/
 https://mufengbufeng.github.io/tags/Unity/
+https://mufengbufeng.github.io/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/
+https://mufengbufeng.github.io/tags/%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2/
 https://mufengbufeng.github.io/categories/LGF/
 https://mufengbufeng.github.io/categories/LGF/Unity/
 https://mufengbufeng.github.io/categories/%E9%9A%8F%E7%AC%94/
