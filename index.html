@@ -146,6 +146,95 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-vim踩坑记录-E117" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/suHang/vim%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95-E117/">vim踩坑记录-E117</a>
+    </h1>
+  
+
+        
+        <a href="/suHang/vim%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95-E117/" class="archive-article-date">
+  	<time datetime="2024-10-30T08:36:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2024-10-30</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近刚换了新的电脑，在最初使用的时候也没有记录一下配置流程，所以遇到一些问题，这次统一记录一下。</p>
+<h3 id="E117"><a href="#E117" class="headerlink" title="E117"></a>E117</h3><p>问题：在代码中有插件管理下载，但是 运行时报错”E117”</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&quot; 安装 vim-plug 插件管理器</span><br><span class="line">if empty(glob(&#x27;~/.vim/autoload/plug.vim&#x27;))</span><br><span class="line">  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim</span><br><span class="line">  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC</span><br><span class="line">endif</span><br></pre></td></tr></table></figure>
+<p>原因：网络问题，curl无法连接网络下载插件<br>解决方案：为curl添加网络代理，示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -x http://localhost:8080(代理地址) -fLo  ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim</span><br></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Vim</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/Vim//" class="article-tag-list-link color4">Vim</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/suHang/vim%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95-E117/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-内网穿透_基于frp实现远程桌面" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -159,7 +248,7 @@
 
         
         <a href="/suHang/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F_%E5%9F%BA%E4%BA%8Efrp%E5%AE%9E%E7%8E%B0%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2/" class="archive-article-date">
-  	<time datetime="2024-10-30T04:14:27.255Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2024-10-30</time>
+  	<time datetime="2024-10-30T04:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2024-10-30</time>
 </a>
         
       </header>
@@ -197,7 +286,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/随笔//" class="article-tag-list-link color3">随笔</a>
+        			<a href="/categories/玩机优化//" class="article-tag-list-link color5">玩机优化</a>
         		</li>
       		
 		</ul>
@@ -517,11 +606,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/LGF//" class="article-tag-list-link color4">LGF</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/LGF/Unity//" class="article-tag-list-link color1">Unity</a>
+        			<a href="/categories/Unity//" class="article-tag-list-link color1">Unity</a>
         		</li>
       		
 		</ul>
@@ -594,7 +679,7 @@
 <li>验证状态机是否可用</li>
 <li></li>
 </ul>
-<h2 id="如何催我？"><a href="#如何催我？" class="headerlink" title="如何催我？"></a>如何催我？</h2><p>mail: <a href="mailto:&#x6c;&#x33;&#50;&#48;&#51;&#x39;&#x32;&#48;&#54;&#x33;&#64;&#103;&#109;&#x61;&#x69;&#108;&#46;&#99;&#x6f;&#109;">&#x6c;&#x33;&#50;&#48;&#51;&#x39;&#x32;&#48;&#54;&#x33;&#64;&#103;&#109;&#x61;&#x69;&#108;&#46;&#99;&#x6f;&#109;</a></p>
+<h2 id="如何催我？"><a href="#如何催我？" class="headerlink" title="如何催我？"></a>如何催我？</h2><p>mail: <a href="mailto:&#x6c;&#51;&#50;&#x30;&#51;&#57;&#x32;&#48;&#54;&#51;&#64;&#x67;&#109;&#x61;&#105;&#x6c;&#46;&#x63;&#111;&#109;">&#x6c;&#51;&#50;&#x30;&#51;&#57;&#x32;&#48;&#54;&#51;&#64;&#x67;&#109;&#x61;&#105;&#x6c;&#46;&#x63;&#111;&#109;</a></p>
 
       
 
@@ -624,11 +709,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/LGF//" class="article-tag-list-link color4">LGF</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/LGF/Unity//" class="article-tag-list-link color1">Unity</a>
+        			<a href="/categories/Unity//" class="article-tag-list-link color1">Unity</a>
         		</li>
       		
 		</ul>
@@ -680,7 +761,7 @@
 
         
         <a href="/suHang/hello-world/" class="archive-article-date">
-  	<time datetime="2024-06-27T13:52:31.049Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2024-06-27</time>
+  	<time datetime="2024-07-11T14:25:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2024-07-11</time>
 </a>
         
       </header>
@@ -857,6 +938,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">远程桌面</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Vim</a>
               </li>
             
             <div class="clearfix"></div>
