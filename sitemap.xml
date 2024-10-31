@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://mufengbufeng.github.io/about/index.html</loc>
+    
+    <lastmod>2024-10-31</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://mufengbufeng.github.io/suHang/%E9%9A%8F%E7%AC%94-%E8%AE%B0%E5%BD%95%E6%9C%80%E8%BF%91_%E9%9D%A2%E8%AF%95/</loc>
     
     <lastmod>2024-10-30</lastmod>
