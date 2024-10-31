@@ -123,7 +123,7 @@
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/">
-      <strong>Fluid</strong>
+      <strong>苏杭小站</strong>
     </a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
@@ -303,9 +303,9 @@
                 
                 <p>最近刚换了新的电脑，在最初使用的时候也没有记录一下配置流程，所以遇到一些问题，这次统一记录一下。</p>
 <h3 id="E117"><a href="#E117" class="headerlink" title="E117"></a>E117</h3><p>问题：在代码中有插件管理下载，但是 运行时报错”E117”</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&quot; 安装 vim-plug 插件管理器</span><br><span class="line">if empty(glob(&#x27;~/.vim/autoload/plug.vim&#x27;))</span><br><span class="line">  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim</span><br><span class="line">  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC</span><br><span class="line">endif</span><br></pre></td></tr></table></figure>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs vim"><span class="hljs-comment">&quot; 安装 vim-plug 插件管理器</span><br><span class="hljs-keyword">if</span> <span class="hljs-built_in">empty</span>(<span class="hljs-built_in">glob</span>(<span class="hljs-string">&#x27;~/.vim/autoload/plug.vim&#x27;</span>))<br>  <span class="hljs-keyword">silent</span> !curl -fLo ~/.<span class="hljs-keyword">vim</span>/autoload/plug.<span class="hljs-keyword">vim</span> --create-dirs https://raw.githubusercontent.<span class="hljs-keyword">com</span>/junegunn/<span class="hljs-keyword">vim</span>-plug/master/plug.<span class="hljs-keyword">vim</span><br>  <span class="hljs-keyword">autocmd</span> VimEnter * PlugInstall --<span class="hljs-keyword">sync</span> | <span class="hljs-keyword">source</span> $MYVIMRC<br><span class="hljs-keyword">endif</span><br></code></pre></td></tr></table></figure>
 <p>原因：网络问题，curl无法连接网络下载插件<br>解决方案：为curl添加网络代理，示例：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -x http://localhost:8080(代理地址) -fLo  ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim</span><br></pre></td></tr></table></figure>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs vim">curl -<span class="hljs-keyword">x</span> http://localhos<span class="hljs-variable">t:8080</span>(代理地址) -fLo  ~/.<span class="hljs-keyword">vim</span>/autoload/plug.<span class="hljs-keyword">vim</span> --create-dirs https://raw.githubusercontent.<span class="hljs-keyword">com</span>/junegunn/<span class="hljs-keyword">vim</span>-plug/master/plug.<span class="hljs-keyword">vim</span><br></code></pre></td></tr></table></figure>
 
                 
               </div>
