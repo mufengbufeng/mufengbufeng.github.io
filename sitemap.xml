@@ -2,6 +2,24 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://mufengbufeng.github.io/suHang/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F%E2%80%94%E5%9F%BA%E4%BA%8Efrp%E5%AE%9E%E7%8E%B0%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2/</loc>
+    
+    <lastmod>2024-11-06</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://mufengbufeng.github.io/suHang/vim%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95-E117/</loc>
+    
+    <lastmod>2024-11-06</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://mufengbufeng.github.io/suHange/%E9%9A%8F%E7%AC%94_%E8%AE%B0%E4%B8%80%E6%AC%A1%E4%BD%8E%E8%A1%80%E7%B3%96%E6%84%9F%E5%8F%97/</loc>
     
     <lastmod>2024-11-06</lastmod>
@@ -76,6 +94,20 @@
     <priority>0.2</priority>
   </url>
   
+  <url>
+    <loc>https://mufengbufeng.github.io/tags/%E9%83%A8%E7%BD%B2/</loc>
+    <lastmod>2024-11-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://mufengbufeng.github.io/tags/%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2/</loc>
+    <lastmod>2024-11-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
 
   
   <url>
@@ -87,6 +119,20 @@
   
   <url>
     <loc>https://mufengbufeng.github.io/categories/Unity/</loc>
+    <lastmod>2024-11-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://mufengbufeng.github.io/categories/Vim/</loc>
+    <lastmod>2024-11-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://mufengbufeng.github.io/categories/%E4%BE%BF%E6%8D%B7%E5%B7%A5%E4%BD%9C/</loc>
     <lastmod>2024-11-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>

@@ -4,6 +4,56 @@
   
   
   <entry>
+    <title>内网穿透—基于frp实现远程桌面</title>
+    <link href="/suHang/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F%E2%80%94%E5%9F%BA%E4%BA%8Efrp%E5%AE%9E%E7%8E%B0%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2/"/>
+    <url>/suHang/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F%E2%80%94%E5%9F%BA%E4%BA%8Efrp%E5%AE%9E%E7%8E%B0%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2/</url>
+    
+    <content type="html"><![CDATA[<p><strong>要做好保护工作，有被入侵风险！！！！</strong><br><strong>要做好保护工作，有被入侵风险！！！！</strong><br><strong>要做好保护工作，有被入侵风险！！！！</strong>  </p><p><a href="https://starcheng.xyz/791.html">使用frp配置远程桌面</a><br><a href="https://www.anyviewer.cn/how-to/account-restrictions-are-preventing-this-user-from-signingin-2111.html">用户账户限制阻止登录解决</a><br><a href="https://www.anyviewer.cn/how-to/your-credentials-did-not-work-666.html">修复你的凭据不工作</a></p><p>连接时的用户名和密码是 电脑用户和锁屏密码。<br><strong>如果使用了微软账号登录，而非本地账户，使用电脑用户名和微软账号密码</strong></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>便捷工作</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>远程桌面</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>vim踩坑记录-E117</title>
+    <link href="/suHang/vim%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95-E117/"/>
+    <url>/suHang/vim%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95-E117/</url>
+    
+    <content type="html"><![CDATA[<p>最近刚换了新的电脑，在最初使用的时候也没有记录一下配置流程，所以遇到一些问题，这次统一记录一下。</p><h3 id="E117"><a href="#E117" class="headerlink" title="E117"></a>E117</h3><p>问题：在代码中有插件管理下载，但是 运行时报错”E117”</p><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs vim"><span class="hljs-comment">&quot; 安装 vim-plug 插件管理器</span><br><span class="hljs-keyword">if</span> <span class="hljs-built_in">empty</span>(<span class="hljs-built_in">glob</span>(<span class="hljs-string">&#x27;~/.vim/autoload/plug.vim&#x27;</span>))<span class="hljs-keyword">c</span><br>  <span class="hljs-keyword">silent</span> !curl -fLo ~/.<span class="hljs-keyword">vim</span>/autoload/plug.<span class="hljs-keyword">vim</span> --create-dirs https://raw.githubusercontent.<span class="hljs-keyword">com</span>/junegunn/<span class="hljs-keyword">vim</span>-plug/master/plug.<span class="hljs-keyword">vim</span><br>  <span class="hljs-keyword">autocmd</span> VimEnter * PlugInstall --<span class="hljs-keyword">sync</span> | <span class="hljs-keyword">source</span> $MYVIMRC<br><span class="hljs-keyword">endif</span><br></code></pre></td></tr></table></figure><p>原因：网络问题，curl无法连接网络下载插件<br>解决方案：为curl添加网络代理，示例：</p><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs vim">curl -<span class="hljs-keyword">x</span> http://localhos<span class="hljs-variable">t:8080</span>(代理地址) -fLo  ~/.<span class="hljs-keyword">vim</span>/autoload/plug.<span class="hljs-keyword">vim</span> --create-dirs https://raw.githubusercontent.<span class="hljs-keyword">com</span>/junegunn/<span class="hljs-keyword">vim</span>-plug/master/plug.<span class="hljs-keyword">vim</span><br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>Vim</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>部署</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>记录一下最近面试,总结</title>
     <link href="/suHange/%E9%9A%8F%E7%AC%94-%E8%AE%B0%E5%BD%95%E6%9C%80%E8%BF%91_%E9%9D%A2%E8%AF%95/"/>
     <url>/suHange/%E9%9A%8F%E7%AC%94-%E8%AE%B0%E5%BD%95%E6%9C%80%E8%BF%91_%E9%9D%A2%E8%AF%95/</url>
