@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  
+  
+  
+  <entry>
+    <title>GameFramework生命周期</title>
+    <link href="/2025/05/24/GameFramework_Lifecycle/"/>
+    <url>/2025/05/24/GameFramework_Lifecycle/</url>
+    
+    <content type="html"><![CDATA[<p>最近又在写一些游戏项目，想要看一些有什么方便开发的框架，来来回回发现 GameFramework 依然是绕不过去的一个框架。本章主要是分析一下 GameFramework 的生命周期。</p><h2 id="Unity-生命周期"><a href="#Unity-生命周期" class="headerlink" title="Unity 生命周期"></a>Unity 生命周期</h2><p>先看一下常见的 Unity 的生命周期</p><pre><code class=" mermaid">graph LR    A[Awake] --&gt; B[Start]    B --&gt; C[Update]    C --&gt; C    C --&gt; D[OnDestroy]    E[其他MonoBehaviour] --&gt; F[独立生命周期]</code></pre><p>主要有几个问题：</p><ul><li>各个模块之间的生命周期是独立的，执行顺序不确定</li><li>难以控制正确的初始化和销毁顺序</li><li>无法更好的处理依赖关系</li></ul><h2 id="GameFramework-生命周期"><a href="#GameFramework-生命周期" class="headerlink" title="GameFramework 生命周期"></a>GameFramework 生命周期</h2><h3 id="GameFrameworkModule"><a href="#GameFrameworkModule" class="headerlink" title="GameFrameworkModule"></a>GameFrameworkModule</h3><p>GameFramework 通过 GameFrameworkModule 来管理模块的生命周期。GameFrameworkModule 是一个抽象类，主要有三个方法：</p><pre><code class=" mermaid">graph TB    A[GameFrameworkEntry.GetModule] --&gt; B[自动创建模块]    B --&gt; C[按优先级排序]    C --&gt; D[统一Update循环]    D --&gt; E[逆序Shutdown]    F[高优先级模块] --&gt; G[先执行Update]    F --&gt; H[后执行Shutdown]   </code></pre><p>代码是这样的：</p><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;summary&gt;</span></span><br><span class="hljs-comment"><span class="hljs-doctag">///</span> 游戏框架模块抽象类。</span><br><span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;/summary&gt;</span></span><br><span class="hljs-keyword">internal</span> <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">class</span> <span class="hljs-title">GameFrameworkModule</span><br>&#123;<br>    <span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;summary&gt;</span></span><br>    <span class="hljs-comment"><span class="hljs-doctag">///</span> 获取游戏框架模块优先级。</span><br>    <span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;/summary&gt;</span></span><br>    <span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;remarks&gt;</span>优先级较高的模块会优先轮询，并且关闭操作会后进行。<span class="hljs-doctag">&lt;/remarks&gt;</span></span><br>    <span class="hljs-keyword">internal</span> <span class="hljs-keyword">virtual</span> <span class="hljs-built_in">int</span> Priority<br>    &#123;<br>        <span class="hljs-keyword">get</span><br>        &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;summary&gt;</span></span><br>    <span class="hljs-comment"><span class="hljs-doctag">///</span> 游戏框架模块轮询。</span><br>    <span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;/summary&gt;</span></span><br>    <span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;param name=&quot;elapseSeconds&quot;&gt;</span>逻辑流逝时间，以秒为单位。<span class="hljs-doctag">&lt;/param&gt;</span></span><br>    <span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;param name=&quot;realElapseSeconds&quot;&gt;</span>真实流逝时间，以秒为单位。<span class="hljs-doctag">&lt;/param&gt;</span></span><br>    <span class="hljs-function"><span class="hljs-keyword">internal</span> <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Update</span>(<span class="hljs-params"><span class="hljs-built_in">float</span> elapseSeconds, <span class="hljs-built_in">float</span> realElapseSeconds</span>)</span>;<br><br>    <span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;summary&gt;</span></span><br>    <span class="hljs-comment"><span class="hljs-doctag">///</span> 关闭并清理游戏框架模块。</span><br>    <span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;/summary&gt;</span></span><br>    <span class="hljs-function"><span class="hljs-keyword">internal</span> <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Shutdown</span>()</span>;<br>&#125;<br></code></pre></td></tr></table></figure><ol><li>通过 Priority 来控制模块的执行顺序</li><li>通过 Update 来控制模块的更新</li><li>通过 Shutdown 来控制模块的销毁</li></ol><h3 id="GameFrameworkEntry"><a href="#GameFrameworkEntry" class="headerlink" title="GameFrameworkEntry"></a>GameFrameworkEntry</h3><p>看了 GameFrameworkModule 的实现，接下来看看 GameFrameworkEntry 的实现。GameFrameworkEntry 中是如何管理项目中所有的模块的。</p><h4 id="1-CreateModule"><a href="#1-CreateModule" class="headerlink" title="1. CreateModule"></a>1. CreateModule</h4><ol><li>使用 <a href="https://learn.microsoft.com/zh-cn/dotnet/api/system.activator.createinstance?view=net-8.0">System.Activator.CreateInstance</a> 来创建模块</li><li>通过 LinkedList 来管理模块的顺序,保证在数据结构中模块是有序的</li></ol><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;summary&gt;</span></span><br><span class="hljs-comment"><span class="hljs-doctag">///</span> 创建游戏框架模块。</span><br><span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;/summary&gt;</span></span><br><span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;param name=&quot;moduleType&quot;&gt;</span>要创建的游戏框架模块类型。<span class="hljs-doctag">&lt;/param&gt;</span></span><br><span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;returns&gt;</span>要创建的游戏框架模块。<span class="hljs-doctag">&lt;/returns&gt;</span></span><br><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> GameFrameworkModule <span class="hljs-title">CreateModule</span>(<span class="hljs-params">Type moduleType</span>)</span><br>&#123;<br>    GameFrameworkModule module = (GameFrameworkModule)Activator.CreateInstance(moduleType);<br>    <span class="hljs-keyword">if</span> (module == <span class="hljs-literal">null</span>)<br>    &#123;<br>        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> GameFrameworkException(Utility.Text.Format(<span class="hljs-string">&quot;Can not create module &#x27;&#123;0&#125;&#x27;.&quot;</span>, moduleType.FullName));<br>    &#125;<br><br>    <span class="hljs-comment">// 根据优先级插入,高优先级在前</span><br>    LinkedListNode&lt;GameFrameworkModule&gt; current = s_GameFrameworkModules.First;<br>    <span class="hljs-keyword">while</span> (current != <span class="hljs-literal">null</span>)<br>    &#123;<br>        <span class="hljs-keyword">if</span> (module.Priority &gt; current.Value.Priority)<br>        &#123;<br>            <span class="hljs-keyword">break</span>;<br>        &#125;<br>        current = current.Next;<br>    &#125;<br><br>    <span class="hljs-keyword">if</span> (current != <span class="hljs-literal">null</span>)<br>    &#123;<br>        s_GameFrameworkModules.AddBefore(current, module);<br>    &#125;<br>    <span class="hljs-keyword">else</span><br>    &#123;<br>        s_GameFrameworkModules.AddLast(module);<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> module;<br>&#125;<br></code></pre></td></tr></table></figure><h4 id="2-GetModule"><a href="#2-GetModule" class="headerlink" title="2. GetModule"></a>2. GetModule</h4><ol><li>强制使用接口来获取模块，依赖倒置原则:<ul><li>高层模块不应该依赖低层模块，二者都应该依赖抽象</li><li>通过接口来获取模块，避免了直接依赖实现类</li></ul></li><li>通过命名约定来获取模块<ul><li>IXxxManager -&gt; XxxManager</li><li>通过反射来获取模块的类型</li></ul></li></ol><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;summary&gt;</span></span><br><span class="hljs-comment"><span class="hljs-doctag">///</span> 获取游戏框架模块。</span><br><span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;/summary&gt;</span></span><br><span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;typeparam name=&quot;T&quot;&gt;</span>要获取的游戏框架模块类型。<span class="hljs-doctag">&lt;/typeparam&gt;</span></span><br><span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;returns&gt;</span>要获取的游戏框架模块。<span class="hljs-doctag">&lt;/returns&gt;</span></span><br><span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;remarks&gt;</span>如果要获取的游戏框架模块不存在，则自动创建该游戏框架模块。<span class="hljs-doctag">&lt;/remarks&gt;</span></span><br><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> T <span class="hljs-title">GetModule</span>&lt;<span class="hljs-title">T</span>&gt;() <span class="hljs-keyword">where</span> T : <span class="hljs-keyword">class</span></span><br>&#123;<br>    Type interfaceType = <span class="hljs-keyword">typeof</span>(T);<br>    <span class="hljs-comment">// 1. 必须是接口类型</span><br>    <span class="hljs-keyword">if</span> (!interfaceType.IsInterface)<br>    &#123;<br>        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> GameFrameworkException(Utility.Text.Format(<span class="hljs-string">&quot;You must get module by interface, but &#x27;&#123;0&#125;&#x27; is not.&quot;</span>, interfaceType.FullName));<br>    &#125;<br>    <span class="hljs-comment">// 2. 必须是游戏框架模块, 必须是 GameFramework 命名空间下的类型</span><br>    <span class="hljs-keyword">if</span> (!interfaceType.FullName.StartsWith(<span class="hljs-string">&quot;GameFramework.&quot;</span>, StringComparison.Ordinal))<br>    &#123;<br>        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> GameFrameworkException(Utility.Text.Format(<span class="hljs-string">&quot;You must get a Game Framework module, but &#x27;&#123;0&#125;&#x27; is not.&quot;</span>, interfaceType.FullName));<br>    &#125;<br>    <span class="hljs-comment">// 3. 命名约定：IXxxManager -&gt; XxxManager</span><br>    <span class="hljs-built_in">string</span> moduleName = Utility.Text.Format(<span class="hljs-string">&quot;&#123;0&#125;.&#123;1&#125;&quot;</span>,<br>        interfaceType.Namespace,<br>        interfaceType.Name.Substring(<span class="hljs-number">1</span>));   <span class="hljs-comment">// 去掉前缀 I</span><br>    Type moduleType = Type.GetType(moduleName);<br>    <span class="hljs-keyword">if</span> (moduleType == <span class="hljs-literal">null</span>)<br>    &#123;<br>        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> GameFrameworkException(Utility.Text.Format(<span class="hljs-string">&quot;Can not find Game Framework module type &#x27;&#123;0&#125;&#x27;.&quot;</span>, moduleName));<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> GetModule(moduleType) <span class="hljs-keyword">as</span> T;<br>&#125;<br><br><span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;summary&gt;</span></span><br><span class="hljs-comment"><span class="hljs-doctag">///</span> 获取游戏框架模块。</span><br><span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;/summary&gt;</span></span><br><span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;param name=&quot;moduleType&quot;&gt;</span>要获取的游戏框架模块类型。<span class="hljs-doctag">&lt;/param&gt;</span></span><br><span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;returns&gt;</span>要获取的游戏框架模块。<span class="hljs-doctag">&lt;/returns&gt;</span></span><br><span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;remarks&gt;</span>如果要获取的游戏框架模块不存在，则自动创建该游戏框架模块。<span class="hljs-doctag">&lt;/remarks&gt;</span></span><br><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> GameFrameworkModule <span class="hljs-title">GetModule</span>(<span class="hljs-params">Type moduleType</span>)</span><br>&#123;<br>    <span class="hljs-keyword">foreach</span> (GameFrameworkModule module <span class="hljs-keyword">in</span> s_GameFrameworkModules)<br>    &#123;<br>        <span class="hljs-keyword">if</span> (module.GetType() == moduleType)<br>        &#123;<br>            <span class="hljs-keyword">return</span> module;<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> CreateModule(moduleType);<br>&#125;<br></code></pre></td></tr></table></figure><h4 id="3-Update-Shutdown"><a href="#3-Update-Shutdown" class="headerlink" title="3. Update&#x2F;Shutdown"></a>3. Update&#x2F;Shutdown</h4><p>这部分就没什么特别需要注意的地方了，唯一需要注意的是在 Shutdown 的时候是逆序的(优先级低的模块可能用到了高优先级的模块)。</p><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;summary&gt;</span></span><br><span class="hljs-comment"><span class="hljs-doctag">///</span> 所有游戏框架模块轮询。</span><br><span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;/summary&gt;</span></span><br><span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;param name=&quot;elapseSeconds&quot;&gt;</span>逻辑流逝时间，以秒为单位。<span class="hljs-doctag">&lt;/param&gt;</span></span><br><span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;param name=&quot;realElapseSeconds&quot;&gt;</span>真实流逝时间，以秒为单位。<span class="hljs-doctag">&lt;/param&gt;</span></span><br><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Update</span>(<span class="hljs-params"><span class="hljs-built_in">float</span> elapseSeconds, <span class="hljs-built_in">float</span> realElapseSeconds</span>)</span><br>&#123;<br>    <span class="hljs-keyword">foreach</span> (GameFrameworkModule module <span class="hljs-keyword">in</span> s_GameFrameworkModules)<br>    &#123;<br>        module.Update(elapseSeconds, realElapseSeconds);<br>    &#125;<br>&#125;<br><br><span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;summary&gt;</span></span><br><span class="hljs-comment"><span class="hljs-doctag">///</span> 关闭并清理所有游戏框架模块。</span><br><span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;/summary&gt;</span></span><br><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Shutdown</span>()</span><br>&#123;<br>    <span class="hljs-keyword">for</span> (LinkedListNode&lt;GameFrameworkModule&gt; current = s_GameFrameworkModules.Last; current != <span class="hljs-literal">null</span>; current = current.Previous)<br>    &#123;<br>        current.Value.Shutdown();<br>    &#125;<br><br>    s_GameFrameworkModules.Clear();<br>    ReferencePool.ClearAll();<br>    Utility.Marshal.FreeCachedHGlobal();<br>    GameFrameworkLog.SetLogHelper(<span class="hljs-literal">null</span>);<br>&#125;<br></code></pre></td></tr></table></figure><h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><h4 id="用到的设计模式"><a href="#用到的设计模式" class="headerlink" title="用到的设计模式"></a>用到的设计模式</h4><ul><li>工厂模式、单例模式</li></ul><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment">// GameFrameworkEntry 充当了工厂和单例管理器</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">class</span> <span class="hljs-title">GameFrameworkEntry</span><br>&#123;<br>    <span class="hljs-comment">// 单例容器</span><br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">readonly</span> <span class="hljs-title">GameFrameworkLinkedList</span>&lt;<span class="hljs-title">GameFrameworkModule</span>&gt; s_GameFrameworkModules</span>;<br><br>    <span class="hljs-comment">// 工厂方法</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> T <span class="hljs-title">GetModule</span>&lt;<span class="hljs-title">T</span>&gt;() <span class="hljs-keyword">where</span> T : <span class="hljs-keyword">class</span></span><br>    &#123;<br>        <span class="hljs-comment">// 1. 检查是否已存在</span><br>        GameFrameworkModule existingModule = GetModule(moduleType);<br>        <span class="hljs-keyword">if</span> (existingModule != <span class="hljs-literal">null</span>) <span class="hljs-keyword">return</span> existingModule <span class="hljs-keyword">as</span> T;<br><br>        <span class="hljs-comment">// 2. 不存在则创建新实例</span><br>        <span class="hljs-keyword">return</span> CreateModule(moduleType) <span class="hljs-keyword">as</span> T;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure><p>工厂模式:</p><pre><code class=" mermaid">graph TBA[Client 客户端] --&gt; B[Factory 工厂类]B --&gt; C&#123;产品类型判断&#125;C --&gt;|TypeA| D[ProductA 产品 A]C --&gt;|TypeB| E[ProductB 产品 B]C --&gt;|TypeC| F[ProductC 产品 C]    D --&gt; G[IProduct产品接口]    E --&gt; G    F --&gt; G    G --&gt; H[返回给客户端]</code></pre><p>单例模式:</p><pre><code class=" mermaid">graph TBA[Client 客户端] --&gt; B[Singleton 单例类]B --&gt; C&#123;判断是否已存在&#125;C --&gt;|已存在| D[返回实例]C --&gt;|不存在| E[创建新实例]    E --&gt; F[返回实例]</code></pre><h4 id="LinkedList"><a href="#LinkedList" class="headerlink" title="LinkedList"></a>LinkedList</h4><p>使用了 LinkedList 来管理模块的顺序，LinkedList 是一个双向链表，支持在 O(1) 的时间复杂度内插入和删除节点。适合频繁插入和删除的场景。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>Unity</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>GameFramework</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>软技能-代码之外的生存指南-第二章-像经营企业一样，经营自己的职业生涯</title>
+    <link href="/2025/05/18/Soft_Skills_Beyond_Code_Chapter_2/"/>
+    <url>/2025/05/18/Soft_Skills_Beyond_Code_Chapter_2/</url>
+    
+    <content type="html"><![CDATA[<h1 id="像经营企业一样，经营自己的职业生涯"><a href="#像经营企业一样，经营自己的职业生涯" class="headerlink" title="像经营企业一样，经营自己的职业生涯"></a>像经营企业一样，经营自己的职业生涯</h1><h2 id="拥有商业心态"><a href="#拥有商业心态" class="headerlink" title="拥有商业心态"></a>拥有商业心态</h2><ol><li>大多数软件开发人员并不能把自己的软件开发事业当作一桩生意来看待</li><li>为了谋生的写代码和开一个小铺子的老板，没有本质差别，都是将自己的服务推销出去</li><li>我们为公司工作，但是技能和生意都还是自己的，我们随时可以换个地方</li><li>开始把自己当作一家企业去思考，把雇主当作一个客户，从弱势地位转换为自我治理和自我引导的主动地位</li><li><strong>这是你职业职业生涯中必须要做的第一要务：转变你的心态，从被一纸“卖身契”束缚住的仆人，转变为一个拥有自己生意的商人，将此铭记于心，并积极主动地挂农历自己的职业生涯</strong></li></ol><h2 id="将思维模式切换为”经营企业”"><a href="#将思维模式切换为”经营企业”" class="headerlink" title="将思维模式切换为”经营企业”"></a>将思维模式切换为”经营企业”</h2><p>如何经营企业</p><ol><li>我们能提供什么？软件开发人员售卖的就是，把一个想法变成数字化现实产品的能力</li><li>我能提供的服务和其他人有什么不同？</li><li>推广，仅有服务或者产品是不够的。想赚到钱，你就必须让潜在客户了解该产品或服务。</li><li>如何规划？<ul><li>专注于你正在提供怎样的服务，以及如何营销这项服务</li><li>想方设法提升你的服务</li><li>思考你可以专注为哪一类特定类型的客户或者行业提供特定的服务</li><li>集中精力成为一名转转，专门为某一种特定类型的客户提供专业的整体服务。</li><li><strong>只有真正专注于一类客户，才能找到顶尖的岗位</strong></li></ul></li></ol>]]></content>
+    
+    
+    <categories>
+      
+      <category>读书</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>软技能代码之外的生存指南</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Unity组件Canvas_CanvasScaler参数详解</title>
+    <link href="/2025/05/13/Unity%20Component%20Canvas_CanvasScaler%20Parameter%20Explanation/"/>
+    <url>/2025/05/13/Unity%20Component%20Canvas_CanvasScaler%20Parameter%20Explanation/</url>
+    
+    <content type="html"><![CDATA[<p><img src="/../images/book.png"></p><h2 id="Canvas"><a href="#Canvas" class="headerlink" title="Canvas"></a>Canvas</h2><p>Render Mode: 画布中渲染模式</p><ul><li><p>Screen Space - Overlay: 这种渲染模式将 UI 元素放在最上级渲染，不需要相机也可以渲染<br><img src="/../images/Unity_Canvas/CanvasOverlay.png"></p></li><li><p>Screen Space - Camera: 这种渲染模式下，Canvas 会放置在指定的 UI 相机前。UI 元素由这个相机渲染。相机的设置会影响 UI 的外观<br><img src="/../images/Unity_Canvas/CanvasCamera.png"></p></li><li><p>World Space: 将 UI 视为平面渲染。其他对象可以位于 UI 后面、中间穿透、前面。画布大小取决于与相机视角和距离。例如显示在人物头顶的血条<br><img src="/../images/Unity_Canvas/CanvasWorldSpace.png"></p></li></ul><p>Pixel Perfect: 可以使元素看起来更清晰，防止模糊。但是，如果许多元素被缩放或旋转，或者使用微妙的动画位置或缩放，则禁用 pixelPerfect 可能更有利，因为运动将更平滑。<br>Render Camera: 渲染相机<br>Plane Distance: 平面距离<br>Resize Canvas: 调整画布大小<br>Sorting Layer: 排序层<br>Order in Layer: 层级顺序<br>Additional Shader Channels: 附加着色器通道<br>Vertex Color Always In Gamma Color Space: 顶点颜色始终在伽马颜色空间中</p><h2 id="CanvasScaler"><a href="#CanvasScaler" class="headerlink" title="CanvasScaler"></a>CanvasScaler</h2><p>UI Scale Mode:</p><ul><li><p>Constant Pixel Size: 无论屏幕大小 UI 元素都以相同的像素大小显示</p></li><li><p>Scale With Screen Size: 屏幕越大 UI 元素越大</p></li><li><p>Constant Physical Size: 保持默认的物理尺寸，如果屏幕大小改变，UI 元素不会改变</p><p>Reference Resolution: 参考分辨率Screen Match Mode: 屏幕匹配模式Match:Refreence Pixels Per Unit: 参考每单位像素</p></li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>Unity</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>优化，UGUI</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>性能优化-静态资源优化-音乐音效资源</title>
+    <link href="/2025/05/12/Performance%20Optimization%20-%20Static%20Resource%20Optimization%20-%20Music%20and%20Sound%20Effect%20Resources/"/>
+    <url>/2025/05/12/Performance%20Optimization%20-%20Static%20Resource%20Optimization%20-%20Music%20and%20Sound%20Effect%20Resources/</url>
+    
+    <content type="html"><![CDATA[<h2 id="音频声道"><a href="#音频声道" class="headerlink" title="音频声道"></a>音频声道</h2><p>如果音频为双声道音频且左右声道音频完全相同，可以启用 Force To Mono 强行将音频改为单声道音频<img src="/../images/Pastedimage20230616171545.png"></p><h2 id="音频采样率"><a href="#音频采样率" class="headerlink" title="音频采样率"></a>音频采样率</h2><p>移动平台建议 22050 Hz<img src="/../images/Pastedimage20230616182612.png"></p><h2 id="加载方式"><a href="#加载方式" class="headerlink" title="加载方式"></a>加载方式</h2><p><img src="/../images/Pastedimage20230616182806.png">Decompress On Load：建议压缩后大小低于 200 kb 的音效文件Compressed In Memory：大于 200kbStreaming：较大文件，如背景音乐文件</p><h2 id="音频源源文件"><a href="#音频源源文件" class="headerlink" title="音频源源文件"></a>音频源源文件</h2><h3 id="信息"><a href="#信息" class="headerlink" title="信息"></a>信息</h3><p>音频原始资源大小：导入压缩后的大小：压缩比：<br><img src="/../images/Pasted%20image%2020250520130914.png"><br>尽可能使用未压缩的 wav 音频源文件</p><h3 id="压缩方式"><a href="#压缩方式" class="headerlink" title="压缩方式"></a>压缩方式</h3><h2 id="Pasted-20image-2020250520130914-pngPasted-20image-2020250520131255-PCM：（Pulse-Code-Modulation）属于脉冲调制编码，它将模拟信号转换为数字信号，实质上没有经过编码，没有进行压缩，所以音质上属于完全无损的原始音频。而且相较于原生的模拟信号，它的抗干扰能力-Pasted-20image-2020250520130914-pngPasted-20image-2020250520131255强，保真效果更好。-Vorbis：（OGG-Vorbis）-类似于-MP3-格式，但这是一种免费开发的非商业压缩格式。属于有损压缩-ADPCM：（Adaptive-Differential-Pulse-Code-Modulation）-自适应差分脉冲编码调制。是一种基于-PCM-的优化压缩方式，但也属于有损压缩。"><a href="#Pasted-20image-2020250520130914-pngPasted-20image-2020250520131255-PCM：（Pulse-Code-Modulation）属于脉冲调制编码，它将模拟信号转换为数字信号，实质上没有经过编码，没有进行压缩，所以音质上属于完全无损的原始音频。而且相较于原生的模拟信号，它的抗干扰能力-Pasted-20image-2020250520130914-pngPasted-20image-2020250520131255强，保真效果更好。-Vorbis：（OGG-Vorbis）-类似于-MP3-格式，但这是一种免费开发的非商业压缩格式。属于有损压缩-ADPCM：（Adaptive-Differential-Pulse-Code-Modulation）-自适应差分脉冲编码调制。是一种基于-PCM-的优化压缩方式，但也属于有损压缩。" class="headerlink" title="&#x2F;Pasted%20image%2020250520130914.pngPasted%20image%2020250520131255- PCM：（Pulse-Code Modulation）属于脉冲调制编码，它将模拟信号转换为数字信号，实质上没有经过编码，没有进行压缩，所以音质上属于完全无损的原始音频。而且相较于原生的模拟信号，它的抗干扰能力&#x2F;Pasted%20image%2020250520130914.pngPasted%20image%2020250520131255强，保真效果更好。- Vorbis：（OGG Vorbis） 类似于 MP3 格式，但这是一种免费开发的非商业压缩格式。属于有损压缩- ADPCM：（Adaptive Differential Pulse Code Modulation） 自适应差分脉冲编码调制。是一种基于 PCM 的优化压缩方式，但也属于有损压缩。"></a><img src="/../images/Pasted%20image%2020250520131255.png">&#x2F;Pasted%20image%2020250520130914.pngPasted%20image%2020250520131255- PCM：（Pulse-Code Modulation）属于脉冲调制编码，它将模拟信号转换为数字信号，实质上没有经过编码，没有进行压缩，所以音质上属于完全无损的原始音频。而且相较于原生的模拟信号，它的抗干扰能力&#x2F;Pasted%20image%2020250520130914.pngPasted%20image%2020250520131255强，保真效果更好。- Vorbis：（OGG Vorbis） 类似于 MP3 格式，但这是一种免费开发的非商业压缩格式。属于有损压缩- ADPCM：（Adaptive Differential Pulse Code Modulation） 自适应差分脉冲编码调制。是一种基于 PCM 的优化压缩方式，但也属于有损压缩。</h2><ol><li>安卓移动平台一般使用 Vorbis 模式</li><li>Ios 对 MP3 格式有优化</li></ol><h2 id="加载类型"><a href="#加载类型" class="headerlink" title="加载类型"></a>加载类型</h2><p><img src="/../images/Pasted%20image%2020250520131527.png"></p><ul><li>Decompress On Load: 音频文件以压缩形式存储在磁盘上，加载时直接解压放在内存中。这种方式在内存占用上没有优势，但在后续播放时对 CPU 的计算需求是最小的。一般来说这种方式更适合短小的音频</li><li>Compressed In Memory:音频文件以压缩形式存放在内存里，使用时再解压。这意味着会有更多的 CPU 开销，但是在加载速度和内存占用上具有优势。适用于</li><li>Streaming:音频文件存在放磁盘中，加载时循环以下操作：“从磁盘读取一部分 -》 解压 到内存中 -》 播放 -》 卸载”。这种方式在内存占用上相对而言是较小的，到那时在 CPU 消耗上不占优势在音频的实际运用中，背景音乐的使用是普遍存在的。几乎所有游戏都会使用 BGM 以增强对游戏氛围和环境的渲染。结合以上关于音频加载方式的描述可以看出，采用 Streaming 方式去加载背景音乐，可以有效减少内存占用和加载时间，从而降低 Audio 资源对项目总体内存和加载时间的影响。</li></ul><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>音乐为性能瓶颈，优化音乐音效可以较少内存的使用和安装包大小。</p><h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>游戏需要静音时，建议将 AudioSource 组件卸载，而不是把音量降低为 0</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>Unity</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>性能优化</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>软技能-代码之外的生存指南_第一章</title>
+    <link href="/2025/05/07/Soft_Skills_Beyond_Code_Chapter_1/"/>
+    <url>/2025/05/07/Soft_Skills_Beyond_Code_Chapter_1/</url>
+    
+    <content type="html"><![CDATA[<p><img src="/../images/book.png"></p><h2 id="为什么这本书与其他软件相关书籍截然不同？"><a href="#为什么这本书与其他软件相关书籍截然不同？" class="headerlink" title="为什么这本书与其他软件相关书籍截然不同？"></a>为什么这本书与其他软件相关书籍截然不同？</h2><ol><li>多数软件开发的书籍都是有关于代码开发本身</li><li>本书主要解决“如何成为一名优秀的软件开发者”这个问题</li><li>本书讨论什么：<ul><li>关于你自己</li><li>作为一名软件开发者，如何超越编写代码本身</li></ul></li><li>本书不讨论什么：<ul><li>代码本身</li><li>代码的质量</li><li>代码的设计</li><li>…你能做什么</li></ul></li></ol><h2 id="篇章"><a href="#篇章" class="headerlink" title="篇章"></a>篇章</h2><ol><li>职业</li><li>自我营销</li><li>学习</li><li>生产力</li><li>理财</li><li>健身</li><li>心态</li></ol><h2 id="记忆点"><a href="#记忆点" class="headerlink" title="记忆点"></a>记忆点</h2><p><strong>想要成为优秀的人才？需要把重点放在“人”身上</strong></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>读书</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>软技能代码之外的生存指南</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Unity网格重建</title>
+    <link href="/2025/04/30/Unity_Mesh_Rebuild/"/>
+    <url>/2025/04/30/Unity_Mesh_Rebuild/</url>
+    
+    <content type="html"><![CDATA[<h2 id="什么是网格重建（Mesh-Rebuild）"><a href="#什么是网格重建（Mesh-Rebuild）" class="headerlink" title="什么是网格重建（Mesh Rebuild）"></a>什么是网格重建（Mesh Rebuild）</h2><p>在 UGUI 中，如果要渲染一个 UI 元素（Image，Text 等），需要经过 CPU 阶段将渲染所需要数据如：顶点，位置，纹理等信息传递给 GPU 进行渲染。在运行时，UI 元素外观或布局发生变化时，UGUI 会重新计算这些数据并传递给 GPU，这个过程称为网格重建（Mesh Rebuild）。</p><h2 id="为什么会造成网格重建"><a href="#为什么会造成网格重建" class="headerlink" title="为什么会造成网格重建"></a>为什么会造成网格重建</h2><p>每个 UI 元素会维护自己的 Mesh 信息，但是 Mesh 信息并不是实时更新的，Unity 在 UI 元素发生必须要重建 Mesh 信息的情况下才会进行网格重建。比如：</p><ul><li>文本内容修改：Text.text or TextMeshProUGUI.text 发生变化</li><li>图像资源修改：Image.sprite, RawImage.texture 发生变化</li><li>颜色修改：Image.color, Text.color 发生变化</li><li>…</li></ul><h2 id="如何避免或减少网格重建"><a href="#如何避免或减少网格重建" class="headerlink" title="如何避免或减少网格重建"></a>如何避免或减少网格重建</h2><ol><li>拆分 Canvas - 动静分离<br>例如一个 Image 元素在 Simple 模式下会创建四个顶点，如果我们有 100 个相同的这样的 Image，UGUI 底层(Native Code 部分)会将这 100 个 Image 的 Mesh 信息合并成一个大的 Mesh，用同一个 DrawCall 发送给 CPU。但是，UI 的 Mesh 信息相对于普通的 Mesh 来说有一个很大的不同，就是 UI 的 Mesh 信息是会变化的，而一旦某个 UI 元素的 Mesh 信息发生修改，那么和这个元素合并在一批的整个 Mesh 都会变成不可用。<br>如果将动态的 UI 元素单独分离到不同的 Canvas 中，由于 UGUI 渲染时以 Canvas 为单位的，那么这些动态的 UI 元素就不会影响到静态的 UI 元素了。</li></ol><h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://dmstory.github.io/post/ugui-optimize-rebatch/">浅谈UGUI优化-网格合并</a><br><a href="https://dmstory.github.io/post/ugui-optimize-rebuild/">浅谈UGUI优化-网格重建</a><br><a href="https://www.xuanyusong.com/archives/4573">UGUI研究院之找到具体某个引起了网格重建的UI元素</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>Unity</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>UGUI</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>MCP踩坑记录-ServerMemory-无法指定json目录</title>
+    <link href="/2025/03/16/MCP_ServerMemory_NoToolFound/"/>
+    <url>/2025/03/16/MCP_ServerMemory_NoToolFound/</url>
+    
+    <content type="html"><![CDATA[<h2 id="server-memory-无法指定-json-目录"><a href="#server-memory-无法指定-json-目录" class="headerlink" title="server-memory 无法指定 json 目录"></a>server-memory 无法指定 json 目录</h2><p>官方示例中使用了 env 去设置运行目录，但是我一直没成功</p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;mcpServers&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;memory&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;command&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;npx&quot;</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;args&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;-y&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;@modelcontextprotocol/server-memory&quot;</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>      <span class="hljs-attr">&quot;env&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;MEMORY_FILE_PATH&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;/path/to/custom/memory.json&quot;</span><br>      <span class="hljs-punctuation">&#125;</span><br>    <span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure><h4 id="解决记录"><a href="#解决记录" class="headerlink" title="解决记录"></a>解决记录</h4><p>找到 index.js 代码，让 ai 修改代码，把 json 目录改为可定义参数，使用命令行传入</p><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-keyword">cmd</span><span class="language-bash"> /c npx @modelcontextprotocol/server-memory -p C:\Q5\Unity\Q5.json</span><br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>AI Code</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>MCP</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>MCP踩坑记录-关于windows配置报错-NoToolFound</title>
+    <link href="/2025/03/16/MCP_WIndows_NoToolFound/"/>
+    <url>/2025/03/16/MCP_WIndows_NoToolFound/</url>
+    
+    <content type="html"><![CDATA[<p>在windows配置mcp出现的问题记录</p><h2 id="No-tool-found"><a href="#No-tool-found" class="headerlink" title="No tool  found"></a>No tool  found</h2><h3 id="官方使用方法"><a href="#官方使用方法" class="headerlink" title="官方使用方法"></a>官方使用方法</h3><figure class="highlight mel"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mel">npx @modelcontextprotocol/server-<span class="hljs-keyword">memory</span><br></code></pre></td></tr></table></figure><h3 id="解决方法1"><a href="#解决方法1" class="headerlink" title="解决方法1"></a>解决方法1</h3><p>找到对应服务器的index.js,直接使用node运行。</p><figure class="highlight moonscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs moonscript">node <span class="hljs-name">C</span>:\Users\user\AppData\Roaming\npm-cache\_npx\<span class="hljs-number">15</span>b07286cbcc3329\node_modules\@modelcontextprotocol\server-memory\dist\index.js<br></code></pre></td></tr></table></figure><h3 id="解决方法2"><a href="#解决方法2" class="headerlink" title="解决方法2"></a>解决方法2</h3><p>使用cmd调用到系统的npx命令，而不是编辑器中的环境。</p><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-keyword">cmd</span><span class="language-bash"> /c npx @modelcontextprotocol/server-memory</span><br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>AI Code</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>MCP</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>重学C#-类型基础-所有的类型都从System.Object派生</title>
+    <link href="/2025/03/16/All_types_derive_from_SystemObject/"/>
+    <url>/2025/03/16/All_types_derive_from_SystemObject/</url>
+    
+    <content type="html"><![CDATA[<h2 id="所有的类型都从-System-Object-派生"><a href="#所有的类型都从-System-Object-派生" class="headerlink" title="所有的类型都从 System.Object 派生"></a>所有的类型都从 System.Object 派生</h2><p>“运行时”要求每个类型最终都从 System.Object 类型派生。<br>以下两个定义完全一致</p><figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs C#"><span class="hljs-comment">// 隐式派生于 System.Object</span><br><span class="hljs-keyword">class</span> <span class="hljs-title">Employee</span>&#123;<br>    ...<br>&#125;<br><br><span class="hljs-comment">// 显式派生于 System.Object</span><br><span class="hljs-keyword">class</span> <span class="hljs-title">Employee</span> : <span class="hljs-title">System.Object</span>&#123;<br>    ...<br>&#125;<br></code></pre></td></tr></table></figure><p>由于所有的类型都从 System.Object 中派生，所以每个类型都保证了一组最基本的方法。</p><ol><li>公共方法<ul><li>Equals</li><li>GetHashCode</li><li>ToString</li><li>GetType</li></ul></li><li>收到保护方法<ul><li>MemberwiseClose</li><li>FinalizeCLR 要求所有的对象都用<b> new </b>操作符创建</li></ul></li></ol><figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C#">Employee e = <span class="hljs-keyword">new</span> Employee(<span class="hljs-string">&quot;Parama&quot;</span>);<br></code></pre></td></tr></table></figure><p><b> new </b>操作符会做以下事情</p><ol><li>计算类型及其所有的基类（一直到 System.Object）和”同步块索引”.</li><li>从托管堆中分配类型所需要的字节数，从而分配对象的内存，分配的所有字节都设为 0</li><li>初始化对象的”类型对象指针” 和 “同步块索引” 成员</li><li>调用类型的实例构造器，传递在<b> new </b> 调用中指定的实参(上述中的 “Parama”)，每个类型的构造器负责初始化该类型定义的实例字段，最终调用 System.Object 的构造器(该构造器什么都不做，简单的返回)。<br><b>new</b> 执行了所有操作后，返回指向新建对象的一个引用（或指针）。</li></ol>]]></content>
+    
+    
+    <categories>
+      
+      <category>编程</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>C#</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>内网穿透—基于frp实现远程桌面</title>
+    <link href="/2024/10/30/frp_remote_desktop/"/>
+    <url>/2024/10/30/frp_remote_desktop/</url>
+    
+    <content type="html"><![CDATA[<p><strong>要做好保护工作，有被入侵风险！！！！</strong><br><strong>要做好保护工作，有被入侵风险！！！！</strong><br><strong>要做好保护工作，有被入侵风险！！！！</strong>  </p><p><a href="https://starcheng.xyz/791.html">使用frp配置远程桌面</a><a href="https://www.anyviewer.cn/how-to/account-restrictions-are-preventing-this-user-from-signingin-2111.html">用户账户限制阻止登录解决</a><a href="https://www.anyviewer.cn/how-to/your-credentials-did-not-work-666.html">修复你的凭据不工作</a></p><p>连接时的用户名和密码是 电脑用户和锁屏密码。<br><strong>如果使用了微软账号登录，而非本地账户，使用电脑用户名和微软账号密码</strong></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>便捷工作</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>远程桌面</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>vim踩坑记录-E117</title>
+    <link href="/2024/10/30/vim_E117/"/>
+    <url>/2024/10/30/vim_E117/</url>
+    
+    <content type="html"><![CDATA[<p>最近刚换了新的电脑，在最初使用的时候也没有记录一下配置流程，所以遇到一些问题，这次统一记录一下。</p><h3 id="E117"><a href="#E117" class="headerlink" title="E117"></a>E117</h3><p>问题：在代码中有插件管理下载，但是 运行时报错”E117”</p><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs vim"><span class="hljs-comment">&quot; 安装 vim-plug 插件管理器</span><br><span class="hljs-keyword">if</span> <span class="hljs-built_in">empty</span>(<span class="hljs-built_in">glob</span>(<span class="hljs-string">&#x27;~/.vim/autoload/plug.vim&#x27;</span>))<span class="hljs-keyword">c</span><br>  <span class="hljs-keyword">silent</span> !curl -fLo ~/.<span class="hljs-keyword">vim</span>/autoload/plug.<span class="hljs-keyword">vim</span> --create-dirs https://raw.githubusercontent.<span class="hljs-keyword">com</span>/junegunn/<span class="hljs-keyword">vim</span>-plug/master/plug.<span class="hljs-keyword">vim</span><br>  <span class="hljs-keyword">autocmd</span> VimEnter * PlugInstall --<span class="hljs-keyword">sync</span> | <span class="hljs-keyword">source</span> $MYVIMRC<br><span class="hljs-keyword">endif</span><br></code></pre></td></tr></table></figure><p>原因：网络问题，curl无法连接网络下载插件解决方案：为curl添加网络代理，示例：</p><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs vim">curl -<span class="hljs-keyword">x</span> http://localhos<span class="hljs-variable">t:8080</span>(代理地址) -fLo  ~/.<span class="hljs-keyword">vim</span>/autoload/plug.<span class="hljs-keyword">vim</span> --create-dirs https://raw.githubusercontent.<span class="hljs-keyword">com</span>/junegunn/<span class="hljs-keyword">vim</span>-plug/master/plug.<span class="hljs-keyword">vim</span><br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>Vim</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>部署</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>记录一下最近面试,总结</title>
+    <link href="/2024/08/08/Interview/"/>
+    <url>/2024/08/08/Interview/</url>
+    
+    <content type="html"><![CDATA[<p>最近这段时间因为项目放缓了几个星期，就出去面试了三家吧，过了一家，寄掉两家。没面多少但还是记录记录吧。  </p><ol><li>对自己做过的功能其实还不够了解。<br>这个是有一家公司面试问了自己做过的一些功能，现场跟技术说怎么用 MVC 思想如何去设计，有什么函数，怎样的数结构。其实问的不算难，只是很多细节的考虑而已，功能自己是做过的，但是面试时还是很多点没说到。没说明白。因该是寄的原因。</li><li>对一些原理性的东西还不够了解，不明白为什么这么做。<br> 面试问题：在UI框架管理中，界面延时关闭是为了什么，界面频繁加载会导致什么消耗，为什么不能频繁加载界面。   </li><li>优化简历，学会说话，学会表达。</li></ol>]]></content>
+    
+    
+    <categories>
+      
+      <category>随笔</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>面试</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>记一次低血糖感受</title>
+    <link href="/2024/07/18/Low_Blood_Sugar/"/>
+    <url>/2024/07/18/Low_Blood_Sugar/</url>
+    
+    <content type="html"><![CDATA[<h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>起因是因为上一个星期去拔了一颗智齿，这周就过去拆线了。然后因为肉长到线上面去了。医生就用剪刀，镊子和钩子慢慢把肉剪开把线挑出来，给我疼傻了。</p><h2 id="经过"><a href="#经过" class="headerlink" title="经过"></a>经过</h2><p>可能因为太疼了，自己一直紧绷着。在下椅子的时候已经开始感觉不对劲了。等医生开完账单后。就出去到牙科门口的椅子上坐着，做到椅子上时候眼睛已经开始看不清了。最开始是趴着的，能感觉到自己在慢慢恢复和发抖，然后过了一会，眼睛又开始看清了，就从趴着到坐着靠着后背，然后大概是因为血糖低引起的血压低，从趴着到坐着供血开始不足。幸运的是旁边的姐姐看到了，叫了医生，医生拿了葡萄糖喝完之后就好了。</p><p>已经开始记忆不清淅了，记得在喝葡萄糖的时候医生递给我，我记得当时眼睛是睁开的，但是只能看到白茫茫一片。疯狂的感受自己流出的冷汗。</p><h2 id="感想"><a href="#感想" class="headerlink" title="感想"></a>感想</h2><p>其实不是第一次低血糖，导致的这些了。以前在学校晕过一次，还有一次在地铁站，刚好在商店旁买了糖水。所以要么是毫无意识，要么是快速恢复了。第一次感受的这么贴切。</p><p>谢谢坐我隔壁的姐姐，谢谢医生。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>随笔</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>记录</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  
+</search>
