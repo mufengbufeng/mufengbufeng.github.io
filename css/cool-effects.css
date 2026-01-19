@@ -1,0 +1,591 @@
+/* ========================================
+   炫酷效果增强样式 - Cool Effects
+   ======================================== */
+
+/* 1. 动态渐变背景动画 */
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* 2. 霓虹发光效果 */
+@keyframes neonGlow {
+    0%, 100% {
+        text-shadow:
+            0 0 5px #667eea,
+            0 0 10px #667eea,
+            0 0 20px #667eea,
+            0 0 40px #764ba2;
+    }
+    50% {
+        text-shadow:
+            0 0 2px #667eea,
+            0 0 5px #667eea,
+            0 0 10px #667eea,
+            0 0 20px #764ba2;
+    }
+}
+
+/* 3. 流光边框效果 */
+@keyframes borderFlow {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 200% 0%; }
+}
+
+/* 4. 呼吸灯效果 */
+@keyframes breathe {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.05); }
+}
+
+/* 5. 悬浮上升动画 */
+@keyframes floatUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 6. 脉冲光晕效果 */
+@keyframes pulseGlow {
+    0% {
+        box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 15px rgba(102, 126, 234, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(102, 126, 234, 0);
+    }
+}
+
+/* 7. 旋转渐变边框 */
+@keyframes rotateGradient {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* 8. 打字机光标闪烁 */
+@keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+}
+
+/* ============ 导航栏增强 ============ */
+.navbar {
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    background: rgba(47, 65, 84, 0.85) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.navbar.scrolled {
+    background: rgba(47, 65, 84, 0.95) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+[data-user-color-scheme="dark"] .navbar {
+    background: rgba(31, 49, 68, 0.85) !important;
+}
+
+[data-user-color-scheme="dark"] .navbar.scrolled {
+    background: rgba(31, 49, 68, 0.95) !important;
+}
+
+/* 导航栏菜单项悬停效果 */
+.navbar .nav-item .nav-link {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.navbar .nav-item .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+.navbar .nav-item .nav-link:hover::after {
+    width: 100%;
+}
+
+/* ============ Banner 区域增强 ============ */
+#banner {
+    position: relative;
+    overflow: hidden;
+}
+
+#banner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.3) 100%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Banner 标题霓虹效果（已禁用，太刺眼） */
+/*
+.banner-content h1 {
+    animation: neonGlow 3s ease-in-out infinite;
+}
+*/
+
+/* 副标题打字机效果增强（已禁用，使用主题自带） */
+
+/* ============ 文章卡片玻璃态效果 ============ */
+.index-card {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+/* 移除卡片闪光效果 */
+
+.index-card:hover {
+    transform: translateY(-4px) scale(1.01);
+    box-shadow:
+        0 12px 28px rgba(102, 126, 234, 0.12),
+        0 0 0 1px rgba(102, 126, 234, 0.08);
+    background: rgba(255, 255, 255, 0.85);
+}
+
+[data-user-color-scheme="dark"] .index-card {
+    background: rgba(37, 45, 56, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+[data-user-color-scheme="dark"] .index-card:hover {
+    background: rgba(37, 45, 56, 0.85);
+    box-shadow:
+        0 12px 28px rgba(0, 0, 0, 0.25),
+        0 0 0 1px rgba(102, 126, 234, 0.15);
+}
+
+/* 卡片图片悬浮效果 */
+.index-img {
+    overflow: hidden;
+    border-radius: 16px 16px 0 0;
+}
+
+.index-img img {
+    transition: transform 0.4s ease;
+}
+
+.index-card:hover .index-img img {
+    transform: scale(1.05);
+}
+
+/* ============ 主面板玻璃态 ============ */
+#board {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+[data-user-color-scheme="dark"] #board {
+    background: rgba(37, 45, 56, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* ============ 按钮炫酷效果 ============ */
+.btn {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease, height 0.6s ease;
+}
+
+.btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+}
+
+/* ============ 标签云炫彩效果 ============ */
+.tag-cloud a {
+    display: inline-block;
+    padding: 6px 16px;
+    margin: 4px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+    border: 1px solid rgba(102, 126, 234, 0.2);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+/* 移除标签闪光效果 */
+
+.tag-cloud a:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white !important;
+    box-shadow: 0 6px 16px rgba(102, 126, 234, 0.25);
+}
+
+/* ============ 滚动进度条彩虹效果 ============ */
+#nprogress .bar {
+    background: linear-gradient(90deg, #667eea, #764ba2, #f093fb, #667eea) !important;
+    background-size: 300% 100% !important;
+    animation: borderFlow 2s linear infinite !important;
+    box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
+}
+
+/* ============ 返回顶部按钮美化 ============ */
+#scroll-top-button {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    transition: all 0.3s ease;
+}
+
+#scroll-top-button:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+}
+
+/* ============ 代码块复制按钮美化 ============ */
+.highlight-wrapper .copy-btn {
+    background: linear-gradient(135deg, #667eea, #764ba2) !important;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 12px;
+    transition: all 0.3s ease;
+}
+
+.highlight-wrapper .copy-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+/* ============ 侧边栏目录美化 ============ */
+.toc .toc-item a {
+    position: relative;
+    transition: all 0.3s ease;
+    border-left: 3px solid transparent;
+}
+
+.toc .toc-item a:hover {
+    color: #667eea !important;
+    border-left-color: #667eea;
+    background: rgba(102, 126, 234, 0.1);
+    padding-left: 10px;
+}
+
+.toc .toc-item.active > a {
+    color: #667eea !important;
+    border-left-color: #667eea;
+    font-weight: 600;
+}
+
+/* ============ 分页按钮美化 ============ */
+.pagination .page-link {
+    border-radius: 10px;
+    margin: 0 4px;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(102, 126, 234, 0.2);
+}
+
+.pagination .page-link:hover {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border-color: transparent;
+    transform: translateY(-2px);
+}
+
+.pagination .page-item.active .page-link {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-color: transparent;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+/* ============ 评论区域美化 ============ */
+#comments {
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 16px;
+    padding: 20px;
+}
+
+[data-user-color-scheme="dark"] #comments {
+    background: rgba(37, 45, 56, 0.5);
+}
+
+/* ============ 页脚美化 ============ */
+.footer {
+    background: linear-gradient(180deg, transparent, rgba(0,0,0,0.05));
+}
+
+/* ============ 搜索框美化 ============ */
+.search-dialog .form-control {
+    border-radius: 25px;
+    border: 2px solid rgba(102, 126, 234, 0.2);
+    transition: all 0.3s ease;
+}
+
+.search-dialog .form-control:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* ============ 滚动条美化 ============ */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #764ba2, #667eea);
+}
+
+[data-user-color-scheme="dark"] ::-webkit-scrollbar-track {
+    background: #1a1a2e;
+}
+
+/* ============ 文字选中效果增强 ============ */
+::selection {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+}
+
+::-moz-selection {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+}
+
+/* ============ 链接悬停效果 ============ */
+a {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.post-content a:not(.btn):hover {
+    color: #667eea !important;
+    text-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+}
+
+/* ============ 加载动画 ============ */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+/* ============ 闪烁星星背景效果 ============ */
+.stars-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle var(--duration) ease-in-out infinite;
+    opacity: 0;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.5); }
+}
+
+/* ============ 社交图标悬停效果 ============ */
+.social-icon {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.social-icon:hover {
+    transform: translateY(-5px) rotate(10deg);
+    filter: drop-shadow(0 8px 15px rgba(102, 126, 234, 0.4));
+}
+
+/* ============ 时间轴样式（如归档页） ============ */
+.timeline-item {
+    position: relative;
+    padding-left: 30px;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, #667eea, #764ba2);
+}
+
+.timeline-item::after {
+    content: '';
+    position: absolute;
+    left: -4px;
+    top: 8px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
+}
+
+/* ============ 响应式适配 ============ */
+@media (max-width: 768px) {
+    .index-card:hover {
+        transform: translateY(-4px) scale(1.01);
+    }
+
+    .tag-cloud a:hover {
+        transform: translateY(-2px);
+    }
+}
+
+/* ============ 暗色模式专属效果 ============ */
+[data-user-color-scheme="dark"] .btn-primary {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+[data-user-color-scheme="dark"] .tag-cloud a {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+}
+
+/* ============ 彩虹文字效果 ============ */
+.rainbow-text {
+    background: linear-gradient(
+        90deg,
+        #667eea,
+        #764ba2,
+        #f093fb,
+        #667eea
+    );
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: borderFlow 3s linear infinite;
+}
+
+/* ============ 波纹点击效果 ============ */
+.ripple {
+    position: relative;
+    overflow: hidden;
+}
+
+.ripple::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.ripple:active::after {
+    width: 300px;
+    height: 300px;
+}
+
+/* ============ 霓虹卡片效果 ============ */
+.neon-card {
+    border: 2px solid transparent;
+    background: linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.1)) padding-box,
+                linear-gradient(135deg, #667eea, #764ba2) border-box;
+    animation: pulseGlow 2s ease-in-out infinite;
+}
+
+/* ============ 文章标题悬停效果 ============ */
+.post-title a:hover {
+    background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: borderFlow 2s linear infinite;
+}
+
+/* ============ 淡入动画延迟 ============ */
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+.delay-4 { animation-delay: 0.4s; }
+.delay-5 { animation-delay: 0.5s; }
