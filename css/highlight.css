@@ -1,0 +1,118 @@
+.markdown-body pre code.hljs,
+figure.highlight code.hljs {
+  display: block !important;
+  overflow-x: auto;
+  padding: 1em;
+}
+.markdown-body code.hljs,
+figure.highlight code.hljs {
+  padding: 3px 5px;
+}
+.markdown-body .hljs,
+figure.highlight .hljs {
+  color: #24292e !important;
+  background: #fff;
+}
+.markdown-body .hljs-doctag,
+.markdown-body .hljs-keyword,
+.markdown-body .hljs-meta .hljs-keyword,
+.markdown-body .hljs-template-tag,
+.markdown-body .hljs-template-variable,
+.markdown-body .hljs-type,
+.markdown-body .hljs-variable.language_,
+figure.highlight .hljs-doctag,
+figure.highlight .hljs-keyword,
+figure.highlight .hljs-meta .hljs-keyword,
+figure.highlight .hljs-template-tag,
+figure.highlight .hljs-template-variable,
+figure.highlight .hljs-type,
+figure.highlight .hljs-variable.language_ {
+  color: #d73a49 !important;
+}
+.markdown-body .hljs-title,
+.markdown-body .hljs-title.class_,
+.markdown-body .hljs-title.class_.inherited__,
+.markdown-body .hljs-title.function_,
+figure.highlight .hljs-title,
+figure.highlight .hljs-title.class_,
+figure.highlight .hljs-title.class_.inherited__,
+figure.highlight .hljs-title.function_ {
+  color: #6f42c1 !important;
+}
+.markdown-body .hljs-attr,
+.markdown-body .hljs-attribute,
+.markdown-body .hljs-literal,
+.markdown-body .hljs-meta,
+.markdown-body .hljs-number,
+.markdown-body .hljs-operator,
+.markdown-body .hljs-selector-attr,
+.markdown-body .hljs-selector-class,
+.markdown-body .hljs-selector-id,
+.markdown-body .hljs-variable,
+figure.highlight .hljs-attr,
+figure.highlight .hljs-attribute,
+figure.highlight .hljs-literal,
+figure.highlight .hljs-meta,
+figure.highlight .hljs-number,
+figure.highlight .hljs-operator,
+figure.highlight .hljs-selector-attr,
+figure.highlight .hljs-selector-class,
+figure.highlight .hljs-selector-id,
+figure.highlight .hljs-variable {
+  color: #005cc5 !important;
+}
+.markdown-body .hljs-meta .hljs-string,
+.markdown-body .hljs-regexp,
+.markdown-body .hljs-string,
+figure.highlight .hljs-meta .hljs-string,
+figure.highlight .hljs-regexp,
+figure.highlight .hljs-string {
+  color: #032f62 !important;
+}
+.markdown-body .hljs-built_in,
+.markdown-body .hljs-symbol,
+figure.highlight .hljs-built_in,
+figure.highlight .hljs-symbol {
+  color: #e36209 !important;
+}
+.markdown-body .hljs-code,
+.markdown-body .hljs-comment,
+.markdown-body .hljs-formula,
+figure.highlight .hljs-code,
+figure.highlight .hljs-comment,
+figure.highlight .hljs-formula {
+  color: #6a737d !important;
+}
+.markdown-body .hljs-name,
+.markdown-body .hljs-quote,
+.markdown-body .hljs-selector-pseudo,
+.markdown-body .hljs-selector-tag,
+figure.highlight .hljs-name,
+figure.highlight .hljs-quote,
+figure.highlight .hljs-selector-pseudo,
+figure.highlight .hljs-selector-tag {
+  color: #22863a !important;
+}
+.markdown-body .hljs-subst,
+figure.highlight .hljs-subst {
+  color: #24292e !important;
+}
+.markdown-body .hljs-section,
+figure.highlight .hljs-section {
+  color: #005cc5 !important;
+  font-weight: 700;
+}
+.markdown-body .hljs-bullet,
+figure.highlight .hljs-bullet {
+  color: #735c0f !important;
+}
+.markdown-body .hljs-emphasis,
+figure.highlight .hljs-emphasis {
+  color: #24292e !important;
+  font-style: italic;
+}
+.markdown-body .hljs-strong,
+figure.highlight .hljs-strong {
+  color: #24292e !important;
+  font-weight: 700;
+}

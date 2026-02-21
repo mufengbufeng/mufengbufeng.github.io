@@ -1,0 +1,31 @@
+/* 自定义鼠标样式 */
+body {
+    cursor: url(https://cdn.jsdelivr.net/gh/sviptzk/HexoStaticFile@latest/Hexo/img/default.cur), default;
+}
+a, img {
+    cursor: url(https://cdn.jsdelivr.net/gh/sviptzk/HexoStaticFile@latest/Hexo/img/pointer.cur), default;
+}
+
+/* 首页文章卡片悬浮效果 */
+.index-card {
+    transition: all 0.3s ease-in-out;
+    border-radius: 0.5rem;
+}
+
+.index-card:hover {
+    transform: scale(1.015); /* 轻微放大 */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* 加深阴影 */
+    background-color: rgba(255, 255, 255, 0.9); /* 稍微提亮背景 */
+}
+
+/* 暗色模式下的卡片悬浮适配 */
+[data-user-color-scheme="dark"] .index-card:hover {
+    background-color: rgba(37, 45, 56, 0.9);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* 文本选中颜色自定义 */
+::selection {
+    background-color: #667eea; /* 霓虹蓝 */
+    color: #ffffff;
+}

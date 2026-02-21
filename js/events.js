@@ -1,0 +1,264 @@
+/* global Fluid */
+
+HTMLElement.prototype.wrap = function(wrapper) {
+  this.parentNode.insertBefore(wrapper, this);
+  this.parentNode.removeChild(this);
+  wrapper.appendChild(this);
+};
+
+Fluid.events = {
+
+  registerNavbarEvent: function() {
+    var navbar = jQuery('#navbar');
+    if (navbar.length === 0) {
+      return;
+    }
+    var submenu = jQuery('#navbar .dropdown-menu');
+    if (navbar.offset().top > 0) {
+      navbar.removeClass('navbar-dark');
+      submenu.removeClass('navbar-dark');
+    }
+    Fluid.utils.listenScroll(function() {
+      navbar[navbar.offset().top > 50 ? 'addClass' : 'removeClass']('top-nav-collapse');
+      submenu[navbar.offset().top > 50 ? 'addClass' : 'removeClass']('dropdown-collapse');
+      if (navbar.offset().top > 0) {
+        navbar.removeClass('navbar-dark');
+        submenu.removeClass('navbar-dark');
+      } else {
+        navbar.addClass('navbar-dark');
+        submenu.removeClass('navbar-dark');
+      }
+    });
+    jQuery('#navbar-toggler-btn').on('click', function() {
+      jQuery('.animated-icon').toggleClass('open');
+      jQuery('#navbar').toggleClass('navbar-col-show');
+    });
+  },
+
+  registerParallaxEvent: function() {
+    var ph = jQuery('#banner[parallax="true"]');
+    if (ph.length === 0) {
+      return;
+    }
+    var board = jQuery('#board');
+    if (board.length === 0) {
+      return;
+    }
+    var parallax = function() {
+      var pxv = jQuery(window).scrollTop() / 5;
+      var offset = parseInt(board.css('margin-top'), 10);
+      var max = 96 + offset;
+      if (pxv > max) {
+        pxv = max;
+      }
+      ph.css({
+        transform: 'translate3d(0,' + pxv + 'px,0)'
+      });
+      var sideCol = jQuery('.side-col');
+      if (sideCol) {
+        sideCol.css({
+          'padding-top': pxv + 'px'
+        });
+      }
+    };
+    Fluid.utils.listenScroll(parallax);
+  },
+
+  registerScrollDownArrowEvent: function() {
+    var scrollbar = jQuery('.scroll-down-bar');
+    if (scrollbar.length === 0) {
+      return;
+    }
+    scrollbar.on('click', function() {
+      Fluid.utils.scrollToElement('#board', -jQuery('#navbar').height());
+    });
+  },
+
+  registerIndexArticleEvent: function() {
+    var articles = document.querySelectorAll('.index-card article.index-info');
+    if (articles.length === 0) {
+      return;
+    }
+
+    var isInteractiveTarget = function(target) {
+      if (typeof Element === 'undefined' || !(target instanceof Element)) {
+        return false;
+      }
+      return Boolean(target.closest('a, button, input, textarea, select, label, summary, [role="button"], [contenteditable="true"]'));
+    };
+
+    var navigate = function(url, target) {
+      if (!url) {
+        return;
+      }
+      if (target === '_blank') {
+        window.open(url, '_blank', 'noopener,noreferrer');
+      } else {
+        window.location.assign(url);
+      }
+    };
+
+    for (var i = 0; i < articles.length; i++) {
+      var article = articles[i];
+      if (article.dataset.clickBound === 'true') {
+        continue;
+      }
+
+      var link = article.querySelector('.index-header a, .index-excerpt');
+      if (!link) {
+        continue;
+      }
+
+      var href = link.getAttribute('href');
+      if (!href) {
+        continue;
+      }
+
+      article.dataset.postUrl = href;
+      article.dataset.postTarget = link.getAttribute('target') || '_self';
+      article.dataset.clickBound = 'true';
+      article.classList.add('index-info--clickable');
+      article.setAttribute('role', 'link');
+      article.setAttribute('tabindex', '0');
+
+      var title = article.querySelector('.index-header');
+      if (title && title.textContent) {
+        article.setAttribute('aria-label', title.textContent.trim());
+      }
+
+      article.addEventListener('click', function(event) {
+        if (event.defaultPrevented || event.button !== 0 || event.altKey || event.shiftKey) {
+          return;
+        }
+        if (isInteractiveTarget(event.target)) {
+          return;
+        }
+        if (window.getSelection && window.getSelection().toString().trim()) {
+          return;
+        }
+        var target = this.dataset.postTarget;
+        if (event.ctrlKey || event.metaKey) {
+          target = '_blank';
+        }
+        navigate(this.dataset.postUrl, target);
+      });
+
+      article.addEventListener('keydown', function(event) {
+        var isActiveKey = event.key === 'Enter' || event.key === ' ' || event.key === 'Spacebar';
+        if (!isActiveKey || isInteractiveTarget(event.target)) {
+          return;
+        }
+        event.preventDefault();
+        navigate(this.dataset.postUrl, this.dataset.postTarget);
+      });
+    }
+  },
+
+  registerScrollTopArrowEvent: function() {
+    var topArrow = jQuery('#scroll-top-button');
+    if (topArrow.length === 0) {
+      return;
+    }
+    var board = jQuery('#board');
+    if (board.length === 0) {
+      return;
+    }
+    var posDisplay = false;
+    var scrollDisplay = false;
+    // Position
+    var setTopArrowPos = function() {
+      var boardRight = board[0].getClientRects()[0].right;
+      var bodyWidth = document.body.offsetWidth;
+      var right = bodyWidth - boardRight;
+      posDisplay = right >= 50;
+      topArrow.css({
+        'bottom': posDisplay && scrollDisplay ? '20px' : '-60px',
+        'right' : right - 64 + 'px'
+      });
+    };
+    setTopArrowPos();
+    jQuery(window).resize(setTopArrowPos);
+    // Display
+    var headerHeight = board.offset().top;
+    Fluid.utils.listenScroll(function() {
+      var scrollHeight = document.body.scrollTop + document.documentElement.scrollTop;
+      scrollDisplay = scrollHeight >= headerHeight;
+      topArrow.css({
+        'bottom': posDisplay && scrollDisplay ? '20px' : '-60px'
+      });
+    });
+    // Click
+    topArrow.on('click', function() {
+      jQuery('body,html').animate({
+        scrollTop: 0,
+        easing   : 'swing'
+      });
+    });
+  },
+
+  registerImageLoadedEvent: function() {
+    if (!('NProgress' in window)) { return; }
+
+    var bg = document.getElementById('banner');
+    if (bg) {
+      var src = bg.style.backgroundImage;
+      var url = src.match(/\((.*?)\)/)[1].replace(/(['"])/g, '');
+      var img = new Image();
+      img.onload = function() {
+        window.NProgress && window.NProgress.status !== null && window.NProgress.inc(0.2);
+      };
+      img.src = url;
+      if (img.complete) { img.onload(); }
+    }
+
+    var notLazyImages = jQuery('main img:not([lazyload])');
+    var total = notLazyImages.length;
+    for (const img of notLazyImages) {
+      const old = img.onload;
+      img.onload = function() {
+        old && old();
+        window.NProgress && window.NProgress.status !== null && window.NProgress.inc(0.5 / total);
+      };
+      if (img.complete) { img.onload(); }
+    }
+  },
+
+  registerRefreshCallback: function(callback) {
+    if (!Array.isArray(Fluid.events._refreshCallbacks)) {
+      Fluid.events._refreshCallbacks = [];
+    }
+    Fluid.events._refreshCallbacks.push(callback);
+  },
+
+  refresh: function() {
+    if (Array.isArray(Fluid.events._refreshCallbacks)) {
+      for (var callback of Fluid.events._refreshCallbacks) {
+        if (callback instanceof Function) {
+          callback();
+        }
+      }
+    }
+  },
+
+  billboard: function() {
+    if (!('console' in window)) {
+      return;
+    }
+    // eslint-disable-next-line no-console
+    console.log(`
+-------------------------------------------------
+|                                               |
+|      ________  __            _        __      |
+|     |_   __  |[  |          (_)      |  ]     |
+|       | |_ \\_| | | __   _   __   .--.| |      |
+|       |  _|    | |[  | | | [  |/ /'\`\\' |      |
+|      _| |_     | | | \\_/ |, | || \\__/  |      |
+|     |_____|   [___]'.__.'_/[___]'.__.;__]     |
+|                                               |
+|            Powered by Hexo x Fluid            |
+| https://github.com/fluid-dev/hexo-theme-fluid |
+|                                               |
+-------------------------------------------------
+    `);
+  }
+};
