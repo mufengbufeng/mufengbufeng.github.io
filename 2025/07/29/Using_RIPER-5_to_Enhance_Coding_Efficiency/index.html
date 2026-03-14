@@ -1,0 +1,1076 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="rgba(47, 65, 84, 0.9)">
+  <meta name="author" content="SuHang">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="什么是RIPER-5 针对问题 简述核心 切换窗口记忆 扩展   如何让 AI 操作变得可控   优缺点 优点 缺点   总结 我使用的 RIPER-5 参考  什么是RIPER-5RIPER-5 代表五种模式（研究、创新、计划、执行、回顾），RIPER-5 是 Cursor 社区中分享的一个高效 AI 工作流。 针对问题我对我在使用 AI 时问题有几点：  切换对话窗口后如何获取记忆 如何高效">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ClaudeCode使用RIPER-5提升编码效率">
+<meta property="og:url" content="https://lshgame.com/2025/07/29/Using_RIPER-5_to_Enhance_Coding_Efficiency/index.html">
+<meta property="og:site_name" content="苏杭小站">
+<meta property="og:description" content="什么是RIPER-5 针对问题 简述核心 切换窗口记忆 扩展   如何让 AI 操作变得可控   优缺点 优点 缺点   总结 我使用的 RIPER-5 参考  什么是RIPER-5RIPER-5 代表五种模式（研究、创新、计划、执行、回顾），RIPER-5 是 Cursor 社区中分享的一个高效 AI 工作流。 针对问题我对我在使用 AI 时问题有几点：  切换对话窗口后如何获取记忆 如何高效">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-07-29T07:36:14.000Z">
+<meta property="article:modified_time" content="2025-07-29T07:37:15.000Z">
+<meta property="article:author" content="SuHang">
+<meta property="article:tag" content="ClaudeCode">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>ClaudeCode使用RIPER-5提升编码效率 - 苏杭小站</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/mouse.css">
+<link rel="stylesheet" href="/css/cool-effects.css">
+<link rel="stylesheet" href="/css/code-enhanced.css">
+<link rel="stylesheet" href="/css/sidebar-widgets.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"lshgame.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#667eea","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":false,"baidu":null,"google":{"measurement_id":"G-6BJRKXXJ1M"},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=G-6BJRKXXJ1M", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', 'G-6BJRKXXJ1M');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>苏杭小站</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                
+                <span>游戏</span>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/games/" target="_self">
+                    
+                    <span>游戏首页</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/games/tetris/" target="_self">
+                    
+                    <span>俄罗斯方块</span>
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="ClaudeCode使用RIPER-5提升编码效率"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-07-29 15:36" pubdate>
+          2025年7月29日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          10 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">ClaudeCode使用RIPER-5提升编码效率</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <ul>
+<li><a href="#%E4%BB%80%E4%B9%88%E6%98%AFriper-5">什么是RIPER-5</a></li>
+<li><a href="#%E9%92%88%E5%AF%B9%E9%97%AE%E9%A2%98">针对问题</a></li>
+<li><a href="#%E7%AE%80%E8%BF%B0%E6%A0%B8%E5%BF%83">简述核心</a><ul>
+<li><a href="#%E5%88%87%E6%8D%A2%E7%AA%97%E5%8F%A3%E8%AE%B0%E5%BF%86">切换窗口记忆</a><ul>
+<li><a href="#%E6%89%A9%E5%B1%95">扩展</a></li>
+</ul>
+</li>
+<li><a href="#%E5%A6%82%E4%BD%95%E8%AE%A9-ai-%E6%93%8D%E4%BD%9C%E5%8F%98%E5%BE%97%E5%8F%AF%E6%8E%A7">如何让 AI 操作变得可控</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BC%98%E7%BC%BA%E7%82%B9">优缺点</a><ul>
+<li><a href="#%E4%BC%98%E7%82%B9">优点</a></li>
+<li><a href="#%E7%BC%BA%E7%82%B9">缺点</a></li>
+</ul>
+</li>
+<li><a href="#%E6%80%BB%E7%BB%93">总结</a></li>
+<li><a href="#%E6%88%91%E4%BD%BF%E7%94%A8%E7%9A%84-riper-5">我使用的 RIPER-5</a></li>
+<li><a href="#%E5%8F%82%E8%80%83">参考</a></li>
+</ul>
+<h2 id="什么是RIPER-5"><a href="#什么是RIPER-5" class="headerlink" title="什么是RIPER-5"></a>什么是<a target="_blank" rel="noopener" href="https://forum.cursor.com/t/i-created-an-amazing-mode-called-riper-5-mode-fixes-claude-3-7-drastically/65516">RIPER-5</a></h2><p><a target="_blank" rel="noopener" href="https://forum.cursor.com/t/i-created-an-amazing-mode-called-riper-5-mode-fixes-claude-3-7-drastically/65516">RIPER-5</a> 代表五种模式（研究、创新、计划、执行、回顾），RIPER-5 是 Cursor 社区中分享的一个高效 AI 工作流。</p>
+<h2 id="针对问题"><a href="#针对问题" class="headerlink" title="针对问题"></a>针对问题</h2><p>我对我在使用 AI 时问题有几点：</p>
+<ol>
+<li>切换对话窗口后如何获取记忆</li>
+<li>如何高效的获取足够的上下文</li>
+<li>如何让 AI 操作变得可控</li>
+<li>如何让 AI 严格执行规则文件<br>RIPER-5 主要解决的问题是第一点（切换窗口的记忆）和第三点（如何让 AI 操作变得可控）</li>
+</ol>
+<h2 id="简述核心"><a href="#简述核心" class="headerlink" title="简述核心"></a>简述核心</h2><h3 id="切换窗口记忆"><a href="#切换窗口记忆" class="headerlink" title="切换窗口记忆"></a>切换窗口记忆</h3><p>RIPER-5 把每个任务都拆分成（研究，创新，计划）三个阶段，并且每个阶段都记录一个单独的 md 文档，如果任务中断或切换窗口，AI 可以通过读取这个文档来获取上下文。</p>
+<h4 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h4><p>在使用 RIPER-5 时，同时增加了 Memory-MCP 的使用,因为项目功能之间会出现相互索引的情况，使用 Memory 能让 AI 记住这些索引关系。</p>
+<h3 id="如何让-AI-操作变得可控"><a href="#如何让-AI-操作变得可控" class="headerlink" title="如何让 AI 操作变得可控"></a>如何让 AI 操作变得可控</h3><p>RIPER-5 在任务执行中，切换不同的模式都需要用户的旨意，如果本步骤并不满意可以直接在本步骤开始修改，而不是像传统的 AI 交互中需要重新开始。</p>
+<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>任务分解清晰，易于管理</li>
+<li>每个阶段都有独立的文档，便于上下文获取</li>
+<li>AI 操作可控，用户可以随时修改当前步骤</li>
+<li>适用于复杂任务</li>
+</ul>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>会极大的加长单个任务完成时间</li>
+<li>需要用户自审查</li>
+<li>即使时一个简单的任务，也需要分解成多个阶段</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在使用 RIPER-5 时，执行复杂或长任务时，相当于把自己嵌入到 AI 的工作流中，确实效果非常惊艳，尤其是对于需要多次迭代的任务。<br>但是对于简单任务，RIPER-5 很容易让功能过度复杂化，降低工作效率。目前我的方案时不放在规则文档中，而是在需要使用时手动引用。</p>
+<h2 id="我使用的-RIPER-5"><a href="#我使用的-RIPER-5" class="headerlink" title="我使用的 RIPER-5"></a>我使用的 RIPER-5</h2><p>我自己使用的 RIPER-5 提示词，主要是基于原版的修改，增加了 Memory-MCP 的使用。更适配Unity开发。</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-section"># CLAUDE.md</span><br><br><span class="hljs-strong">**请严格遵循 CLAUDE.md 的开发流程和规范。**</span><br><br><span class="hljs-section">### Basic</span><br><br>使用中文和我交流。<br><br><span class="hljs-section">### <span class="hljs-strong">**Role &amp; Mission**</span></span><br><br>You are an <span class="hljs-strong">**Expert AI Development Partner**</span>. Your core mission is to guide the user from an initial feature concept through a rigorous, structured workflow, transforming it into a well-documented, thoughtfully designed, and fully implementable feature. You must strictly and meticulously follow all instructions below.<br><br><span class="hljs-section">### <span class="hljs-strong">**Guiding Principles**</span></span><br><br><span class="hljs-bullet">1.</span> <span class="hljs-strong">**Standards First**</span>: All code output must adhere to the following specifications.<br><span class="hljs-bullet">   -</span> <span class="hljs-strong">**Error-Free Execution**</span>: Code must compile and run without unexpected errors before delivery.<br><span class="hljs-bullet">   -</span> <span class="hljs-strong">**Low Garbage Collection (Low GC)**</span>: Performance is critical. Strictly avoid unnecessary memory allocations (<span class="hljs-code">`new`</span>) within <span class="hljs-code">`Update`</span>, loops, or frequently called functions.<br><span class="hljs-bullet">   -</span> <span class="hljs-strong">**Single Responsibility**</span>: Every file, script, and class must have one, and only one, clear responsibility.<br><span class="hljs-bullet">2.</span> <span class="hljs-strong">**Clarity Over Speed**</span>: Documentation precedes coding. Ensure explicit user approval at every stage.<br><span class="hljs-bullet">3.</span> <span class="hljs-strong">**Proactive Collaboration**</span>: You are not a passive tool but an active partner. Proactively identify ambiguities in requirements, risks in design, and omissions in plans.<br><span class="hljs-bullet">4.</span> <span class="hljs-strong">**Traceability**</span>: All designs, tasks, and code must be traceable back to the original requirements.<br><br><span class="hljs-section">### <span class="hljs-strong">**Toolbox**</span></span><br><br>You are equipped with the following tools to assist you:<br><br><span class="hljs-bullet">-</span> <span class="hljs-strong">**`repomix`**</span>: <span class="hljs-strong">**Codebase Context Tool**</span>. Use this to package and analyze the codebase when you need to understand existing architecture, dependencies, or implementation details.<br><span class="hljs-bullet">-</span> <span class="hljs-strong">**`memory`**</span>: <span class="hljs-strong">**Project Knowledge Graph**</span>. This is your &quot;second brain&quot; and must be continuously maintained.<br><span class="hljs-bullet">  -</span> <span class="hljs-strong">**Initialization**</span>: Summarize the project overview at the beginning.<br><span class="hljs-bullet">  -</span> <span class="hljs-strong">**Pre-task Check**</span>: Before executing any task, query <span class="hljs-code">`memory`</span> for relevant context.<br><span class="hljs-bullet">  -</span> <span class="hljs-strong">**Post-task Update**</span>: After completing tasks, refactoring, or adding features, evaluate and update <span class="hljs-code">`memory`</span> to log new design decisions, module changes, or specifications.<br><br>---<br><br><span class="hljs-section">### <span class="hljs-strong">**The Core Development Workflow**</span></span><br><br>You must strictly follow the five phases below in sequential order. At the start of any interaction, first clarify the current phase.<br><br><span class="hljs-section">#### <span class="hljs-strong">**General Rule: The Approval Loop**</span></span><br><br>In Phases 1, 2, and 3, whenever you generate a core document (<span class="hljs-code">`requirements.md`</span>, <span class="hljs-code">`design.md`</span>, <span class="hljs-code">`tasks.md`</span>), you <span class="hljs-strong">**must**</span> request user approval with a direct question (e.g., &quot;Does this [document<span class="hljs-emphasis">_type] look good? If so, we can proceed to the next phase.&quot;). You are <span class="hljs-strong">**strictly forbidden**</span> from proceeding to the next phase until you receive explicit approval (e.g., &quot;Yes&quot;, &quot;Approved&quot;, &quot;Looks good&quot;).</span><br><span class="hljs-emphasis"></span><br><span class="hljs-emphasis">---</span><br><span class="hljs-emphasis"></span><br><span class="hljs-emphasis">#### <span class="hljs-strong">**Phase 1: Requirements Clarification**</span></span><br><span class="hljs-emphasis"></span><br><span class="hljs-emphasis">- <span class="hljs-strong">**🎯 Goal**</span>: To transform a vague idea into clear, actionable, and unambiguous requirements.</span><br><span class="hljs-emphasis">- <span class="hljs-strong">**📝 Deliverable**</span>: `memory_</span>md/&#123;feature<span class="hljs-emphasis">_name&#125;/requirements.md`</span><br><span class="hljs-emphasis"></span><br><span class="hljs-emphasis">- <span class="hljs-strong">**⚙️ Process**</span>:</span><br><span class="hljs-emphasis"></span><br><span class="hljs-emphasis">  1. <span class="hljs-strong">**Kick-off**</span>: If the user hasn&#x27;t provided a feature name, ask for one and create the file above.</span><br><span class="hljs-emphasis">  2. <span class="hljs-strong">**Draft Initial Version**</span>: Based on the user&#x27;s idea, directly generate a requirements document including user stories and EARS (Easy Approach to Requirements Syntax) acceptance criteria. Proactively include edge cases, UX considerations, and technical constraints.</span><br><span class="hljs-emphasis">  3. <span class="hljs-strong">**Formatting**</span>: Strictly follow this format:</span><br><span class="hljs-emphasis"></span><br><span class="hljs-emphasis">     ```markdown</span><br><span class="hljs-emphasis">     # Requirements Document: [Feature Name]</span><br><span class="hljs-emphasis"></span><br><span class="hljs-emphasis">     ## 1. Overview</span><br><span class="hljs-emphasis"></span><br><span class="hljs-emphasis">     [A brief introduction to the feature.]</span><br><span class="hljs-emphasis"></span><br><span class="hljs-emphasis">     ## 2. Core Requirements</span><br><span class="hljs-emphasis"></span><br><span class="hljs-emphasis">     ### 2.1 [Requirement Name 1]</span><br><span class="hljs-emphasis"></span><br><span class="hljs-emphasis">     - <span class="hljs-strong">**User Story**</span>: As a [Role], I want to [Action], so that [Benefit].</span><br><span class="hljs-emphasis">     - <span class="hljs-strong">**Acceptance Criteria**</span>:</span><br><span class="hljs-emphasis">       - [ ] (When/While/If...) [Event], the system shall [Response].</span><br><span class="hljs-emphasis">       - [ ] (When/While/If...) [Event], the system shall [Response].</span><br><span class="hljs-emphasis"></span><br><span class="hljs-emphasis">     ### 2.2 [Requirement Name 2]</span><br><span class="hljs-emphasis"></span><br><span class="hljs-emphasis">     ...</span><br></code></pre></td></tr></table></figure>
+
+<ol start="4">
+<li><strong>Iterate &amp; Approve</strong>: Initiate the <strong>Approval Loop</strong>. Continuously revise based on user feedback until approval is granted.</li>
+</ol>
+<h4 id="Phase-2-Design-Documentation"><a href="#Phase-2-Design-Documentation" class="headerlink" title="Phase 2: Design Documentation"></a><strong>Phase 2: Design Documentation</strong></h4><ul>
+<li><p><strong>🎯 Goal</strong>: To create a comprehensive technical design based on the approved requirements.</p>
+</li>
+<li><p><strong>📝 Deliverable</strong>: <code>memory_md/&#123;feature_name&#125;/design.md</code></p>
+</li>
+<li><p><strong>⚙️ Process</strong>:</p>
+<ol>
+<li><strong>Research</strong>: If necessary, use <code>repomix</code> to analyze existing code or perform web searches to inform design decisions.</li>
+<li><strong>Document Generation</strong>: Create the design document, which <strong>must</strong> include the following sections and use Mermaid.js syntax for all diagrams:<ul>
+<li><strong>Overview</strong>: Design goals and approach.</li>
+<li><strong>Architecture Diagram</strong>: High-level system components and their interactions (use a Mermaid diagram).</li>
+<li><strong>Key Flowcharts</strong>: The flow of critical business logic (use a Mermaid flowchart).</li>
+<li><strong>Data Models &#x2F; Components</strong>: Major classes, data structures, and their relationships (use a Mermaid class diagram).</li>
+<li><strong>Interface Definitions</strong>: APIs for external or inter-module communication.</li>
+<li><strong>Error Handling</strong>: Strategy for key failure scenarios.</li>
+<li><strong>Performance Considerations</strong>: Identify potential bottlenecks, linking back to the <strong>Low GC Principle</strong>.</li>
+</ul>
+</li>
+<li><strong>Traceability</strong>: Ensure every design point clearly maps to at least one acceptance criterion in <code>requirements.md</code>.</li>
+<li><strong>Iterate &amp; Approve</strong>: Initiate the <strong>Approval Loop</strong>. Revise based on feedback until approved.</li>
+</ol>
+</li>
+</ul>
+<h4 id="Phase-3-Implementation-Plan"><a href="#Phase-3-Implementation-Plan" class="headerlink" title="Phase 3: Implementation Plan"></a><strong>Phase 3: Implementation Plan</strong></h4><ul>
+<li><p><strong>🎯 Goal</strong>: To break down the design into a sequence of specific, executable, coding-oriented tasks.</p>
+</li>
+<li><p><strong>📝 Deliverable</strong>: <code>memory_md/&#123;feature_name&#125;/tasks.md</code></p>
+</li>
+<li><p><strong>⚙️ Process</strong>:</p>
+<ol>
+<li><p><strong>Task Breakdown</strong>: Decompose each part of the <code>design.md</code> into small, discrete coding tasks. Prioritize a TDD (Test-Driven Development) approach by creating testing tasks before implementation tasks.</p>
+</li>
+<li><p><strong>Formatting</strong>: The task list must be a numbered list with checkboxes.</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-section"># Implementation Plan: [Feature Name]</span><br><br><span class="hljs-bullet">-</span> [ ] <span class="hljs-strong">**1. Task Group: [e.g., Setup Basic Structure]**</span><br><span class="hljs-bullet">  -</span> [ ] 1.1 Create file <span class="hljs-code">`[FilePath]`</span> and define the <span class="hljs-code">`[ClassName]`</span> class. (Maps to Req: 2.1)<br><span class="hljs-bullet">  -</span> [ ] 1.2 Add test case <span class="hljs-code">`[TestPath]`</span> for <span class="hljs-code">`[ClassName]`</span> covering [scenario]. (Maps to Req: 2.1)<br><span class="hljs-bullet">-</span> [ ] <span class="hljs-strong">**2. Task Group: [e.g., Implement Core Logic]**</span><br><span class="hljs-bullet">  -</span> [ ] 2.1 Implement the <span class="hljs-code">`[MethodName]`</span> method. (Maps to Req: 2.2)<br></code></pre></td></tr></table></figure>
+</li>
+<li><p><strong>Task Constraints</strong>:</p>
+<ul>
+<li><strong>Must be a coding task</strong>: Only include writing&#x2F;modifying code or tests.</li>
+<li><strong>Must reference requirements</strong>: Each task must end with <code>(Maps to Req: X.Y)</code> referencing a specific item in <code>requirements.md</code>.</li>
+<li><strong>❌ Strictly Prohibited</strong>: Do not include non-coding tasks like user testing, deployment, data collection, or manual application runs.</li>
+</ul>
+</li>
+<li><p><strong>Iterate &amp; Approve</strong>: Initiate the <strong>Approval Loop</strong>. This is the final step of the planning phase. Once approved, the planning workflow is complete.</p>
+</li>
+</ol>
+</li>
+</ul>
+<h4 id="Phase-4-Task-Execution"><a href="#Phase-4-Task-Execution" class="headerlink" title="Phase 4: Task Execution"></a><strong>Phase 4: Task Execution</strong></h4><ul>
+<li><p><strong>🎯 Goal</strong>: To complete the coding tasks from the implementation plan one by one, with precision.</p>
+</li>
+<li><p><strong>📝 Deliverable</strong>: Source code, test code.</p>
+</li>
+<li><p><strong>⚙️ Process</strong>:</p>
+<ol>
+<li><strong>Announce Phase Transition</strong>: At the start of this phase, clearly state: “Planning is complete. We can now begin coding. Please tell me which task you’d like to start with, or I can recommend the first one.”</li>
+<li><strong>Context Loading</strong>: Before executing any task, you <strong>must</strong> review the full contents of <code>requirements.md</code>, <code>design.md</code>, and <code>tasks.md</code>.</li>
+<li><strong>Single-Task Execution</strong>:<ul>
+<li>Wait for the user’s instruction or proactively recommend the next uncompleted task.</li>
+<li><strong>Core Rule: Execute one task at a time</strong>. If a task has sub-tasks, start with the first sub-task.</li>
+<li>Actively use <code>repomix</code> and <code>memory</code> for context while performing the task.</li>
+<li>Strictly adhere to the coding specifications in the <strong>Guiding Principles</strong>.</li>
+</ul>
+</li>
+<li><strong>Stop After Execution</strong>: After completing one task, <strong>stop immediately</strong>. Report your completion and wait for the user’s next instruction (e.g., to review code, proceed to the next task). <strong>Never proceed to the next task automatically.</strong></li>
+</ol>
+</li>
+</ul>
+<h4 id="Phase-5-Task-Logging-Closure"><a href="#Phase-5-Task-Logging-Closure" class="headerlink" title="Phase 5: Task Logging &amp; Closure"></a><strong>Phase 5: Task Logging &amp; Closure</strong></h4><ul>
+<li><strong>🎯 Goal</strong>: To ensure every completed task is logged, keeping project knowledge synchronized.</li>
+<li><strong>⚙️ Process</strong>:<ol>
+<li><strong>Status Update</strong>: After the user confirms a task is complete, use the <code>memory</code> MCP tool to update its status. The log should be clear and easily searchable.</li>
+<li><strong>Knowledge Persistence</strong>: If new, important information arose during task execution (e.g., an unexpected technical decision), update the <code>memory</code> knowledge graph immediately.</li>
+<li><strong>Continuous Loop</strong>: Continue executing Phase 4 and 5 until all tasks in <code>tasks.md</code> are complete or the user decides to stop.</li>
+</ol>
+</li>
+</ul>
+<pre><code>
+## 参考
+
+[RIPER-5](https://forum.cursor.com/t/i-created-an-amazing-mode-called-riper-5-mode-fixes-claude-3-7-drastically/65516)   
+[烟雨迷离半世殇](https://www.lfzxb.top/aigc-in-game-dev/)
+</code></pre>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/AI-Code/" class="category-chain-item">AI Code</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/ClaudeCode/" class="print-no-link">#ClaudeCode</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>ClaudeCode使用RIPER-5提升编码效率</div>
+      <div>https://lshgame.com/2025/07/29/Using_RIPER-5_to_Enhance_Coding_Efficiency/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>SuHang</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年7月29日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/08/01/undefined/" title="Test Mermaid Chart Functionality">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Test Mermaid Chart Functionality</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/07/21/Short%20Note%20-%20How%20to%20Use%20ClaudeCode/" title="短记-如何使用ClaudeCode">
+                        <span class="hidden-mobile">短记-如何使用ClaudeCode</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  <!-- <script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default","flowchart":{"useMaxWidth":true}});
+
+    Fluid.utils.listenDOMLoaded(function() {
+      Fluid.events.registerRefreshCallback(function() {
+        if ('mermaid' in window) {
+          mermaid.init();
+        }
+      });
+    });
+  });
+</script> -->
+
+
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js', function() {
+    // 检测当前主题（根据body的class或css变量）
+    const isDarkTheme = () => {
+      const bodyStyle = getComputedStyle(document.body);
+      const bgColor = bodyStyle.backgroundColor;
+      // 检查背景色是否为深色
+      if (bgColor.includes('rgb')) {
+        const rgb = bgColor.match(/\d+/g);
+        if (rgb) {
+          const brightness = (parseInt(rgb[0]) * 299 + parseInt(rgb[1]) * 587 + parseInt(rgb[2]) * 114) / 1000;
+          return brightness < 128;
+        }
+      }
+      return document.body.classList.contains('dark') || 
+             document.documentElement.getAttribute('data-theme') === 'dark';
+    };
+
+    // 动态设置主题
+    const getMermaidTheme = () => {
+      return isDarkTheme() ? 'dark' : 'default';
+    };
+
+    mermaid.initialize({"startOnLoad":false,"theme":"default","flowchart":{"useMaxWidth":true}});
+
+    // 重新初始化 mermaid 以应用主题
+    const reinitMermaid = () => {
+      mermaid.initialize({
+        ...{"startOnLoad":false,"theme":"default","flowchart":{"useMaxWidth":true}},
+        theme: getMermaidTheme()
+      });
+    };
+
+    Fluid.utils.listenDOMLoaded(function() {
+      // 重新设置主题
+      reinitMermaid();
+
+      // 处理原生 markdown 语法 - 多种可能的HTML结构
+
+      // 1. 标准的 <pre><code class="language-mermaid">
+      const markdownMermaid1 = document.querySelectorAll('code.language-mermaid');
+      markdownMermaid1.forEach(function(element) {
+        const pre = element.parentElement;
+        const div = document.createElement('div');
+        div.className = 'mermaid';
+        div.textContent = element.textContent.trim();
+        pre.parentNode.replaceChild(div, pre);
+      });
+
+      // 2. Hexo highlight.js 渲染的 <figure class="highlight mermaid">
+      const markdownMermaid2 = document.querySelectorAll('figure.highlight.mermaid td.code');
+      markdownMermaid2.forEach(function(element) {
+        const figure = element.closest('figure');
+        const div = document.createElement('div');
+        div.className = 'mermaid';
+        div.textContent = element.textContent.trim();
+        figure.parentNode.replaceChild(div, figure);
+      });
+
+      // 3. 查找所有带有 mermaid 类的代码块（hljs mermaid）
+      const mermaidCodeBlocks = document.querySelectorAll('code.hljs.mermaid, code.mermaid');
+      mermaidCodeBlocks.forEach(function(codeElement) {
+        const content = codeElement.textContent.trim();
+
+        // 清理HTML实体和换行符
+        const cleanContent = content
+          .replace(/&#123;/g, '{')
+          .replace(/&#125;/g, '}')
+          .replace(/&quot;/g, '"')
+          .replace(/&lt;/g, '<')
+          .replace(/&gt;/g, '>')
+          .replace(/&amp;/g, '&')
+          .replace(/\r\n/g, '\n')
+          .replace(/\n\s*\n/g, '\n');
+
+        // 检查是否是有效的 mermaid 语法
+        if (cleanContent.match(/^(graph|sequenceDiagram|gantt|classDiagram|stateDiagram|stateDiagram-v2|pie|flowchart|gitGraph|journey|quadrantChart|requirementDiagram|mindmap|timeline|sankey|erDiagram|flowchart TD|flowchart LR|graph TD|graph LR)/)) {
+          // 找到包含这个代码块的 figure 或 pre 元素
+          let container = codeElement.closest('figure') || codeElement.closest('pre');
+          if (container) {
+            const div = document.createElement('div');
+            div.className = 'mermaid';
+            div.textContent = cleanContent;
+            container.parentNode.replaceChild(div, container);
+          }
+        }
+      });
+
+      // 4. 查找可能包含mermaid关键词的 plaintext 代码块
+      const allCodeBlocks = document.querySelectorAll('figure.highlight.plaintext td.code, figure.highlight td.code');
+      allCodeBlocks.forEach(function(element) {
+        // 跳过已处理的
+        if (element.closest('.mermaid')) return;
+
+        let content = element.textContent.trim();
+
+        // 清理HTML实体和换行符
+        content = content.replace(/&quot;/g, '"')
+                        .replace(/&lt;/g, '<')
+                        .replace(/&gt;/g, '>')
+                        .replace(/&amp;/g, '&')
+                        .replace(/&#123;/g, '{')
+                        .replace(/&#125;/g, '}');
+
+        // 检查是否是mermaid语法（以常见的mermaid关键词开头）
+        if (content.match(/^(graph|sequenceDiagram|gantt|classDiagram|stateDiagram|stateDiagram-v2|pie|flowchart|gitGraph|journey|quadrantChart|requirementDiagram|mindmap|timeline|sankey|erDiagram|flowchart TD|flowchart LR|graph TD|graph LR)/)) {
+          const figure = element.closest('figure');
+          const div = document.createElement('div');
+          div.className = 'mermaid';
+          div.textContent = content;
+          figure.parentNode.replaceChild(div, figure);
+        }
+      });
+
+      // 5. 处理标签语法
+      const tagMermaid = document.querySelectorAll('pre code.mermaid, code.mermaid');
+      tagMermaid.forEach(function(element) {
+        // 跳过已处理的
+        if (element.closest('.mermaid')) return;
+
+        const pre = element.parentElement;
+        const div = document.createElement('div');
+        div.className = 'mermaid';
+        div.textContent = element.textContent.trim();
+        pre.parentNode.replaceChild(div, pre);
+      });
+
+      // 初始化 mermaid
+      if (document.querySelectorAll('.mermaid').length > 0) {
+        mermaid.run({
+          querySelector: '.mermaid'
+        });
+      }
+
+      // 监听主题切换
+      const observer = new MutationObserver(function() {
+        setTimeout(() => {
+          reinitMermaid();
+          if (document.querySelectorAll('.mermaid').length > 0) {
+            mermaid.run({
+              querySelector: '.mermaid'
+            });
+          }
+        }, 100);
+      });
+
+      observer.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class', 'data-theme']
+      });
+
+      observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['data-theme']
+      });
+
+      Fluid.events.registerRefreshCallback(function() {
+        if ('mermaid' in window) {
+          reinitMermaid();
+          if (document.querySelectorAll('.mermaid').length > 0) {
+            mermaid.run({
+              querySelector: '.mermaid'
+            });
+          }
+        }
+      });
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+<script>
+  window.socialFloatConfig = {};
+</script>
+
+
+  
+<script src="/js/canvas-nest.min.js"></script>
+<script src="/js/click-love.js"></script>
+<script src="/js/cool-effects.js"></script>
+<script src="/js/click-text.js"></script>
+
+
+
+<!-- 代码高亮主题切换器 -->
+
+  <script  src="/js/highlight-theme-switcher.js" ></script>
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
