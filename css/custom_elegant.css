@@ -1,0 +1,123 @@
+
+/* Footer 样式修复 */
+[data-theme="dark"] #footer {
+    background: transparent !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+[data-theme="dark"] #footer-wrap {
+    color: inherit !important;
+}
+[data-theme="dark"] #footer-wrap a {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* 浅色模式配色 - 模拟 default.png 的色调 (假设是柔和的蓝/紫色调，根据 Fluid 默认图推测) */
+[data-theme="light"] {
+    --global-bg: linear-gradient(to bottom, #f5f7fa, #e4e7eb); /* 柔和灰白背景 */
+    --theme-color: #3b5d92; /* 提取自图片的深蓝色 */
+    --text-highlight-color: #3b5d92;
+}
+
+/* 浅色模式下的玻璃拟态 */
+[data-theme="light"] #aside-content .card-widget,
+[data-theme="light"] .layout > .recent-posts > .recent-post-item,
+[data-theme="light"] .layout > div.post-content,
+[data-theme="light"] .layout > .page-template {
+    background: rgba(255, 255, 255, 0.7) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 4px 16px rgba(59, 93, 146, 0.1); /* 使用主题色的淡淡阴影 */
+}
+
+/* 全局背景 - 深色渐变，增加质感 */
+[data-theme="dark"] {
+  --global-bg: linear-gradient(to bottom, #121212, #1a1a1a);
+  background-image: var(--global-bg) !important;
+}
+
+/* 首页大图与内容的过渡 - 移除波浪效果（如果存在），让过渡更简洁 */
+/* 这里主要是通过让卡片半透明来实现视觉上的自然过渡 */
+
+/* 卡片毛玻璃效果 & 立体感增强 (Glassmorphism) */
+[data-theme="dark"] #aside-content .card-widget,
+[data-theme="dark"] .layout > .recent-posts > .recent-post-item,
+[data-theme="dark"] .layout > div.post-content,
+[data-theme="dark"] .layout > .page-template {
+  background: rgba(30, 30, 30, 0.6) !important; /* 半透明深色背景 */
+  backdrop-filter: blur(15px); /* 毛玻璃模糊 */
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.08); /* 微妙的边框高光 */
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); /* 深度阴影 */
+  border-radius: 12px; /* 更圆润的角 */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* 悬停效果 - 增加互动立体感 */
+[data-theme="dark"] .recent-post-item:hover,
+[data-theme="dark"] .card-widget:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.5);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* 优化 Banner 区域 */
+/* 去掉 Banner 遮罩的生硬感，或者让文字更清晰 */
+#page-header {
+  background-color: transparent;
+}
+
+/* 导航栏透明化，与背景融合 */
+#nav {
+  background-color: rgba(18, 18, 18, 0.8);
+  backdrop-filter: blur(10px);
+}
+[data-theme="dark"] #nav {
+    box-shadow: none;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+/* 字体优化 - 更加高雅 */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Lato, Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+/* ---------------------------------------------------
+   修复深色模式下 Recent Post Item 分辨率低的问题
+   通过加深背景色和增强边框对比度来解决
+--------------------------------------------------- */
+[data-theme="dark"] .layout > .recent-posts > .recent-post-item {
+    background: rgba(20, 20, 20, 0.8) !important; /* 加深背景，减少透明度 */
+    border: 1px solid rgba(255, 255, 255, 0.15);   /* 增强边框亮度 */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);     /* 加深阴影 */
+}
+
+[data-theme="dark"] .layout > .recent-posts > .recent-post-item:hover {
+    background: rgba(25, 25, 25, 0.9) !important; /* 悬停时更加不透明 */
+    border-color: rgba(255, 255, 255, 0.3);       /* 悬停时边框更亮 */
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8);
+}
+
+/* ---------------------------------------------------
+   修复 Mermaid 渲染问题
+   1. 强制居中并包含在块内
+   2. 优化深色模式下的背景
+--------------------------------------------------- */
+.mermaid-wrap {
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+    overflow-x: auto;
+    text-align: center; /* 尝试居中 */
+}
+
+[data-theme="dark"] .mermaid-wrap {
+    background: rgba(255, 255, 255, 0.05); /* 深色模式下给 Mermaid 一个微弱的背景块 */
+}
+
+/* 强制 svg 适应容器宽度，防止溢出或过小 */
+.mermaid svg {
+    max-width: 100% !important;
+    height: auto !important;
+}

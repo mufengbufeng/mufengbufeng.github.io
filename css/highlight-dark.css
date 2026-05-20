@@ -1,0 +1,110 @@
+.markdown-body pre code.hljs,
+figure.highlight code.hljs {
+  display: block !important;
+  overflow-x: auto;
+  padding: 1em;
+}
+.markdown-body code.hljs,
+figure.highlight code.hljs {
+  padding: 3px 5px;
+}
+.markdown-body .hljs,
+figure.highlight .hljs {
+  color: #abb2bf !important;
+  background: #282c34;
+}
+.markdown-body .hljs-comment,
+.markdown-body .hljs-quote,
+figure.highlight .hljs-comment,
+figure.highlight .hljs-quote {
+  color: #5c6370 !important;
+  font-style: italic;
+}
+.markdown-body .hljs-doctag,
+.markdown-body .hljs-formula,
+.markdown-body .hljs-keyword,
+figure.highlight .hljs-doctag,
+figure.highlight .hljs-formula,
+figure.highlight .hljs-keyword {
+  color: #c678dd !important;
+}
+.markdown-body .hljs-deletion,
+.markdown-body .hljs-name,
+.markdown-body .hljs-section,
+.markdown-body .hljs-selector-tag,
+.markdown-body .hljs-subst,
+figure.highlight .hljs-deletion,
+figure.highlight .hljs-name,
+figure.highlight .hljs-section,
+figure.highlight .hljs-selector-tag,
+figure.highlight .hljs-subst {
+  color: #e06c75 !important;
+}
+.markdown-body .hljs-literal,
+figure.highlight .hljs-literal {
+  color: #56b6c2 !important;
+}
+.markdown-body .hljs-addition,
+.markdown-body .hljs-attribute,
+.markdown-body .hljs-meta .hljs-string,
+.markdown-body .hljs-regexp,
+.markdown-body .hljs-string,
+figure.highlight .hljs-addition,
+figure.highlight .hljs-attribute,
+figure.highlight .hljs-meta .hljs-string,
+figure.highlight .hljs-regexp,
+figure.highlight .hljs-string {
+  color: #98c379 !important;
+}
+.markdown-body .hljs-attr,
+.markdown-body .hljs-number,
+.markdown-body .hljs-selector-attr,
+.markdown-body .hljs-selector-class,
+.markdown-body .hljs-selector-pseudo,
+.markdown-body .hljs-template-variable,
+.markdown-body .hljs-type,
+.markdown-body .hljs-variable,
+figure.highlight .hljs-attr,
+figure.highlight .hljs-number,
+figure.highlight .hljs-selector-attr,
+figure.highlight .hljs-selector-class,
+figure.highlight .hljs-selector-pseudo,
+figure.highlight .hljs-template-variable,
+figure.highlight .hljs-type,
+figure.highlight .hljs-variable {
+  color: #d19a66 !important;
+}
+.markdown-body .hljs-bullet,
+.markdown-body .hljs-link,
+.markdown-body .hljs-meta,
+.markdown-body .hljs-selector-id,
+.markdown-body .hljs-symbol,
+.markdown-body .hljs-title,
+figure.highlight .hljs-bullet,
+figure.highlight .hljs-link,
+figure.highlight .hljs-meta,
+figure.highlight .hljs-selector-id,
+figure.highlight .hljs-symbol,
+figure.highlight .hljs-title {
+  color: #61aeee !important;
+}
+.markdown-body .hljs-built_in,
+.markdown-body .hljs-class .hljs-title,
+.markdown-body .hljs-title.class_,
+figure.highlight .hljs-built_in,
+figure.highlight .hljs-class .hljs-title,
+figure.highlight .hljs-title.class_ {
+  color: #e6c07b !important;
+}
+.markdown-body .hljs-emphasis,
+figure.highlight .hljs-emphasis {
+  font-style: italic;
+}
+.markdown-body .hljs-strong,
+figure.highlight .hljs-strong {
+  font-weight: 700;
+}
+.markdown-body .hljs-link,
+figure.highlight .hljs-link {
+  text-decoration: underline;
+}

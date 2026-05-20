@@ -1,0 +1,1062 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=light>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+    <link rel="canonical" href="https://lshgame.com/2026/05/11/Unity Performance Optimization - Code - Memory Leaks/"/>
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="rgba(47, 65, 84, 0.9)">
+  <meta name="author" content="SuHang">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Unity优化—代码篇—内存泄漏本文总结Unity游戏开发中常见的内存泄漏问题及其游戏性能优化方案。 基本概念什么是内存泄漏内存泄漏（Memory Leak）是指程序中已分配的内存由于某种原因未被释放或无法释放，导致系统可用内存逐渐减少的现象。在Unity中主要表现为：  托管内存泄漏：C#对象无法被GC回收 原生内存泄漏：Unity引擎底层资源未正确释放 内存持续增长：长时间运行后内存占用不断上">
+<meta property="og:type" content="article">
+<meta property="og:title" content="性能优化-代码篇-内存泄漏">
+<meta property="og:url" content="https://lshgame.com/2026/05/11/Unity%20Performance%20Optimization%20-%20Code%20-%20Memory%20Leaks/index.html">
+<meta property="og:site_name" content="苏杭小站">
+<meta property="og:description" content="Unity优化—代码篇—内存泄漏本文总结Unity游戏开发中常见的内存泄漏问题及其游戏性能优化方案。 基本概念什么是内存泄漏内存泄漏（Memory Leak）是指程序中已分配的内存由于某种原因未被释放或无法释放，导致系统可用内存逐渐减少的现象。在Unity中主要表现为：  托管内存泄漏：C#对象无法被GC回收 原生内存泄漏：Unity引擎底层资源未正确释放 内存持续增长：长时间运行后内存占用不断上">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-05-11T03:29:00.000Z">
+<meta property="article:modified_time" content="2026-05-11T03:43:52.006Z">
+<meta property="article:author" content="SuHang">
+<meta property="article:tag" content="Unity">
+<meta property="article:tag" content="性能优化">
+<meta property="article:tag" content="内存泄漏">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>性能优化-代码篇-内存泄漏 - 苏杭小站</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/retro-game-ui.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"lshgame.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#667eea","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":false,"baidu":null,"google":{"measurement_id":"G-6BJRKXXJ1M"},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=G-6BJRKXXJ1M", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', 'G-6BJRKXXJ1M');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner header-inner--post" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>苏杭小站</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                
+                <span>游戏</span>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/games/" target="_self">
+                    
+                    <span>游戏首页</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/games/tetris/" target="_self">
+                    
+                    <span>俄罗斯方块</span>
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/retro-game-banner.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="性能优化-代码篇-内存泄漏"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-05-11 11:29" pubdate>
+          2026年5月11日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          15 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">性能优化-代码篇-内存泄漏</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Unity优化—代码篇—内存泄漏"><a href="#Unity优化—代码篇—内存泄漏" class="headerlink" title="Unity优化—代码篇—内存泄漏"></a>Unity优化—代码篇—内存泄漏</h1><p>本文总结Unity游戏开发中常见的内存泄漏问题及其游戏性能优化方案。</p>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><h3 id="什么是内存泄漏"><a href="#什么是内存泄漏" class="headerlink" title="什么是内存泄漏"></a>什么是内存泄漏</h3><p>内存泄漏（Memory Leak）是指程序中已分配的内存由于某种原因未被释放或无法释放，导致系统可用内存逐渐减少的现象。在Unity中主要表现为：</p>
+<ul>
+<li><strong>托管内存泄漏</strong>：C#对象无法被GC回收</li>
+<li><strong>原生内存泄漏</strong>：Unity引擎底层资源未正确释放</li>
+<li><strong>内存持续增长</strong>：长时间运行后内存占用不断上升</li>
+</ul>
+<h3 id="Unity内存分类"><a href="#Unity内存分类" class="headerlink" title="Unity内存分类"></a>Unity内存分类</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">Unity内存架构<br>├── 托管堆 (Managed Heap)<br>│   ├── C#对象<br>│   ├── 字符串<br>│   └── 数组/集合<br>├── 原生内存 (Native Memory)<br>│   ├── 纹理 (Textures)<br>│   ├── 网格 (Meshes)<br>│   ├── 音频 (AudioClips)<br>│   ├── 动画片 (AnimationClips)<br>│   ├── 着色器 (Shaders)<br>│   └── 渲染纹理 (RenderTextures)<br>└── 引擎内存 (Engine Memory)<br>    ├── 场景对象<br>    ├── 组件<br>    └── 系统开销<br></code></pre></td></tr></table></figure>
+
+<h2 id="定位工具与方法"><a href="#定位工具与方法" class="headerlink" title="定位工具与方法"></a>定位工具与方法</h2><h3 id="1-Unity-Profiler"><a href="#1-Unity-Profiler" class="headerlink" title="1. Unity Profiler"></a>1. Unity Profiler</h3><p><strong>启用方式</strong>：<code>Window &gt; Analysis &gt; Profiler</code></p>
+<h4 id="关键指标监控"><a href="#关键指标监控" class="headerlink" title="关键指标监控"></a>关键指标监控</h4><table>
+<thead>
+<tr>
+<th>指标</th>
+<th>说明</th>
+<th>异常阈值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Total Allocated</td>
+<td>总分配内存</td>
+<td>持续增长</td>
+</tr>
+<tr>
+<td>GC Allocated</td>
+<td>每帧GC分配</td>
+<td>&gt;1KB&#x2F;帧</td>
+</tr>
+<tr>
+<td>Reserved Memory</td>
+<td>保留内存</td>
+<td>异常峰值</td>
+</tr>
+<tr>
+<td>GC.Collect</td>
+<td>GC调用频率</td>
+<td>&gt;1次&#x2F;秒</td>
+</tr>
+</tbody></table>
+<h4 id="Memory-Profiler详细使用"><a href="#Memory-Profiler详细使用" class="headerlink" title="Memory Profiler详细使用"></a>Memory Profiler详细使用</h4><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment">// 代码中捕获快照</span><br><span class="hljs-keyword">using</span> Unity.Profiling;<br><span class="hljs-keyword">using</span> Unity.Profiling.Memory;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">MemorySnapshotTaker</span> : <span class="hljs-title">MonoBehaviour</span><br>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">TakeSnapshot</span>()</span><br>    &#123;<br>        <span class="hljs-comment">// 需要Memory Profiler包</span><br>        <span class="hljs-comment">// Window &gt; Package Manager &gt; Memory Profiler</span><br>        Debug.Log(<span class="hljs-string">&quot;请使用Memory Profiler窗口手动捕获快照&quot;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-Deep-Profiling"><a href="#2-Deep-Profiling" class="headerlink" title="2. Deep Profiling"></a>2. Deep Profiling</h3><p><strong>启用方式</strong>：Profiler窗口勾选 “Deep Profile”</p>
+<ul>
+<li>记录所有函数调用</li>
+<li>定位具体分配位置</li>
+<li>注意：性能开销较大，仅在调试时使用</li>
+</ul>
+<h3 id="3-内存快照对比"><a href="#3-内存快照对比" class="headerlink" title="3. 内存快照对比"></a>3. 内存快照对比</h3><p><strong>操作步骤</strong>：</p>
+<ol>
+<li>打开游戏运行至目标场景</li>
+<li>捕获第一份快照（基准）</li>
+<li>执行待测操作（如进入&#x2F;退出战斗）</li>
+<li>捕获第二份快照</li>
+<li>对比两次快照，查看对象增量</li>
+</ol>
+<h3 id="4-代码检测工具"><a href="#4-代码检测工具" class="headerlink" title="4. 代码检测工具"></a>4. 代码检测工具</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment">// 对象引用追踪工具</span><br><span class="hljs-keyword">using</span> System.Collections.Generic;<br><span class="hljs-keyword">using</span> UnityEngine;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">ObjectReferenceTracker</span> : <span class="hljs-title">MonoBehaviour</span><br>&#123;<br>    <span class="hljs-keyword">private</span> Dictionary&lt;<span class="hljs-built_in">string</span>, <span class="hljs-built_in">int</span>&gt; objectCounts = <span class="hljs-keyword">new</span> Dictionary&lt;<span class="hljs-built_in">string</span>, <span class="hljs-built_in">int</span>&gt;();<br><br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Update</span>()</span><br>    &#123;<br>        <span class="hljs-keyword">if</span> (Input.GetKeyDown(KeyCode.F1))<br>        &#123;<br>            LogObjectCounts();<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">LogObjectCounts</span>()</span><br>    &#123;<br>        <span class="hljs-keyword">var</span> allObjects = FindObjectsOfType&lt;UnityEngine.Object&gt;();<br>        <span class="hljs-keyword">var</span> typeCounts = <span class="hljs-keyword">new</span> Dictionary&lt;<span class="hljs-built_in">string</span>, <span class="hljs-built_in">int</span>&gt;();<br><br>        <span class="hljs-keyword">foreach</span> (<span class="hljs-keyword">var</span> obj <span class="hljs-keyword">in</span> allObjects)<br>        &#123;<br>            <span class="hljs-keyword">var</span> typeName = obj.GetType().Name;<br>            <span class="hljs-keyword">if</span> (!typeCounts.ContainsKey(typeName))<br>                typeCounts[typeName] = <span class="hljs-number">0</span>;<br>            typeCounts[typeName]++;<br>        &#125;<br><br>        Debug.Log(<span class="hljs-string">&quot;=== Object Count Report ===&quot;</span>);<br>        <span class="hljs-keyword">foreach</span> (<span class="hljs-keyword">var</span> kvp <span class="hljs-keyword">in</span> typeCounts)<br>        &#123;<br>            Debug.Log(<span class="hljs-string">$&quot;<span class="hljs-subst">&#123;kvp.Key&#125;</span>: <span class="hljs-subst">&#123;kvp.Value&#125;</span>&quot;</span>);<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="5-引用链分析"><a href="#5-引用链分析" class="headerlink" title="5. 引用链分析"></a>5. 引用链分析</h3><p>使用Memory Profiler的”Reference”功能查看：</p>
+<ul>
+<li>对象被谁引用</li>
+<li>引用链路径</li>
+<li>GC Root引用关系</li>
+</ul>
+<h2 id="常见泄漏场景"><a href="#常见泄漏场景" class="headerlink" title="常见泄漏场景"></a>常见泄漏场景</h2><h3 id="1-静态引用泄漏"><a href="#1-静态引用泄漏" class="headerlink" title="1. 静态引用泄漏"></a>1. 静态引用泄漏</h3><h4 id="问题代码"><a href="#问题代码" class="headerlink" title="问题代码"></a>问题代码</h4><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment">// 静态集合持有对象引用</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">GameManager</span> : <span class="hljs-title">MonoBehaviour</span><br>&#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> List&lt;GameObject&gt; allEnemies = <span class="hljs-keyword">new</span> List&lt;GameObject&gt;();<br><br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">OnDestroy</span>()</span><br>    &#123;<br>        <span class="hljs-comment">// 忘记清理，对象无法释放</span><br>        <span class="hljs-comment">// allEnemies.Clear();</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h4 id="修复方案"><a href="#修复方案" class="headerlink" title="修复方案"></a>修复方案</h4><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment">// 及时清理静态引用</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">GameManager</span> : <span class="hljs-title">MonoBehaviour</span><br>&#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> List&lt;GameObject&gt; allEnemies = <span class="hljs-keyword">new</span> List&lt;GameObject&gt;();<br><br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">OnDestroy</span>()</span><br>    &#123;<br>        <span class="hljs-comment">// 场景切换时清理</span><br>        ClearEnemies();<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">ClearEnemies</span>()</span><br>    &#123;<br>        <span class="hljs-keyword">foreach</span> (<span class="hljs-keyword">var</span> enemy <span class="hljs-keyword">in</span> allEnemies)<br>        &#123;<br>            <span class="hljs-keyword">if</span> (enemy != <span class="hljs-literal">null</span>)<br>                Destroy(enemy);<br>        &#125;<br>        allEnemies.Clear();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-事件订阅未取消"><a href="#2-事件订阅未取消" class="headerlink" title="2. 事件订阅未取消"></a>2. 事件订阅未取消</h3><h4 id="问题代码-1"><a href="#问题代码-1" class="headerlink" title="问题代码"></a>问题代码</h4><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">UIEventListener</span> : <span class="hljs-title">MonoBehaviour</span><br>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">OnEnable</span>()</span><br>    &#123;<br>        EventBus.OnPlayerStateChanged += HandlePlayerState;<br>    &#125;<br>    <span class="hljs-comment">//  缺少OnDisable取消订阅</span><br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">HandlePlayerState</span>(<span class="hljs-params">PlayerState state</span>)</span><br>    &#123;<br>        <span class="hljs-comment">// 处理逻辑</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h4 id="修复方案-1"><a href="#修复方案-1" class="headerlink" title="修复方案"></a>修复方案</h4><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">UIEventListener</span> : <span class="hljs-title">MonoBehaviour</span><br>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">OnEnable</span>()</span><br>    &#123;<br>        EventBus.OnPlayerStateChanged += HandlePlayerState;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">OnDisable</span>()</span><br>    &#123;<br>        EventBus.OnPlayerStateChanged -= HandlePlayerState;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">HandlePlayerState</span>(<span class="hljs-params">PlayerState state</span>)</span><br>    &#123;<br>        <span class="hljs-comment">// 处理逻辑</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="3-协程泄漏"><a href="#3-协程泄漏" class="headerlink" title="3. 协程泄漏"></a>3. 协程泄漏</h3><h4 id="问题代码-2"><a href="#问题代码-2" class="headerlink" title="问题代码"></a>问题代码</h4><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">CoroutineLeak</span> : <span class="hljs-title">MonoBehaviour</span><br>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Start</span>()</span><br>    &#123;<br>        StartCoroutine(DoSomething());<br>    &#125;<br><br>    <span class="hljs-function">IEnumerator <span class="hljs-title">DoSomething</span>()</span><br>    &#123;<br>        <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>)<br>        &#123;<br>            <span class="hljs-function"><span class="hljs-keyword">yield</span> <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title">WaitForSeconds</span>(<span class="hljs-params"><span class="hljs-number">1f</span></span>)</span>;<br>            <span class="hljs-comment">// 对象被Destroy后，这个协程可能继续存在</span><br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h4 id="修复方案-2"><a href="#修复方案-2" class="headerlink" title="修复方案"></a>修复方案</h4><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">CoroutineManager</span> : <span class="hljs-title">MonoBehaviour</span><br>&#123;<br>    <span class="hljs-keyword">private</span> Coroutine currentCoroutine;<br><br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Start</span>()</span><br>    &#123;<br>        currentCoroutine = StartCoroutine(DoSomething());<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">OnDestroy</span>()</span><br>    &#123;<br>        <span class="hljs-comment">// 停止所有协程</span><br>        StopAllCoroutines();<br>    &#125;<br><br>    <span class="hljs-function">IEnumerator <span class="hljs-title">DoSomething</span>()</span><br>    &#123;<br>        <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>)<br>        &#123;<br>            <span class="hljs-function"><span class="hljs-keyword">yield</span> <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title">WaitForSeconds</span>(<span class="hljs-params"><span class="hljs-number">1f</span></span>)</span>;<br>            <span class="hljs-comment">// 检查对象是否被销毁</span><br>            <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span> == <span class="hljs-literal">null</span>) <span class="hljs-keyword">yield</span> <span class="hljs-keyword">break</span>;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="4-Unity对象引用"><a href="#4-Unity对象引用" class="headerlink" title="4. Unity对象引用"></a>4. Unity对象引用</h3><h4 id="问题代码-3"><a href="#问题代码-3" class="headerlink" title="问题代码"></a>问题代码</h4><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">AudioManager</span> : <span class="hljs-title">MonoBehaviour</span><br>&#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> AudioManager instance;<br>    <span class="hljs-keyword">public</span> AudioSource bgmSource;  <span class="hljs-comment">// 在Inspector中赋值</span><br>    <span class="hljs-comment">// 场景对象被DontDestroyOnLoad持有，导致场景无法卸载</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h4 id="修复方案-3"><a href="#修复方案-3" class="headerlink" title="修复方案"></a>修复方案</h4><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">AudioManager</span> : <span class="hljs-title">MonoBehaviour</span><br>&#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> AudioManager instance;<br>    <span class="hljs-keyword">private</span> AudioSource bgmSource;<br><br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Awake</span>()</span><br>    &#123;<br>        <span class="hljs-keyword">if</span> (instance == <span class="hljs-literal">null</span>)<br>        &#123;<br>            instance = <span class="hljs-keyword">this</span>;<br>            DontDestroyOnLoad(gameObject);<br>            <span class="hljs-comment">// 动态创建组件而非引用场景对象</span><br>            bgmSource = gameObject.AddComponent&lt;AudioSource&gt;();<br>        &#125;<br>        <span class="hljs-keyword">else</span><br>        &#123;<br>            Destroy(gameObject);<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="5-闭包与Lambda泄漏"><a href="#5-闭包与Lambda泄漏" class="headerlink" title="5. 闭包与Lambda泄漏"></a>5. 闭包与Lambda泄漏</h3><h4 id="问题代码-4"><a href="#问题代码-4" class="headerlink" title="问题代码"></a>问题代码</h4><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">ButtonHandler</span> : <span class="hljs-title">MonoBehaviour</span><br>&#123;<br>    <span class="hljs-keyword">private</span> List&lt;Action&gt; actions = <span class="hljs-keyword">new</span> List&lt;Action&gt;();<br><br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">SetupButton</span>()</span><br>    &#123;<br>        actions.Add(() =&gt; &#123;<br>            <span class="hljs-comment">// 这个闭包捕获了this，导致ButtonHandler无法被GC</span><br>            Debug.Log(gameObject.name);<br>        &#125;);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h4 id="修复方案-4"><a href="#修复方案-4" class="headerlink" title="修复方案"></a>修复方案</h4><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">ButtonHandler</span> : <span class="hljs-title">MonoBehaviour</span><br>&#123;<br>    <span class="hljs-keyword">private</span> List&lt;Action&gt; actions = <span class="hljs-keyword">new</span> List&lt;Action&gt;();<br><br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">SetupButton</span>()</span><br>    &#123;<br>        <span class="hljs-comment">// 使用弱引用</span><br>        <span class="hljs-keyword">var</span> weakRef = <span class="hljs-keyword">new</span> WeakReference(<span class="hljs-keyword">this</span>);<br>        actions.Add(() =&gt; &#123;<br>            <span class="hljs-keyword">if</span> (weakRef.Target <span class="hljs-keyword">is</span> ButtonHandler handler)<br>            &#123;<br>                Debug.Log(handler.gameObject.name);<br>            &#125;<br>        &#125;);<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">OnDestroy</span>()</span><br>    &#123;<br>        actions.Clear(); <span class="hljs-comment">// 清理委托引用</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="6-缓存未清理"><a href="#6-缓存未清理" class="headerlink" title="6. 缓存未清理"></a>6. 缓存未清理</h3><h4 id="问题代码-5"><a href="#问题代码-5" class="headerlink" title="问题代码"></a>问题代码</h4><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">ObjectPool</span> : <span class="hljs-title">MonoBehaviour</span><br>&#123;<br>    <span class="hljs-keyword">private</span> Dictionary&lt;<span class="hljs-built_in">string</span>, Queue&lt;GameObject&gt;&gt; pools =<br>        <span class="hljs-keyword">new</span> Dictionary&lt;<span class="hljs-built_in">string</span>, Queue&lt;GameObject&gt;&gt;();<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> GameObject <span class="hljs-title">Get</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> key</span>)</span><br>    &#123;<br>        <span class="hljs-keyword">if</span> (pools.ContainsKey(key) &amp;&amp; pools[key].Count &gt; <span class="hljs-number">0</span>)<br>        &#123;<br>            <span class="hljs-keyword">return</span> pools[key].Dequeue();<br>        &#125;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Return</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> key, GameObject obj</span>)</span><br>    &#123;<br>        <span class="hljs-keyword">if</span> (!pools.ContainsKey(key))<br>            pools[key] = <span class="hljs-keyword">new</span> Queue&lt;GameObject&gt;();<br>        pools[key].Enqueue(obj);<br>    &#125;<br>    <span class="hljs-comment">//  场景切换时没有清理缓存</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h4 id="修复方案-5"><a href="#修复方案-5" class="headerlink" title="修复方案"></a>修复方案</h4><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">ObjectPool</span> : <span class="hljs-title">MonoBehaviour</span><br>&#123;<br>    <span class="hljs-keyword">private</span> Dictionary&lt;<span class="hljs-built_in">string</span>, Queue&lt;GameObject&gt;&gt; pools;<br><br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">OnDestroy</span>()</span><br>    &#123;<br>        ClearPool();<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">ClearPool</span>()</span><br>    &#123;<br>        <span class="hljs-keyword">if</span> (pools == <span class="hljs-literal">null</span>) <span class="hljs-keyword">return</span>;<br><br>        <span class="hljs-keyword">foreach</span> (<span class="hljs-keyword">var</span> pool <span class="hljs-keyword">in</span> pools.Values)<br>        &#123;<br>            <span class="hljs-keyword">while</span> (pool.Count &gt; <span class="hljs-number">0</span>)<br>            &#123;<br>                <span class="hljs-keyword">var</span> obj = pool.Dequeue();<br>                <span class="hljs-keyword">if</span> (obj != <span class="hljs-literal">null</span>)<br>                    Destroy(obj);<br>            &#125;<br>        &#125;<br>        pools.Clear();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="7-MonoBehaviour单例陷阱"><a href="#7-MonoBehaviour单例陷阱" class="headerlink" title="7. MonoBehaviour单例陷阱"></a>7. MonoBehaviour单例陷阱</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment">//  问题场景：切换场景时单例被销毁但静态引用仍存在</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">GameManager</span> : <span class="hljs-title">MonoBehaviour</span><br>&#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> GameManager _instance;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> GameManager Instance<br>    &#123;<br>        <span class="hljs-keyword">get</span><br>        &#123;<br>            <span class="hljs-keyword">if</span> (_instance == <span class="hljs-literal">null</span>)<br>            &#123;<br>                _instance = FindObjectOfType&lt;GameManager&gt;();<br>                <span class="hljs-comment">// 如果场景中没有，可能创建新对象但旧引用存在</span><br>            &#125;<br>            <span class="hljs-keyword">return</span> _instance;<br>        &#125;<br>    &#125;<br>    <span class="hljs-comment">// 场景B加载后，场景A的GameManager被销毁</span><br>    <span class="hljs-comment">// 但某些代码可能仍持有旧引用</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="8-AssetBundle泄漏"><a href="#8-AssetBundle泄漏" class="headerlink" title="8. AssetBundle泄漏"></a>8. AssetBundle泄漏</h3><h4 id="问题代码-6"><a href="#问题代码-6" class="headerlink" title="问题代码"></a>问题代码</h4><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">AssetLoader</span> : <span class="hljs-title">MonoBehaviour</span><br>&#123;<br>    <span class="hljs-keyword">private</span> AssetBundle bundle;<br><br>    <span class="hljs-function">IEnumerator <span class="hljs-title">LoadAsset</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> bundleName, <span class="hljs-built_in">string</span> assetName</span>)</span><br>    &#123;<br>        bundle = AssetBundle.LoadFromFile(bundleName);<br>        <span class="hljs-keyword">var</span> prefab = bundle.LoadAsset&lt;GameObject&gt;(assetName);<br>        Instantiate(prefab);<br>        <span class="hljs-comment">//  卸载时没有卸载AssetBundle</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h4 id="修复方案-6"><a href="#修复方案-6" class="headerlink" title="修复方案"></a>修复方案</h4><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">AssetLoader</span> : <span class="hljs-title">MonoBehaviour</span><br>&#123;<br>    <span class="hljs-keyword">private</span> AssetBundle bundle;<br>    <span class="hljs-keyword">private</span> List&lt;Object&gt; loadedAssets = <span class="hljs-keyword">new</span> List&lt;Object&gt;();<br><br>    <span class="hljs-function">IEnumerator <span class="hljs-title">LoadAsset</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> bundleName, <span class="hljs-built_in">string</span> assetName</span>)</span><br>    &#123;<br>        bundle = AssetBundle.LoadFromFile(bundleName);<br>        <span class="hljs-keyword">var</span> asset = bundle.LoadAsset&lt;GameObject&gt;(assetName);<br>        loadedAssets.Add(asset);<br>        <span class="hljs-keyword">yield</span> <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">OnDestroy</span>()</span><br>    &#123;<br>        <span class="hljs-comment">// 先释放已加载资源</span><br>        <span class="hljs-keyword">foreach</span> (<span class="hljs-keyword">var</span> asset <span class="hljs-keyword">in</span> loadedAssets)<br>        &#123;<br>            <span class="hljs-keyword">if</span> (asset != <span class="hljs-literal">null</span>)<br>                Resources.UnloadAsset(asset);<br>        &#125;<br>        loadedAssets.Clear();<br><br>        <span class="hljs-comment">// 再卸载AssetBundle</span><br>        <span class="hljs-keyword">if</span> (bundle != <span class="hljs-literal">null</span>)<br>            bundle.Unload(<span class="hljs-literal">true</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="9-Texture2D泄漏"><a href="#9-Texture2D泄漏" class="headerlink" title="9. Texture2D泄漏"></a>9. Texture2D泄漏</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment">//  问题代码</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">DynamicTexture</span> : <span class="hljs-title">MonoBehaviour</span><br>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">CreateTexture</span>()</span><br>    &#123;<br>        <span class="hljs-keyword">var</span> tex = <span class="hljs-keyword">new</span> Texture2D(<span class="hljs-number">512</span>, <span class="hljs-number">512</span>);<br>        <span class="hljs-comment">// 使用后没有Destroy</span><br>    &#125;<br>&#125;<br><br><span class="hljs-comment">//  修复方案</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">FixedDynamicTexture</span> : <span class="hljs-title">MonoBehaviour</span><br>&#123;<br>    <span class="hljs-keyword">private</span> Texture2D tempTexture;<br><br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">CreateTexture</span>()</span><br>    &#123;<br>        tempTexture = <span class="hljs-keyword">new</span> Texture2D(<span class="hljs-number">512</span>, <span class="hljs-number">512</span>);<br>        <span class="hljs-comment">// 使用纹理...</span><br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">OnDestroy</span>()</span><br>    &#123;<br>        <span class="hljs-keyword">if</span> (tempTexture != <span class="hljs-literal">null</span>)<br>        &#123;<br>            Destroy(tempTexture);<br>            tempTexture = <span class="hljs-literal">null</span>;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="10-纹理引用泄漏"><a href="#10-纹理引用泄漏" class="headerlink" title="10. 纹理引用泄漏"></a>10. 纹理引用泄漏</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment">//  常见陷阱：UI图集引用</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">UIImageCache</span> : <span class="hljs-title">MonoBehaviour</span><br>&#123;<br>    <span class="hljs-comment">// 字典持有Sprite引用，Sprite持有Texture引用</span><br>    <span class="hljs-keyword">private</span> Dictionary&lt;<span class="hljs-built_in">string</span>, Sprite&gt; spriteCache;<br><br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">LoadSprites</span>()</span><br>    &#123;<br>        <span class="hljs-comment">// 加载图集所有Sprite存入缓存</span><br>        <span class="hljs-keyword">var</span> sprites = Resources.LoadAll&lt;Sprite&gt;(<span class="hljs-string">&quot;UIAtlas&quot;</span>);<br>        spriteCache = <span class="hljs-keyword">new</span> Dictionary&lt;<span class="hljs-built_in">string</span>, Sprite&gt;();<br>        <span class="hljs-keyword">foreach</span> (<span class="hljs-keyword">var</span> s <span class="hljs-keyword">in</span> sprites)<br>        &#123;<br>            spriteCache[s.name] = s;<br>        &#125;<br>        <span class="hljs-comment">// 切换场景时纹理无法释放</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ol>
+<li><strong>避免静态持有Unity对象</strong>：静态字段不应直接引用GameObject、Component等Unity对象</li>
+<li><strong>事件订阅成对出现</strong>：每个Subscribe都应有对应的Unsubscribe</li>
+<li><strong>协程及时停止</strong>：OnDestroy时调用StopAllCoroutines或StopCoroutine</li>
+<li><strong>AssetBundle及时卸载</strong>：使用完毕后调用Unload(true)</li>
+<li><strong>纹理手动释放</strong>：动态创建的Texture2D需要手动Destroy</li>
+<li><strong>场景切换测试</strong>：反复进出场景，观察内存是否稳定</li>
+<li><strong>定期GC回收</strong>：场景切换时手动调用GC.Collect</li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>内存泄漏是Unity性能优化中的常见问题，需要开发者具备良好的编码习惯和系统性的检测方法。关键要点：</p>
+<ol>
+<li><strong>理解内存机制</strong>：区分托管内存和原生内存</li>
+<li><strong>善用Profiler</strong>：定期检查内存快照，对比分析</li>
+<li><strong>规范生命周期</strong>：正确使用OnDestroy&#x2F;OnDisable进行清理</li>
+<li><strong>建立检测流程</strong>：将内存检测纳入开发测试流程</li>
+<li><strong>使用管理工具</strong>：通过对象池、事件总线等工具降低泄漏风险</li>
+</ol>
+<p>通过持续监控和游戏性能优化，可以有效避免内存泄漏问题，保证游戏长期稳定运行。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Unity/" class="category-chain-item">Unity</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Unity/" class="print-no-link">#Unity</a>
+      
+        <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" class="print-no-link">#性能优化</a>
+      
+        <a href="/tags/%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F/" class="print-no-link">#内存泄漏</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>性能优化-代码篇-内存泄漏</div>
+      <div>https://lshgame.com/2026/05/11/Unity Performance Optimization - Code - Memory Leaks/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>SuHang</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年5月11日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2026/05/11/Unity%20Performance%20Optimization%20-%20Code%20-%20GC/" title="性能优化-代码篇-GC">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">性能优化-代码篇-GC</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/05/11/Unity%20Performance%20Optimization%20-%20Code%20-%20Algorithm%20and%20Data%20Structures/" title="性能优化-代码篇-算法数据结构">
+                        <span class="hidden-mobile">性能优化-代码篇-算法数据结构</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  <!-- <script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default","flowchart":{"useMaxWidth":true}});
+
+    Fluid.utils.listenDOMLoaded(function() {
+      Fluid.events.registerRefreshCallback(function() {
+        if ('mermaid' in window) {
+          mermaid.init();
+        }
+      });
+    });
+  });
+</script> -->
+
+
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js', function() {
+    // 检测当前主题（根据body的class或css变量）
+    const isDarkTheme = () => {
+      const bodyStyle = getComputedStyle(document.body);
+      const bgColor = bodyStyle.backgroundColor;
+      // 检查背景色是否为深色
+      if (bgColor.includes('rgb')) {
+        const rgb = bgColor.match(/\d+/g);
+        if (rgb) {
+          const brightness = (parseInt(rgb[0]) * 299 + parseInt(rgb[1]) * 587 + parseInt(rgb[2]) * 114) / 1000;
+          return brightness < 128;
+        }
+      }
+      return document.body.classList.contains('dark') || 
+             document.documentElement.getAttribute('data-theme') === 'dark';
+    };
+
+    // 动态设置主题
+    const getMermaidTheme = () => {
+      return isDarkTheme() ? 'dark' : 'default';
+    };
+
+    mermaid.initialize({"startOnLoad":false,"theme":"default","flowchart":{"useMaxWidth":true}});
+
+    // 重新初始化 mermaid 以应用主题
+    const reinitMermaid = () => {
+      mermaid.initialize({
+        ...{"startOnLoad":false,"theme":"default","flowchart":{"useMaxWidth":true}},
+        theme: getMermaidTheme()
+      });
+    };
+
+    Fluid.utils.listenDOMLoaded(function() {
+      // 重新设置主题
+      reinitMermaid();
+
+      // 处理原生 markdown 语法 - 多种可能的HTML结构
+
+      // 1. 标准的 <pre><code class="language-mermaid">
+      const markdownMermaid1 = document.querySelectorAll('code.language-mermaid');
+      markdownMermaid1.forEach(function(element) {
+        const pre = element.parentElement;
+        const div = document.createElement('div');
+        div.className = 'mermaid';
+        div.textContent = element.textContent.trim();
+        pre.parentNode.replaceChild(div, pre);
+      });
+
+      // 2. Hexo highlight.js 渲染的 <figure class="highlight mermaid">
+      const markdownMermaid2 = document.querySelectorAll('figure.highlight.mermaid td.code');
+      markdownMermaid2.forEach(function(element) {
+        const figure = element.closest('figure');
+        const div = document.createElement('div');
+        div.className = 'mermaid';
+        div.textContent = element.textContent.trim();
+        figure.parentNode.replaceChild(div, figure);
+      });
+
+      // 3. 查找所有带有 mermaid 类的代码块（hljs mermaid）
+      const mermaidCodeBlocks = document.querySelectorAll('code.hljs.mermaid, code.mermaid');
+      mermaidCodeBlocks.forEach(function(codeElement) {
+        const content = codeElement.textContent.trim();
+
+        // 清理HTML实体和换行符
+        const cleanContent = content
+          .replace(/&#123;/g, '{')
+          .replace(/&#125;/g, '}')
+          .replace(/&quot;/g, '"')
+          .replace(/&lt;/g, '<')
+          .replace(/&gt;/g, '>')
+          .replace(/&amp;/g, '&')
+          .replace(/\r\n/g, '\n')
+          .replace(/\n\s*\n/g, '\n');
+
+        // 检查是否是有效的 mermaid 语法
+        if (cleanContent.match(/^(graph|sequenceDiagram|gantt|classDiagram|stateDiagram|stateDiagram-v2|pie|flowchart|gitGraph|journey|quadrantChart|requirementDiagram|mindmap|timeline|sankey|erDiagram|flowchart TD|flowchart LR|graph TD|graph LR)/)) {
+          // 找到包含这个代码块的 figure 或 pre 元素
+          let container = codeElement.closest('figure') || codeElement.closest('pre');
+          if (container) {
+            const div = document.createElement('div');
+            div.className = 'mermaid';
+            div.textContent = cleanContent;
+            container.parentNode.replaceChild(div, container);
+          }
+        }
+      });
+
+      // 4. 查找可能包含mermaid关键词的 plaintext 代码块
+      const allCodeBlocks = document.querySelectorAll('figure.highlight.plaintext td.code, figure.highlight td.code');
+      allCodeBlocks.forEach(function(element) {
+        // 跳过已处理的
+        if (element.closest('.mermaid')) return;
+
+        let content = element.textContent.trim();
+
+        // 清理HTML实体和换行符
+        content = content.replace(/&quot;/g, '"')
+                        .replace(/&lt;/g, '<')
+                        .replace(/&gt;/g, '>')
+                        .replace(/&amp;/g, '&')
+                        .replace(/&#123;/g, '{')
+                        .replace(/&#125;/g, '}');
+
+        // 检查是否是mermaid语法（以常见的mermaid关键词开头）
+        if (content.match(/^(graph|sequenceDiagram|gantt|classDiagram|stateDiagram|stateDiagram-v2|pie|flowchart|gitGraph|journey|quadrantChart|requirementDiagram|mindmap|timeline|sankey|erDiagram|flowchart TD|flowchart LR|graph TD|graph LR)/)) {
+          const figure = element.closest('figure');
+          const div = document.createElement('div');
+          div.className = 'mermaid';
+          div.textContent = content;
+          figure.parentNode.replaceChild(div, figure);
+        }
+      });
+
+      // 5. 处理标签语法
+      const tagMermaid = document.querySelectorAll('pre code.mermaid, code.mermaid');
+      tagMermaid.forEach(function(element) {
+        // 跳过已处理的
+        if (element.closest('.mermaid')) return;
+
+        const pre = element.parentElement;
+        const div = document.createElement('div');
+        div.className = 'mermaid';
+        div.textContent = element.textContent.trim();
+        pre.parentNode.replaceChild(div, pre);
+      });
+
+      // 初始化 mermaid
+      if (document.querySelectorAll('.mermaid').length > 0) {
+        mermaid.run({
+          querySelector: '.mermaid'
+        });
+      }
+
+      // 监听主题切换
+      const observer = new MutationObserver(function() {
+        setTimeout(() => {
+          reinitMermaid();
+          if (document.querySelectorAll('.mermaid').length > 0) {
+            mermaid.run({
+              querySelector: '.mermaid'
+            });
+          }
+        }, 100);
+      });
+
+      observer.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class', 'data-theme']
+      });
+
+      observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['data-theme']
+      });
+
+      Fluid.events.registerRefreshCallback(function() {
+        if ('mermaid' in window) {
+          reinitMermaid();
+          if (document.querySelectorAll('.mermaid').length > 0) {
+            mermaid.run({
+              querySelector: '.mermaid'
+            });
+          }
+        }
+      });
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+<script>
+  window.socialFloatConfig = {};
+</script>
+
+
+  
+<script src="/js/retro-game-ui.js"></script>
+
+
+
+<!-- 代码高亮主题切换器 -->
+
+  <script  src="/js/highlight-theme-switcher.js" ></script>
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

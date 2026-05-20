@@ -1,0 +1,1010 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=light>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+    <link rel="canonical" href="https://lshgame.com/2026/05/11/Unity Performance Optimization - Code - GC/"/>
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="rgba(47, 65, 84, 0.9)">
+  <meta name="author" content="SuHang">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Unity优化—代码篇—GC什么是GC在游戏运行的时候，数据主要存储在内存中，当游戏的数据在不需要的时候，存储当前数据的内存就可以被回收以再次使用。内存垃圾是指当前废弃数据所占用的内存，垃圾回收（GC）是指将废弃的内存重新回收再次使用的过程。 GC 触发时：  主线程会被暂停 标记并扫描所有托管堆上的对象 回收不再被引用的对象  GC触发条件自动触发条件 堆内存分配超过阈值（Incremental">
+<meta property="og:type" content="article">
+<meta property="og:title" content="性能优化-代码篇-GC">
+<meta property="og:url" content="https://lshgame.com/2026/05/11/Unity%20Performance%20Optimization%20-%20Code%20-%20GC/index.html">
+<meta property="og:site_name" content="苏杭小站">
+<meta property="og:description" content="Unity优化—代码篇—GC什么是GC在游戏运行的时候，数据主要存储在内存中，当游戏的数据在不需要的时候，存储当前数据的内存就可以被回收以再次使用。内存垃圾是指当前废弃数据所占用的内存，垃圾回收（GC）是指将废弃的内存重新回收再次使用的过程。 GC 触发时：  主线程会被暂停 标记并扫描所有托管堆上的对象 回收不再被引用的对象  GC触发条件自动触发条件 堆内存分配超过阈值（Incremental">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-05-11T03:29:00.000Z">
+<meta property="article:modified_time" content="2026-05-11T03:43:49.345Z">
+<meta property="article:author" content="SuHang">
+<meta property="article:tag" content="性能优化">
+<meta property="article:tag" content="GC">
+<meta property="article:tag" content="CSharp">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>性能优化-代码篇-GC - 苏杭小站</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/retro-game-ui.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"lshgame.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#667eea","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":false,"baidu":null,"google":{"measurement_id":"G-6BJRKXXJ1M"},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=G-6BJRKXXJ1M", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', 'G-6BJRKXXJ1M');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner header-inner--post" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>苏杭小站</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                
+                <span>游戏</span>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/games/" target="_self">
+                    
+                    <span>游戏首页</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/games/tetris/" target="_self">
+                    
+                    <span>俄罗斯方块</span>
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/retro-game-banner.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="性能优化-代码篇-GC"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-05-11 11:29" pubdate>
+          2026年5月11日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          14 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">性能优化-代码篇-GC</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Unity优化—代码篇—GC"><a href="#Unity优化—代码篇—GC" class="headerlink" title="Unity优化—代码篇—GC"></a>Unity优化—代码篇—GC</h1><h2 id="什么是GC"><a href="#什么是GC" class="headerlink" title="什么是GC"></a>什么是GC</h2><p>在游戏运行的时候，数据主要存储在内存中，当游戏的数据在不需要的时候，存储当前数据的内存就可以被回收以再次使用。内存垃圾是指当前废弃数据所占用的内存，垃圾回收（GC）是指将废弃的内存重新回收再次使用的过程。</p>
+<p>GC 触发时：</p>
+<ul>
+<li>主线程会被暂停</li>
+<li>标记并扫描所有托管堆上的对象</li>
+<li>回收不再被引用的对象</li>
+</ul>
+<h2 id="GC触发条件"><a href="#GC触发条件" class="headerlink" title="GC触发条件"></a>GC触发条件</h2><h3 id="自动触发条件"><a href="#自动触发条件" class="headerlink" title="自动触发条件"></a>自动触发条件</h3><ul>
+<li><strong>堆内存分配</strong>超过阈值（Incremental GC约增加1MB触发一次）</li>
+<li><strong>定期检查</strong>（Editor模式下更频繁）</li>
+<li><strong>系统内存压力</strong>过大</li>
+</ul>
+<h3 id="常见触发场景"><a href="#常见触发场景" class="headerlink" title="常见触发场景"></a>常见触发场景</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Update</span>()</span> &#123;<br>    text.text = <span class="hljs-string">&quot;Score: &quot;</span> + score; <span class="hljs-comment">// 每次拼接产生新字符串</span><br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">ProcessItems</span>(<span class="hljs-params">List&lt;Item&gt; items</span>)</span> &#123;<br>    <span class="hljs-keyword">foreach</span> (<span class="hljs-keyword">var</span> item <span class="hljs-keyword">in</span> items) &#123;<br>        <span class="hljs-keyword">var</span> temp = <span class="hljs-keyword">new</span> List&lt;<span class="hljs-built_in">int</span>&gt;(); <span class="hljs-comment">// 每次迭代分配</span><br>    &#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">SetValue</span>(<span class="hljs-params"><span class="hljs-built_in">int</span> <span class="hljs-keyword">value</span></span>)</span> &#123;<br>    PlayerPrefs.SetInt(<span class="hljs-string">&quot;key&quot;</span>, <span class="hljs-keyword">value</span>); <span class="hljs-comment">// 实际上不会装箱，但要注意</span><br>    <span class="hljs-built_in">int</span> v = (<span class="hljs-built_in">int</span>)GetValue(); <span class="hljs-comment">// 拆箱操作</span><br>&#125;<br><br><span class="hljs-function"><span class="hljs-built_in">object</span> <span class="hljs-title">GetValue</span>()</span> =&gt; <span class="hljs-number">42</span>; <span class="hljs-comment">// 装箱，产生堆分配</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="GC-操作带来的问题"><a href="#GC-操作带来的问题" class="headerlink" title="GC 操作带来的问题"></a>GC 操作带来的问题</h2><ul>
+<li>GC操作会需要大量的时间来运行，如果堆内存上有大量的变量或者引用需要检查，则检查的操作会十分缓慢，这就会使得游戏运行缓慢。</li>
+<li>GC 会带来堆内存碎片的问题。当一个内存单元从堆内存上分配出来，它的大小取决于它存储的变量的大小。当该内存被回收到堆内存上时，有可能会让堆内存分割成碎片化的单元。也就是说，堆内存总体可以使用的内存单元较大，但是单独的内存单元较小，在下次内存分配的时候不能找到合适大小的存储单元，这也会触发 GC 或 内存扩展操作</li>
+</ul>
+<h2 id="游戏性能优化方案"><a href="#游戏性能优化方案" class="headerlink" title="游戏性能优化方案"></a>游戏性能优化方案</h2><h3 id="1-字符串游戏性能优化"><a href="#1-字符串游戏性能优化" class="headerlink" title="1. 字符串游戏性能优化"></a>1. 字符串游戏性能优化</h3><h4 id="使用StringBuilder替代字符串拼接"><a href="#使用StringBuilder替代字符串拼接" class="headerlink" title="使用StringBuilder替代字符串拼接"></a>使用StringBuilder替代字符串拼接</h4><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment">//  错误做法</span><br><span class="hljs-built_in">string</span> result = <span class="hljs-string">&quot;&quot;</span>;<br><span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">1000</span>; i++) &#123;<br>    result += i; <span class="hljs-comment">// 每次循环创建新字符串</span><br>&#125;<br><br><span class="hljs-comment">//  正确做法</span><br><span class="hljs-keyword">var</span> sb = <span class="hljs-keyword">new</span> StringBuilder(<span class="hljs-number">1000</span>); <span class="hljs-comment">// 预分配容量</span><br><span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">1000</span>; i++) &#123;<br>    sb.Append(i);<br>&#125;<br><span class="hljs-built_in">string</span> result = sb.ToString();<br></code></pre></td></tr></table></figure>
+
+<h4 id="缓存常用字符串"><a href="#缓存常用字符串" class="headerlink" title="缓存常用字符串"></a>缓存常用字符串</h4><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment">//  将常用字符串声明为常量或静态字段</span><br><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">readonly</span> <span class="hljs-built_in">string</span>[] SCORE_FORMATS = <span class="hljs-keyword">new</span> <span class="hljs-built_in">string</span>[] &#123;<br>    <span class="hljs-string">&quot;Score: &#123;0&#125;&quot;</span>,<br>    <span class="hljs-string">&quot;Final Score: &#123;0&#125;&quot;</span>,<br>    <span class="hljs-string">&quot;Best Score: &#123;0&#125;&quot;</span><br>&#125;;<br><br><span class="hljs-comment">//  对于文本组件，只在内容变化时更新</span><br><span class="hljs-keyword">private</span> <span class="hljs-built_in">int</span> lastScore = <span class="hljs-number">-1</span>;<br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">UpdateScore</span>(<span class="hljs-params"><span class="hljs-built_in">int</span> score</span>)</span> &#123;<br>    <span class="hljs-keyword">if</span> (score != lastScore) &#123;<br>        scoreText.text = <span class="hljs-built_in">string</span>.Format(SCORE_FORMATS[<span class="hljs-number">0</span>], score);<br>        lastScore = score;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-集合与数组游戏性能优化"><a href="#2-集合与数组游戏性能优化" class="headerlink" title="2. 集合与数组游戏性能优化"></a>2. 集合与数组游戏性能优化</h3><h4 id="预分配集合容量"><a href="#预分配集合容量" class="headerlink" title="预分配集合容量"></a>预分配集合容量</h4><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment">//  未指定初始容量，多次扩容</span><br>List&lt;Vector3&gt; positions = <span class="hljs-keyword">new</span> List&lt;Vector3&gt;();<br><span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">1000</span>; i++) &#123;<br>    positions.Add(Vector3.zero); <span class="hljs-comment">// 多次触发内部数组重新分配</span><br>&#125;<br><br><span class="hljs-comment">//  预分配足够容量</span><br>List&lt;Vector3&gt; positions = <span class="hljs-keyword">new</span> List&lt;Vector3&gt;(<span class="hljs-number">1000</span>);<br></code></pre></td></tr></table></figure>
+
+<h4 id="复用集合对象"><a href="#复用集合对象" class="headerlink" title="复用集合对象"></a>复用集合对象</h4><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment">//  使用静态集合或对象池复用</span><br><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">readonly</span> List&lt;Vector3&gt; sharedList = <span class="hljs-keyword">new</span> List&lt;Vector3&gt;();<br><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">GetPositions</span>(<span class="hljs-params">List&lt;Vector3&gt; output</span>)</span> &#123;<br>    output.Clear();<br>    <span class="hljs-comment">// 填充数据...</span><br>&#125;<br><br><span class="hljs-comment">// 调用</span><br>GetPositions(sharedList);<br></code></pre></td></tr></table></figure>
+
+<h4 id="使用数组替代List（已知容量时）"><a href="#使用数组替代List（已知容量时）" class="headerlink" title="使用数组替代List（已知容量时）"></a>使用数组替代List（已知容量时）</h4><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment">//  固定大小使用数组</span><br><span class="hljs-keyword">private</span> <span class="hljs-keyword">readonly</span> Transform[] cachedTransforms;<br><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Start</span>()</span> &#123;<br>    cachedTransforms = <span class="hljs-keyword">new</span> Transform[<span class="hljs-number">100</span>];<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="3-避免装箱拆箱"><a href="#3-避免装箱拆箱" class="headerlink" title="3. 避免装箱拆箱"></a>3. 避免装箱拆箱</h3><h4 id="使用泛型和非装箱API"><a href="#使用泛型和非装箱API" class="headerlink" title="使用泛型和非装箱API"></a>使用泛型和非装箱API</h4><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment">//  装箱产生堆分配</span><br>ArrayList list = <span class="hljs-keyword">new</span> ArrayList();<br>list.Add(<span class="hljs-number">42</span>); <span class="hljs-comment">// int装箱为object</span><br><br><span class="hljs-comment">//  使用泛型集合</span><br>List&lt;<span class="hljs-built_in">int</span>&gt; list = <span class="hljs-keyword">new</span> List&lt;<span class="hljs-built_in">int</span>&gt;();<br>list.Add(<span class="hljs-number">42</span>); <span class="hljs-comment">// 无装箱</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="避免值类型作为接口类型使用"><a href="#避免值类型作为接口类型使用" class="headerlink" title="避免值类型作为接口类型使用"></a>避免值类型作为接口类型使用</h4><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment">//  结构体装箱</span><br><span class="hljs-keyword">struct</span> Point &#123; <span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span> X, Y; &#125;<br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Draw</span>(<span class="hljs-params"><span class="hljs-built_in">object</span> obj</span>)</span> &#123; &#125;<br>Draw(<span class="hljs-keyword">new</span> Point()); <span class="hljs-comment">// 装箱</span><br><br><span class="hljs-comment">//  使用泛型约束</span><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Draw</span>&lt;<span class="hljs-title">T</span>&gt;(<span class="hljs-params">T obj</span>) <span class="hljs-keyword">where</span> T : <span class="hljs-keyword">struct</span></span> &#123; &#125;<br>Draw(<span class="hljs-keyword">new</span> Point()); <span class="hljs-comment">// 无装箱</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="4-协程游戏性能优化"><a href="#4-协程游戏性能优化" class="headerlink" title="4. 协程游戏性能优化"></a>4. 协程游戏性能优化</h3><h4 id="避免在协程中频繁分配"><a href="#避免在协程中频繁分配" class="headerlink" title="避免在协程中频繁分配"></a>避免在协程中频繁分配</h4><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment">//  每次调用创建新迭代器</span><br><span class="hljs-function">IEnumerator <span class="hljs-title">RepeatAction</span>()</span> &#123;<br>    <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) &#123;<br>        DoSomething();<br>        <span class="hljs-function"><span class="hljs-keyword">yield</span> <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title">WaitForSeconds</span>(<span class="hljs-params"><span class="hljs-number">0.5f</span></span>)</span>; <span class="hljs-comment">// 每次创建新对象</span><br>    &#125;<br>&#125;<br><br><span class="hljs-comment">//  缓存WaitForSeconds对象</span><br><span class="hljs-keyword">private</span> WaitForSeconds waitHalfSecond = <span class="hljs-keyword">new</span> WaitForSeconds(<span class="hljs-number">0.5f</span>);<br><br><span class="hljs-function">IEnumerator <span class="hljs-title">RepeatAction</span>()</span> &#123;<br>    <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) &#123;<br>        DoSomething();<br>        <span class="hljs-keyword">yield</span> <span class="hljs-keyword">return</span> waitHalfSecond; <span class="hljs-comment">// 复用对象</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h4 id="使用WaitForEndOfFrame替代WaitForFixedUpdate"><a href="#使用WaitForEndOfFrame替代WaitForFixedUpdate" class="headerlink" title="使用WaitForEndOfFrame替代WaitForFixedUpdate"></a>使用WaitForEndOfFrame替代WaitForFixedUpdate</h4><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment">//  对于UI更新，使用WaitForEndOfFrame</span><br><span class="hljs-function">IEnumerator <span class="hljs-title">UpdateUI</span>()</span> &#123;<br>    <span class="hljs-function"><span class="hljs-keyword">yield</span> <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title">WaitForEndOfFrame</span>()</span>;<br>    UpdateUIElements();<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="5-LINQ游戏性能优化"><a href="#5-LINQ游戏性能优化" class="headerlink" title="5. LINQ游戏性能优化"></a>5. LINQ游戏性能优化</h3><h4 id="避免在热路径使用LINQ"><a href="#避免在热路径使用LINQ" class="headerlink" title="避免在热路径使用LINQ"></a>避免在热路径使用LINQ</h4><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment">//  LINQ产生闭包和委托分配</span><br><span class="hljs-keyword">var</span> active = enemies.Where(e =&gt; e.isActive).ToList();<br><span class="hljs-keyword">var</span> first = list.FirstOrDefault(e =&gt; e.id == targetId);<br><br><span class="hljs-comment">//  使用传统循环</span><br><span class="hljs-keyword">var</span> active = <span class="hljs-keyword">new</span> List&lt;Enemy&gt;();<br><span class="hljs-keyword">foreach</span> (<span class="hljs-keyword">var</span> e <span class="hljs-keyword">in</span> enemies) &#123;<br>    <span class="hljs-keyword">if</span> (e.isActive) active.Add(e);<br>&#125;<br><br><span class="hljs-comment">//  使用Find或手动查找</span><br>Enemy found = <span class="hljs-literal">null</span>;<br><span class="hljs-keyword">foreach</span> (<span class="hljs-keyword">var</span> e <span class="hljs-keyword">in</span> list) &#123;<br>    <span class="hljs-keyword">if</span> (e.id == targetId) &#123; found = e; <span class="hljs-keyword">break</span>; &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="6-闭包与委托游戏性能优化"><a href="#6-闭包与委托游戏性能优化" class="headerlink" title="6. 闭包与委托游戏性能优化"></a>6. 闭包与委托游戏性能优化</h3><h4 id="缓存常用委托"><a href="#缓存常用委托" class="headerlink" title="缓存常用委托"></a>缓存常用委托</h4><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment">//  每次创建新委托</span><br>button.onClick.AddListener(() =&gt; OnClick());<br>list.Sort((a, b) =&gt; a.<span class="hljs-keyword">value</span>.CompareTo(b.<span class="hljs-keyword">value</span>));<br><br><span class="hljs-comment">//  预先定义委托</span><br><span class="hljs-keyword">private</span> <span class="hljs-keyword">readonly</span> System.Action clickHandler;<br><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Start</span>()</span> &#123;<br>    clickHandler = OnClick;<br>    button.onClick.AddListener(clickHandler);<br>&#125;<br><br><span class="hljs-comment">//  或直接传递方法组</span><br>button.onClick.AddListener(OnClick);<br></code></pre></td></tr></table></figure>
+
+<h3 id="7-对象池技术"><a href="#7-对象池技术" class="headerlink" title="7. 对象池技术"></a>7. 对象池技术</h3><h4 id="实现通用对象池"><a href="#实现通用对象池" class="headerlink" title="实现通用对象池"></a>实现通用对象池</h4><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment">//  简单对象池实现</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">ObjectPool</span>&lt;<span class="hljs-title">T</span>&gt; <span class="hljs-keyword">where</span> <span class="hljs-title">T</span> : <span class="hljs-keyword">class</span>, <span class="hljs-title">new</span>()<br>&#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">readonly</span> Stack&lt;T&gt; pool = <span class="hljs-keyword">new</span> Stack&lt;T&gt;();<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">readonly</span> System.Action&lt;T&gt; resetAction;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">ObjectPool</span>(<span class="hljs-params">System.Action&lt;T&gt; resetAction = <span class="hljs-literal">null</span>, <span class="hljs-built_in">int</span> initialSize = <span class="hljs-number">10</span></span>)</span><br>    &#123;<br>        <span class="hljs-keyword">this</span>.resetAction = resetAction;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>; i &lt; initialSize; i++)<br>            pool.Push(<span class="hljs-keyword">new</span> T());<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> T <span class="hljs-title">Get</span>()</span><br>    &#123;<br>        <span class="hljs-keyword">return</span> pool.Count &gt; <span class="hljs-number">0</span> ? pool.Pop() : <span class="hljs-keyword">new</span> T();<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Return</span>(<span class="hljs-params">T obj</span>)</span><br>    &#123;<br>        resetAction?.Invoke(obj);<br>        pool.Push(obj);<br>    &#125;<br>&#125;<br><br><span class="hljs-comment">// 使用示例</span><br><span class="hljs-keyword">private</span> <span class="hljs-keyword">readonly</span> ObjectPool&lt;Bullet&gt; bulletPool = <span class="hljs-keyword">new</span> ObjectPool&lt;Bullet&gt;(<br>    resetAction: b =&gt; b.Reset(),<br>    initialSize: <span class="hljs-number">50</span><br>);<br><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">FireBullet</span>()</span> &#123;<br>    <span class="hljs-keyword">var</span> bullet = bulletPool.Get(); <span class="hljs-comment">// 从池中获取，无分配</span><br>    <span class="hljs-comment">// 使用子弹...</span><br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">OnBulletDestroyed</span>(<span class="hljs-params">Bullet bullet</span>)</span> &#123;<br>    bulletPool.Return(bullet); <span class="hljs-comment">// 归还到池中</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="8-Unity-API游戏性能优化"><a href="#8-Unity-API游戏性能优化" class="headerlink" title="8. Unity API游戏性能优化"></a>8. Unity API游戏性能优化</h3><h4 id="避免每帧获取组件"><a href="#避免每帧获取组件" class="headerlink" title="避免每帧获取组件"></a>避免每帧获取组件</h4><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment">//  每帧获取组件</span><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Update</span>()</span> &#123;<br>    <span class="hljs-keyword">var</span> renderer = GetComponent&lt;Renderer&gt;();<br>    renderer.material.color = Color.red;<br>&#125;<br><br><span class="hljs-comment">//  缓存组件引用</span><br><span class="hljs-keyword">private</span> Renderer cachedRenderer;<br><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Start</span>()</span> &#123;<br>    cachedRenderer = GetComponent&lt;Renderer&gt;();<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Update</span>()</span> &#123;<br>    cachedRenderer.material.color = Color.red;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h4 id="使用非分配API"><a href="#使用非分配API" class="headerlink" title="使用非分配API"></a>使用非分配API</h4><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment">//  GetComponents返回新数组</span><br>Component[] components = GetComponents&lt;Component&gt;();<br><br><span class="hljs-comment">//  使用List版本复用列表</span><br><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">readonly</span> List&lt;Component&gt; componentCache = <span class="hljs-keyword">new</span> List&lt;Component&gt;();<br>GetComponents(componentCache);<br><br><span class="hljs-comment">//  输入字符串获取键值</span><br><span class="hljs-built_in">string</span> horizontal = Input.GetAxis(<span class="hljs-string">&quot;Horizontal&quot;</span>);<br><br><span class="hljs-comment">// 缓存输入轴名称或直接使用新输入系统</span><br><span class="hljs-comment">// 新输入系统完全避免字符串分配</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="9-手动GC控制"><a href="#9-手动GC控制" class="headerlink" title="9. 手动GC控制"></a>9. 手动GC控制</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment">//  在加载界面主动触发GC</span><br><span class="hljs-function">IEnumerator <span class="hljs-title">LoadSceneAsync</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> sceneName</span>)</span> &#123;<br>    <span class="hljs-comment">// 显示加载界面</span><br>    ShowLoadingScreen();<br><br>    <span class="hljs-comment">// 清理资源</span><br>    Resources.UnloadUnusedAssets();<br><br>    <span class="hljs-comment">// 手动触发GC</span><br>    System.GC.Collect();<br><br>    <span class="hljs-comment">// 加载场景</span><br>    <span class="hljs-keyword">var</span> operation = SceneManager.LoadSceneAsync(sceneName);<br>    <span class="hljs-keyword">yield</span> <span class="hljs-keyword">return</span> operation;<br><br>    <span class="hljs-comment">// 隐藏加载界面</span><br>    HideLoadingScreen();<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="分析工具"><a href="#分析工具" class="headerlink" title="分析工具"></a>分析工具</h2><h3 id="1-Unity-Profiler"><a href="#1-Unity-Profiler" class="headerlink" title="1. Unity Profiler"></a>1. Unity Profiler</h3><ul>
+<li><strong>Memory Profiler</strong>：查看托管堆大小和GC分配</li>
+<li><strong>ProfilerMarkers</strong>：标记代码段，精确分析</li>
+</ul>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment">// 使用自定义标记</span><br><span class="hljs-keyword">using</span> Unity.Profiling;<br><br><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">readonly</span> ProfilerMarker updateMarker = <span class="hljs-keyword">new</span> ProfilerMarker(<span class="hljs-string">&quot;PlayerUpdate&quot;</span>);<br><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Update</span>()</span> &#123;<br>    <span class="hljs-keyword">using</span> (updateMarker.Auto())<br>    &#123;<br>        <span class="hljs-comment">// 代码逻辑</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-Deep-Profiling"><a href="#2-Deep-Profiling" class="headerlink" title="2. Deep Profiling"></a>2. Deep Profiling</h3><ul>
+<li>启用后可看到每个函数调用的分配</li>
+<li>性能开销大，仅在分析时使用</li>
+</ul>
+<h3 id="3-Memory-Profiler-Package"><a href="#3-Memory-Profiler-Package" class="headerlink" title="3. Memory Profiler Package"></a>3. Memory Profiler Package</h3><ul>
+<li>Unity官方Package</li>
+<li>可视化内存分配和GC根</li>
+<li>抓取快照对比内存变化</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Unity/" class="category-chain-item">Unity</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" class="print-no-link">#性能优化</a>
+      
+        <a href="/tags/GC/" class="print-no-link">#GC</a>
+      
+        <a href="/tags/CSharp/" class="print-no-link">#CSharp</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>性能优化-代码篇-GC</div>
+      <div>https://lshgame.com/2026/05/11/Unity Performance Optimization - Code - GC/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>SuHang</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年5月11日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2026/05/20/Waiting_or_Not_Waiting/" title="等待与不等待">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">等待与不等待</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/05/11/Unity%20Performance%20Optimization%20-%20Code%20-%20Memory%20Leaks/" title="性能优化-代码篇-内存泄漏">
+                        <span class="hidden-mobile">性能优化-代码篇-内存泄漏</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  <!-- <script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default","flowchart":{"useMaxWidth":true}});
+
+    Fluid.utils.listenDOMLoaded(function() {
+      Fluid.events.registerRefreshCallback(function() {
+        if ('mermaid' in window) {
+          mermaid.init();
+        }
+      });
+    });
+  });
+</script> -->
+
+
+<script>
+  Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js', function() {
+    // 检测当前主题（根据body的class或css变量）
+    const isDarkTheme = () => {
+      const bodyStyle = getComputedStyle(document.body);
+      const bgColor = bodyStyle.backgroundColor;
+      // 检查背景色是否为深色
+      if (bgColor.includes('rgb')) {
+        const rgb = bgColor.match(/\d+/g);
+        if (rgb) {
+          const brightness = (parseInt(rgb[0]) * 299 + parseInt(rgb[1]) * 587 + parseInt(rgb[2]) * 114) / 1000;
+          return brightness < 128;
+        }
+      }
+      return document.body.classList.contains('dark') || 
+             document.documentElement.getAttribute('data-theme') === 'dark';
+    };
+
+    // 动态设置主题
+    const getMermaidTheme = () => {
+      return isDarkTheme() ? 'dark' : 'default';
+    };
+
+    mermaid.initialize({"startOnLoad":false,"theme":"default","flowchart":{"useMaxWidth":true}});
+
+    // 重新初始化 mermaid 以应用主题
+    const reinitMermaid = () => {
+      mermaid.initialize({
+        ...{"startOnLoad":false,"theme":"default","flowchart":{"useMaxWidth":true}},
+        theme: getMermaidTheme()
+      });
+    };
+
+    Fluid.utils.listenDOMLoaded(function() {
+      // 重新设置主题
+      reinitMermaid();
+
+      // 处理原生 markdown 语法 - 多种可能的HTML结构
+
+      // 1. 标准的 <pre><code class="language-mermaid">
+      const markdownMermaid1 = document.querySelectorAll('code.language-mermaid');
+      markdownMermaid1.forEach(function(element) {
+        const pre = element.parentElement;
+        const div = document.createElement('div');
+        div.className = 'mermaid';
+        div.textContent = element.textContent.trim();
+        pre.parentNode.replaceChild(div, pre);
+      });
+
+      // 2. Hexo highlight.js 渲染的 <figure class="highlight mermaid">
+      const markdownMermaid2 = document.querySelectorAll('figure.highlight.mermaid td.code');
+      markdownMermaid2.forEach(function(element) {
+        const figure = element.closest('figure');
+        const div = document.createElement('div');
+        div.className = 'mermaid';
+        div.textContent = element.textContent.trim();
+        figure.parentNode.replaceChild(div, figure);
+      });
+
+      // 3. 查找所有带有 mermaid 类的代码块（hljs mermaid）
+      const mermaidCodeBlocks = document.querySelectorAll('code.hljs.mermaid, code.mermaid');
+      mermaidCodeBlocks.forEach(function(codeElement) {
+        const content = codeElement.textContent.trim();
+
+        // 清理HTML实体和换行符
+        const cleanContent = content
+          .replace(/&#123;/g, '{')
+          .replace(/&#125;/g, '}')
+          .replace(/&quot;/g, '"')
+          .replace(/&lt;/g, '<')
+          .replace(/&gt;/g, '>')
+          .replace(/&amp;/g, '&')
+          .replace(/\r\n/g, '\n')
+          .replace(/\n\s*\n/g, '\n');
+
+        // 检查是否是有效的 mermaid 语法
+        if (cleanContent.match(/^(graph|sequenceDiagram|gantt|classDiagram|stateDiagram|stateDiagram-v2|pie|flowchart|gitGraph|journey|quadrantChart|requirementDiagram|mindmap|timeline|sankey|erDiagram|flowchart TD|flowchart LR|graph TD|graph LR)/)) {
+          // 找到包含这个代码块的 figure 或 pre 元素
+          let container = codeElement.closest('figure') || codeElement.closest('pre');
+          if (container) {
+            const div = document.createElement('div');
+            div.className = 'mermaid';
+            div.textContent = cleanContent;
+            container.parentNode.replaceChild(div, container);
+          }
+        }
+      });
+
+      // 4. 查找可能包含mermaid关键词的 plaintext 代码块
+      const allCodeBlocks = document.querySelectorAll('figure.highlight.plaintext td.code, figure.highlight td.code');
+      allCodeBlocks.forEach(function(element) {
+        // 跳过已处理的
+        if (element.closest('.mermaid')) return;
+
+        let content = element.textContent.trim();
+
+        // 清理HTML实体和换行符
+        content = content.replace(/&quot;/g, '"')
+                        .replace(/&lt;/g, '<')
+                        .replace(/&gt;/g, '>')
+                        .replace(/&amp;/g, '&')
+                        .replace(/&#123;/g, '{')
+                        .replace(/&#125;/g, '}');
+
+        // 检查是否是mermaid语法（以常见的mermaid关键词开头）
+        if (content.match(/^(graph|sequenceDiagram|gantt|classDiagram|stateDiagram|stateDiagram-v2|pie|flowchart|gitGraph|journey|quadrantChart|requirementDiagram|mindmap|timeline|sankey|erDiagram|flowchart TD|flowchart LR|graph TD|graph LR)/)) {
+          const figure = element.closest('figure');
+          const div = document.createElement('div');
+          div.className = 'mermaid';
+          div.textContent = content;
+          figure.parentNode.replaceChild(div, figure);
+        }
+      });
+
+      // 5. 处理标签语法
+      const tagMermaid = document.querySelectorAll('pre code.mermaid, code.mermaid');
+      tagMermaid.forEach(function(element) {
+        // 跳过已处理的
+        if (element.closest('.mermaid')) return;
+
+        const pre = element.parentElement;
+        const div = document.createElement('div');
+        div.className = 'mermaid';
+        div.textContent = element.textContent.trim();
+        pre.parentNode.replaceChild(div, pre);
+      });
+
+      // 初始化 mermaid
+      if (document.querySelectorAll('.mermaid').length > 0) {
+        mermaid.run({
+          querySelector: '.mermaid'
+        });
+      }
+
+      // 监听主题切换
+      const observer = new MutationObserver(function() {
+        setTimeout(() => {
+          reinitMermaid();
+          if (document.querySelectorAll('.mermaid').length > 0) {
+            mermaid.run({
+              querySelector: '.mermaid'
+            });
+          }
+        }, 100);
+      });
+
+      observer.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class', 'data-theme']
+      });
+
+      observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['data-theme']
+      });
+
+      Fluid.events.registerRefreshCallback(function() {
+        if ('mermaid' in window) {
+          reinitMermaid();
+          if (document.querySelectorAll('.mermaid').length > 0) {
+            mermaid.run({
+              querySelector: '.mermaid'
+            });
+          }
+        }
+      });
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+<script>
+  window.socialFloatConfig = {};
+</script>
+
+
+  
+<script src="/js/retro-game-ui.js"></script>
+
+
+
+<!-- 代码高亮主题切换器 -->
+
+  <script  src="/js/highlight-theme-switcher.js" ></script>
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

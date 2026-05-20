@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://lshgame.com/sitemap.xml
+Sitemap: https://lshgame.com/baidusitemap.xml
+
+Host: lshgame.com
