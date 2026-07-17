@@ -65,13 +65,14 @@
 
   
 <link rel="stylesheet" href="/css/retro-game-ui.css">
+<link rel="stylesheet" href="/css/platformer-revival.css">
 
 
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"lshgame.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#667eea","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":false,"baidu":null,"google":{"measurement_id":"G-6BJRKXXJ1M"},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"lshgame.com","root":"/","version":"1.9.8","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#667eea","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":false,"baidu":null,"google":{"measurement_id":"G-6BJRKXXJ1M"},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -118,7 +119,7 @@
   <header>
     
 
-<div class="header-inner header-inner--index" style="height: 100vh;">
+<div class="header-inner header-inner--index" style="height: 44vh;">
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/">
@@ -229,7 +230,7 @@
         
         
           <li class="nav-item" id="search-btn">
-            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="搜索" title="搜索">
               <i class="iconfont icon-search"></i>
             </a>
           </li>
@@ -237,7 +238,7 @@
         
         
           <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="切换主题" title="切换主题">
               <i class="iconfont icon-dark" id="color-toggle-icon"></i>
             </a>
           </li>
@@ -250,16 +251,38 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/img/retro-game-banner.png') no-repeat center center; background-size: cover;">
+     style="background: url('/img/retro-game-banner-ai.webp') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
-        <div class="h2">
-          
-            <span id="subtitle" data-typed-text="时间会带走很多东西，但总该留下点什么。"></span>
-          
-        </div>
+        
+          <p class="banner-kicker">WORLD 1-1 · 个人技术笔记</p>
+        
 
+        
+          <h1 class="banner-title">苏杭小站</h1>
+        
+
+        
+          <div class="banner-subtitle">
+            
+              <span id="subtitle">时间会带走很多东西，但总该留下点什么。</span>
+            
+          </div>
+        
+
+        
+
+        
+          <div class="banner-stats" aria-label="站点统计">
+            
+              <span class="banner-stat">文章 <strong>48</strong></span>
+            
+              <span class="banner-stat">分类 <strong>11</strong></span>
+            
+              <span class="banner-stat">标签 <strong>40</strong></span>
+            
+          </div>
         
       </div>
 
@@ -280,45 +303,46 @@
     
       <div class="container nopadding-x-md">
         <div id="board"
-          style="margin-top: 0">
+          >
           
           <div class="container">
             <div class="row">
               <div class="col-12 col-md-10 m-auto">
                 
 
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2026/05/20/Project_Startup_Performance_Optimization/" target="_self">
-          项目启动性能优化
-        </a>
-      </h2>
-
+<section class="index-feed" aria-label="文章列表">
+  
+    <div class="row mx-auto index-card">
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2026/05/20/Project_Startup_Performance_Optimization/" target="_self">
-        <div>
-          背景自我们项目上一次启动速度优化以来，最近又遇到了比较大的启动速度危机。上次优化主要从冗余的资源加载入手，本次则主要从代码逻辑上进行优化。 通过 log 信息，我们定位到启动时的加载逻辑主要有以下几个卡点：  DLL 编译 → config 解析 → 必要资源加载（场景、图集等） → SDK 登录  本文主要讲述 DLL、config 和 资源加载 三部分。 DLL 优化DLL 部分基本都是引擎设
-        </div>
-      </a>
+      
+      <article class="col-12 col-md-12 mx-auto index-info">
+        <h3 class="index-header">
+          
+          <a href="/2026/05/20/Project_Startup_Performance_Optimization/" target="_self">
+            项目启动性能优化
+          </a>
+        </h3>
 
-      <div class="index-btm post-metas">
         
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2026-05-20 10:05" pubdate>
-              2026-05-20
-            </time>
+        <a class="index-excerpt index-excerpt__noimg" href="/2026/05/20/Project_Startup_Performance_Optimization/" target="_self">
+          <div>
+            背景自我们项目上一次启动速度优化以来，最近又遇到了比较大的启动速度危机。上次优化主要从冗余的资源加载入手，本次则主要从代码逻辑上进行优化。 通过 log 信息，我们定位到启动时的加载逻辑主要有以下几个卡点：  DLL 编译 → config 解析 → 必要资源加载（场景、图集等） → SDK 登录  本文主要讲述 DLL、config 和 资源加载 三部分。 DLL 优化DLL 部分基本都是引擎设
           </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
+        </a>
+
+        <div class="index-btm post-metas">
+          
+            <div class="post-meta mr-3">
+              <i class="iconfont icon-date"></i>
+              <time datetime="2026-05-20 10:05" pubdate>
+                2026-05-20
+              </time>
+            </div>
+          
+          
+            <div class="post-meta mr-3 d-flex align-items-center">
+              <i class="iconfont icon-category"></i>
+              
 
 <span class="category-chains">
   
@@ -335,59 +359,59 @@
   
 </span>
 
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/Unity/">#Unity</a>
-            
-              <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">#性能优化</a>
-            
-              <a href="/tags/CSharp/">#CSharp</a>
-            
-              <a href="/tags/%E5%90%AF%E5%8A%A8%E4%BC%98%E5%8C%96/">#启动优化</a>
-            
-              <a href="/tags/%E5%BC%82%E6%AD%A5%E5%8A%A0%E8%BD%BD/">#异步加载</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2026/05/20/Waiting_or_Not_Waiting/" target="_self">
-          等待与不等待
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2026/05/20/Waiting_or_Not_Waiting/" target="_self">
-        <div>
-          一直以来我以为的信条 如果当前不是最好的时机，那就等待最好的时机。  问题 没有这么多好的时机。 并不是所有的事情都需要等待时机。 你怎么知道现在不是最好的时机呢？ 更多的事情需要的是现在立刻马上执行，而不是等待。  But我仍然认为很多事情需要等待自己认为最好的时机才能做，大额消费，就业，投资…… 暂行方案基于现在的困惑，我应该需要一套，在什么时候需要等待，什么时候需要执行，的标准。  如果我立
+            </div>
+          
+          
+            <div class="post-meta index-tags-meta">
+              <i class="iconfont icon-tags"></i>
+              
+                <a href="/tags/Unity/">#Unity</a>
+              
+                <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">#性能优化</a>
+              
+                <a href="/tags/CSharp/">#CSharp</a>
+              
+                <a href="/tags/%E5%90%AF%E5%8A%A8%E4%BC%98%E5%8C%96/">#启动优化</a>
+              
+                <a href="/tags/%E5%BC%82%E6%AD%A5%E5%8A%A0%E8%BD%BD/">#异步加载</a>
+              
+            </div>
+          
         </div>
-      </a>
+      </article>
+    </div>
+  
+    <div class="row mx-auto index-card">
+      
+      
+      <article class="col-12 col-md-12 mx-auto index-info">
+        <h3 class="index-header">
+          
+          <a href="/2026/05/20/Waiting_or_Not_Waiting/" target="_self">
+            等待与不等待
+          </a>
+        </h3>
 
-      <div class="index-btm post-metas">
         
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2026-05-20 10:00" pubdate>
-              2026-05-20
-            </time>
+        <a class="index-excerpt index-excerpt__noimg" href="/2026/05/20/Waiting_or_Not_Waiting/" target="_self">
+          <div>
+            一直以来我以为的信条 如果当前不是最好的时机，那就等待最好的时机。  问题 没有这么多好的时机。 并不是所有的事情都需要等待时机。 你怎么知道现在不是最好的时机呢？ 更多的事情需要的是现在立刻马上执行，而不是等待。  But我仍然认为很多事情需要等待自己认为最好的时机才能做，大额消费，就业，投资…… 暂行方案基于现在的困惑，我应该需要一套，在什么时候需要等待，什么时候需要执行，的标准。  如果我立
           </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
+        </a>
+
+        <div class="index-btm post-metas">
+          
+            <div class="post-meta mr-3">
+              <i class="iconfont icon-date"></i>
+              <time datetime="2026-05-20 10:00" pubdate>
+                2026-05-20
+              </time>
+            </div>
+          
+          
+            <div class="post-meta mr-3 d-flex align-items-center">
+              <i class="iconfont icon-category"></i>
+              
 
 <span class="category-chains">
   
@@ -404,53 +428,53 @@
   
 </span>
 
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E6%88%90%E9%95%BF/">#成长</a>
-            
-              <a href="/tags/%E6%80%9D%E8%80%83/">#思考</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2026/05/11/Unity%20Performance%20Optimization%20-%20Code%20-%20GC/" target="_self">
-          性能优化-代码篇-GC
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2026/05/11/Unity%20Performance%20Optimization%20-%20Code%20-%20GC/" target="_self">
-        <div>
-          Unity优化—代码篇—GC什么是GC在游戏运行的时候，数据主要存储在内存中，当游戏的数据在不需要的时候，存储当前数据的内存就可以被回收以再次使用。内存垃圾是指当前废弃数据所占用的内存，垃圾回收（GC）是指将废弃的内存重新回收再次使用的过程。 GC 触发时：  主线程会被暂停 标记并扫描所有托管堆上的对象 回收不再被引用的对象  GC触发条件自动触发条件 堆内存分配超过阈值（Incremental
+            </div>
+          
+          
+            <div class="post-meta index-tags-meta">
+              <i class="iconfont icon-tags"></i>
+              
+                <a href="/tags/%E6%88%90%E9%95%BF/">#成长</a>
+              
+                <a href="/tags/%E6%80%9D%E8%80%83/">#思考</a>
+              
+            </div>
+          
         </div>
-      </a>
+      </article>
+    </div>
+  
+    <div class="row mx-auto index-card">
+      
+      
+      <article class="col-12 col-md-12 mx-auto index-info">
+        <h3 class="index-header">
+          
+          <a href="/2026/05/11/Unity%20Performance%20Optimization%20-%20Code%20-%20GC/" target="_self">
+            性能优化-代码篇-GC
+          </a>
+        </h3>
 
-      <div class="index-btm post-metas">
         
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2026-05-11 11:29" pubdate>
-              2026-05-11
-            </time>
+        <a class="index-excerpt index-excerpt__noimg" href="/2026/05/11/Unity%20Performance%20Optimization%20-%20Code%20-%20GC/" target="_self">
+          <div>
+            Unity优化—代码篇—GC什么是GC在游戏运行的时候，数据主要存储在内存中，当游戏的数据在不需要的时候，存储当前数据的内存就可以被回收以再次使用。内存垃圾是指当前废弃数据所占用的内存，垃圾回收（GC）是指将废弃的内存重新回收再次使用的过程。 GC 触发时：  主线程会被暂停 标记并扫描所有托管堆上的对象 回收不再被引用的对象  GC触发条件自动触发条件 堆内存分配超过阈值（Incremental
           </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
+        </a>
+
+        <div class="index-btm post-metas">
+          
+            <div class="post-meta mr-3">
+              <i class="iconfont icon-date"></i>
+              <time datetime="2026-05-11 11:29" pubdate>
+                2026-05-11
+              </time>
+            </div>
+          
+          
+            <div class="post-meta mr-3 d-flex align-items-center">
+              <i class="iconfont icon-category"></i>
+              
 
 <span class="category-chains">
   
@@ -467,55 +491,55 @@
   
 </span>
 
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">#性能优化</a>
-            
-              <a href="/tags/GC/">#GC</a>
-            
-              <a href="/tags/CSharp/">#CSharp</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2026/05/11/Unity%20Performance%20Optimization%20-%20Code%20-%20Memory%20Leaks/" target="_self">
-          性能优化-代码篇-内存泄漏
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2026/05/11/Unity%20Performance%20Optimization%20-%20Code%20-%20Memory%20Leaks/" target="_self">
-        <div>
-          Unity优化—代码篇—内存泄漏本文总结Unity游戏开发中常见的内存泄漏问题及其游戏性能优化方案。 基本概念什么是内存泄漏内存泄漏（Memory Leak）是指程序中已分配的内存由于某种原因未被释放或无法释放，导致系统可用内存逐渐减少的现象。在Unity中主要表现为：  托管内存泄漏：C#对象无法被GC回收 原生内存泄漏：Unity引擎底层资源未正确释放 内存持续增长：长时间运行后内存占用不断上
+            </div>
+          
+          
+            <div class="post-meta index-tags-meta">
+              <i class="iconfont icon-tags"></i>
+              
+                <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">#性能优化</a>
+              
+                <a href="/tags/GC/">#GC</a>
+              
+                <a href="/tags/CSharp/">#CSharp</a>
+              
+            </div>
+          
         </div>
-      </a>
+      </article>
+    </div>
+  
+    <div class="row mx-auto index-card">
+      
+      
+      <article class="col-12 col-md-12 mx-auto index-info">
+        <h3 class="index-header">
+          
+          <a href="/2026/05/11/Unity%20Performance%20Optimization%20-%20Code%20-%20Algorithm%20and%20Data%20Structures/" target="_self">
+            性能优化-代码篇-算法数据结构
+          </a>
+        </h3>
 
-      <div class="index-btm post-metas">
         
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2026-05-11 11:29" pubdate>
-              2026-05-11
-            </time>
+        <a class="index-excerpt index-excerpt__noimg" href="/2026/05/11/Unity%20Performance%20Optimization%20-%20Code%20-%20Algorithm%20and%20Data%20Structures/" target="_self">
+          <div>
+            Unity优化—代码篇—算法数据结构本文总结一些游戏性能优化，算法和数据结构相关的常见问题。 频繁查找 代码中频繁查找数据结构中的数据   可以考虑使用（HashSet，Dictionary）等查找效率更高的数据结构   范围查询 代码中频繁进行范围查询   可以考虑使用空间划分数据结构（四叉树，八叉树，KD树等）来游戏性能优化范围查询效率   过多排序 代码中频繁对大量数据进行排序   可以考虑
           </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
+        </a>
+
+        <div class="index-btm post-metas">
+          
+            <div class="post-meta mr-3">
+              <i class="iconfont icon-date"></i>
+              <time datetime="2026-05-11 11:29" pubdate>
+                2026-05-11
+              </time>
+            </div>
+          
+          
+            <div class="post-meta mr-3 d-flex align-items-center">
+              <i class="iconfont icon-category"></i>
+              
 
 <span class="category-chains">
   
@@ -532,55 +556,55 @@
   
 </span>
 
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/Unity/">#Unity</a>
-            
-              <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">#性能优化</a>
-            
-              <a href="/tags/%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F/">#内存泄漏</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2026/05/11/Unity%20Performance%20Optimization%20-%20Code%20-%20Algorithm%20and%20Data%20Structures/" target="_self">
-          性能优化-代码篇-算法数据结构
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2026/05/11/Unity%20Performance%20Optimization%20-%20Code%20-%20Algorithm%20and%20Data%20Structures/" target="_self">
-        <div>
-          Unity优化—代码篇—算法数据结构本文总结一些游戏性能优化，算法和数据结构相关的常见问题。 频繁查找 代码中频繁查找数据结构中的数据   可以考虑使用（HashSet，Dictionary）等查找效率更高的数据结构   范围查询 代码中频繁进行范围查询   可以考虑使用空间划分数据结构（四叉树，八叉树，KD树等）来游戏性能优化范围查询效率   过多排序 代码中频繁对大量数据进行排序   可以考虑
+            </div>
+          
+          
+            <div class="post-meta index-tags-meta">
+              <i class="iconfont icon-tags"></i>
+              
+                <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">#性能优化</a>
+              
+                <a href="/tags/%E7%AE%97%E6%B3%95/">#算法</a>
+              
+                <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">#数据结构</a>
+              
+            </div>
+          
         </div>
-      </a>
+      </article>
+    </div>
+  
+    <div class="row mx-auto index-card">
+      
+      
+      <article class="col-12 col-md-12 mx-auto index-info">
+        <h3 class="index-header">
+          
+          <a href="/2026/05/11/Unity%20Performance%20Optimization%20-%20Code%20-%20Memory%20Leaks/" target="_self">
+            性能优化-代码篇-内存泄漏
+          </a>
+        </h3>
 
-      <div class="index-btm post-metas">
         
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2026-05-11 11:29" pubdate>
-              2026-05-11
-            </time>
+        <a class="index-excerpt index-excerpt__noimg" href="/2026/05/11/Unity%20Performance%20Optimization%20-%20Code%20-%20Memory%20Leaks/" target="_self">
+          <div>
+            Unity优化—代码篇—内存泄漏本文总结Unity游戏开发中常见的内存泄漏问题及其游戏性能优化方案。 基本概念什么是内存泄漏内存泄漏（Memory Leak）是指程序中已分配的内存由于某种原因未被释放或无法释放，导致系统可用内存逐渐减少的现象。在Unity中主要表现为：  托管内存泄漏：C#对象无法被GC回收 原生内存泄漏：Unity引擎底层资源未正确释放 内存持续增长：长时间运行后内存占用不断上
           </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
+        </a>
+
+        <div class="index-btm post-metas">
+          
+            <div class="post-meta mr-3">
+              <i class="iconfont icon-date"></i>
+              <time datetime="2026-05-11 11:29" pubdate>
+                2026-05-11
+              </time>
+            </div>
+          
+          
+            <div class="post-meta mr-3 d-flex align-items-center">
+              <i class="iconfont icon-category"></i>
+              
 
 <span class="category-chains">
   
@@ -597,55 +621,55 @@
   
 </span>
 
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">#性能优化</a>
-            
-              <a href="/tags/%E7%AE%97%E6%B3%95/">#算法</a>
-            
-              <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">#数据结构</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2026/04/30/Some_Thoughts_on_AI_Memory/" target="_self">
-          关于 AI Memory 的一些思考：记忆应该如何在工作中形成
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2026/04/30/Some_Thoughts_on_AI_Memory/" target="_self">
-        <div>
-          自从 AI 工具开始进入实际开发和创作流程以来，如何让 AI 获得有效上下文，一直是一个核心问题。围绕 AI Memory 的文章、项目和仓库已经非常多，都是极具想象力和技术深度的实现方案。看过这些探索之后，本文主要是笔者在 AI Memory 上的一些浅思。 当前 AI Memory 的主要问题现在很多 AI Memory 系统已经在查询、联想、摘要、长期保存和生命周期管理方面做得比较完善。它们
+            </div>
+          
+          
+            <div class="post-meta index-tags-meta">
+              <i class="iconfont icon-tags"></i>
+              
+                <a href="/tags/Unity/">#Unity</a>
+              
+                <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">#性能优化</a>
+              
+                <a href="/tags/%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F/">#内存泄漏</a>
+              
+            </div>
+          
         </div>
-      </a>
+      </article>
+    </div>
+  
+    <div class="row mx-auto index-card">
+      
+      
+      <article class="col-12 col-md-12 mx-auto index-info">
+        <h3 class="index-header">
+          
+          <a href="/2026/04/30/Some_Thoughts_on_AI_Memory/" target="_self">
+            关于 AI Memory 的一些思考：记忆应该如何在工作中形成
+          </a>
+        </h3>
 
-      <div class="index-btm post-metas">
         
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2026-04-30 14:43" pubdate>
-              2026-04-30
-            </time>
+        <a class="index-excerpt index-excerpt__noimg" href="/2026/04/30/Some_Thoughts_on_AI_Memory/" target="_self">
+          <div>
+            自从 AI 工具开始进入实际开发和创作流程以来，如何让 AI 获得有效上下文，一直是一个核心问题。围绕 AI Memory 的文章、项目和仓库已经非常多，都是极具想象力和技术深度的实现方案。看过这些探索之后，本文主要是笔者在 AI Memory 上的一些浅思。 当前 AI Memory 的主要问题现在很多 AI Memory 系统已经在查询、联想、摘要、长期保存和生命周期管理方面做得比较完善。它们
           </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
+        </a>
+
+        <div class="index-btm post-metas">
+          
+            <div class="post-meta mr-3">
+              <i class="iconfont icon-date"></i>
+              <time datetime="2026-04-30 14:43" pubdate>
+                2026-04-30
+              </time>
+            </div>
+          
+          
+            <div class="post-meta mr-3 d-flex align-items-center">
+              <i class="iconfont icon-category"></i>
+              
 
 <span class="category-chains">
   
@@ -662,51 +686,51 @@
   
 </span>
 
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/AI-Memory/">#AI Memory</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2026/04/22/What_is_Managed_Code/" target="_self">
-          热更新系列-01-什么是托管代码(Managed Code)
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2026/04/22/What_is_Managed_Code/" target="_self">
-        <div>
-          什么是托管代码托管代码就是：其执行由运行时管理的代码。这种情况下，无论实现（如：Mono、.Net Framework、.Net Core&#x2F;.Net 5+），都被称为公共语言运行时（CLR）。CLR 负责获取托管代码，将其编译为机器码，然后执行它。它还提供了多个重要服务，例如自动内存管理、安全边界和类型安全性。 相反，C&#x2F;C++ 程序被称为”非托管代码”。在非托管的世界中，程序
+            </div>
+          
+          
+            <div class="post-meta index-tags-meta">
+              <i class="iconfont icon-tags"></i>
+              
+                <a href="/tags/AI-Memory/">#AI Memory</a>
+              
+            </div>
+          
         </div>
-      </a>
+      </article>
+    </div>
+  
+    <div class="row mx-auto index-card">
+      
+      
+      <article class="col-12 col-md-12 mx-auto index-info">
+        <h3 class="index-header">
+          
+          <a href="/2026/04/22/What_is_IL/" target="_self">
+            热更新系列-02-IL中间语言(Intermediate Language)
+          </a>
+        </h3>
 
-      <div class="index-btm post-metas">
         
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2026-04-22 12:00" pubdate>
-              2026-04-22
-            </time>
+        <a class="index-excerpt index-excerpt__noimg" href="/2026/04/22/What_is_IL/" target="_self">
+          <div>
+            什么是 IL（中间语言）什么是”中间语言（IL）”？它是用高级 .NET 语言编写的代码编译的产物。编写其中一种语言编写的代码后，将会收到一个由 IL 编写的二进制文件。 值得注意的是，IL 独立于运行在运行时（Runtime）之上的任何特定语言；它甚至拥有一套独立的规范。 从高级代码生成 IL 后，如果要运行它，CLR 会接管工作，启动实时编译（JIT）编译过程，或者将代码从 IL 实时编译成真
           </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
+        </a>
+
+        <div class="index-btm post-metas">
+          
+            <div class="post-meta mr-3">
+              <i class="iconfont icon-date"></i>
+              <time datetime="2026-04-22 12:00" pubdate>
+                2026-04-22
+              </time>
+            </div>
+          
+          
+            <div class="post-meta mr-3 d-flex align-items-center">
+              <i class="iconfont icon-category"></i>
+              
 
 <span class="category-chains">
   
@@ -723,55 +747,55 @@
   
 </span>
 
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/C/">#C#</a>
-            
-              <a href="/tags/Unity/">#Unity</a>
-            
-              <a href="/tags/%E7%83%AD%E6%9B%B4%E6%96%B0/">#热更新</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2026/04/22/What_is_IL/" target="_self">
-          热更新系列-02-IL中间语言(Intermediate Language)
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2026/04/22/What_is_IL/" target="_self">
-        <div>
-          什么是 IL（中间语言）什么是”中间语言（IL）”？它是用高级 .NET 语言编写的代码编译的产物。编写其中一种语言编写的代码后，将会收到一个由 IL 编写的二进制文件。 值得注意的是，IL 独立于运行在运行时（Runtime）之上的任何特定语言；它甚至拥有一套独立的规范。 从高级代码生成 IL 后，如果要运行它，CLR 会接管工作，启动实时编译（JIT）编译过程，或者将代码从 IL 实时编译成真
+            </div>
+          
+          
+            <div class="post-meta index-tags-meta">
+              <i class="iconfont icon-tags"></i>
+              
+                <a href="/tags/C/">#C#</a>
+              
+                <a href="/tags/Unity/">#Unity</a>
+              
+                <a href="/tags/%E7%83%AD%E6%9B%B4%E6%96%B0/">#热更新</a>
+              
+            </div>
+          
         </div>
-      </a>
+      </article>
+    </div>
+  
+    <div class="row mx-auto index-card">
+      
+      
+      <article class="col-12 col-md-12 mx-auto index-info">
+        <h3 class="index-header">
+          
+          <a href="/2026/04/22/What_is_Managed_Code/" target="_self">
+            热更新系列-01-什么是托管代码(Managed Code)
+          </a>
+        </h3>
 
-      <div class="index-btm post-metas">
         
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2026-04-22 12:00" pubdate>
-              2026-04-22
-            </time>
+        <a class="index-excerpt index-excerpt__noimg" href="/2026/04/22/What_is_Managed_Code/" target="_self">
+          <div>
+            什么是托管代码托管代码就是：其执行由运行时管理的代码。这种情况下，无论实现（如：Mono、.Net Framework、.Net Core&#x2F;.Net 5+），都被称为公共语言运行时（CLR）。CLR 负责获取托管代码，将其编译为机器码，然后执行它。它还提供了多个重要服务，例如自动内存管理、安全边界和类型安全性。 相反，C&#x2F;C++ 程序被称为”非托管代码”。在非托管的世界中，程序
           </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
+        </a>
+
+        <div class="index-btm post-metas">
+          
+            <div class="post-meta mr-3">
+              <i class="iconfont icon-date"></i>
+              <time datetime="2026-04-22 12:00" pubdate>
+                2026-04-22
+              </time>
+            </div>
+          
+          
+            <div class="post-meta mr-3 d-flex align-items-center">
+              <i class="iconfont icon-category"></i>
+              
 
 <span class="category-chains">
   
@@ -788,55 +812,55 @@
   
 </span>
 
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/C/">#C#</a>
-            
-              <a href="/tags/Unity/">#Unity</a>
-            
-              <a href="/tags/%E7%83%AD%E6%9B%B4%E6%96%B0/">#热更新</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2026/04/22/What_is_CLR/" target="_self">
-          热更新系列-03-CLR是什么
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2026/04/22/What_is_CLR/" target="_self">
-        <div>
-          CLR 是什么.Net 的运行时环境，类似于 Java 的 JVM。 CLR 做什么 JIT 编译 内存管理 类型系统 异常处理 安全校验  CLR 有哪些实现 CoreCLR  微软官方的 CLR 实现 .Net 6&#x2F;7&#x2F;8&#x2F;9 的核心运行时   Mono  早期第三方 CLR 实现 后被微软收购 现在是 .Net 官方运行时之一   .Net Framework
+            </div>
+          
+          
+            <div class="post-meta index-tags-meta">
+              <i class="iconfont icon-tags"></i>
+              
+                <a href="/tags/C/">#C#</a>
+              
+                <a href="/tags/Unity/">#Unity</a>
+              
+                <a href="/tags/%E7%83%AD%E6%9B%B4%E6%96%B0/">#热更新</a>
+              
+            </div>
+          
         </div>
-      </a>
+      </article>
+    </div>
+  
+    <div class="row mx-auto index-card">
+      
+      
+      <article class="col-12 col-md-12 mx-auto index-info">
+        <h3 class="index-header">
+          
+          <a href="/2026/04/22/What_is_CLR/" target="_self">
+            热更新系列-03-CLR是什么
+          </a>
+        </h3>
 
-      <div class="index-btm post-metas">
         
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2026-04-22 12:00" pubdate>
-              2026-04-22
-            </time>
+        <a class="index-excerpt index-excerpt__noimg" href="/2026/04/22/What_is_CLR/" target="_self">
+          <div>
+            CLR 是什么.Net 的运行时环境，类似于 Java 的 JVM。 CLR 做什么 JIT 编译 内存管理 类型系统 异常处理 安全校验  CLR 有哪些实现 CoreCLR  微软官方的 CLR 实现 .Net 6&#x2F;7&#x2F;8&#x2F;9 的核心运行时   Mono  早期第三方 CLR 实现 后被微软收购 现在是 .Net 官方运行时之一   .Net Framework
           </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
+        </a>
+
+        <div class="index-btm post-metas">
+          
+            <div class="post-meta mr-3">
+              <i class="iconfont icon-date"></i>
+              <time datetime="2026-04-22 12:00" pubdate>
+                2026-04-22
+              </time>
+            </div>
+          
+          
+            <div class="post-meta mr-3 d-flex align-items-center">
+              <i class="iconfont icon-category"></i>
+              
 
 <span class="category-chains">
   
@@ -853,55 +877,55 @@
   
 </span>
 
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/C/">#C#</a>
-            
-              <a href="/tags/Unity/">#Unity</a>
-            
-              <a href="/tags/%E7%83%AD%E6%9B%B4%E6%96%B0/">#热更新</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2026/04/22/What_is_Mono/" target="_self">
-          热更新系列-04-Mono是什么
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2026/04/22/What_is_Mono/" target="_self">
-        <div>
-          Mono 是什么Mono 是一个由 Xamarin 公司（先前是 Novell，最早为 Ximian）所主持的自由开放源码项目。该项目的目标是创建一系列符合 ECMA 标准（Ecma-334 和 Ecma-335）的 .NET 工具，包括 C# 编译器和通用语言架构。与微软的 .NET Framework 不同，Mono 项目不仅可以运行于 Windows 系统上，还可以运行于 Linux、Fre
+            </div>
+          
+          
+            <div class="post-meta index-tags-meta">
+              <i class="iconfont icon-tags"></i>
+              
+                <a href="/tags/C/">#C#</a>
+              
+                <a href="/tags/Unity/">#Unity</a>
+              
+                <a href="/tags/%E7%83%AD%E6%9B%B4%E6%96%B0/">#热更新</a>
+              
+            </div>
+          
         </div>
-      </a>
+      </article>
+    </div>
+  
+    <div class="row mx-auto index-card">
+      
+      
+      <article class="col-12 col-md-12 mx-auto index-info">
+        <h3 class="index-header">
+          
+          <a href="/2026/04/22/What_is_Mono/" target="_self">
+            热更新系列-04-Mono是什么
+          </a>
+        </h3>
 
-      <div class="index-btm post-metas">
         
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2026-04-22 12:00" pubdate>
-              2026-04-22
-            </time>
+        <a class="index-excerpt index-excerpt__noimg" href="/2026/04/22/What_is_Mono/" target="_self">
+          <div>
+            Mono 是什么Mono 是一个由 Xamarin 公司（先前是 Novell，最早为 Ximian）所主持的自由开放源码项目。该项目的目标是创建一系列符合 ECMA 标准（Ecma-334 和 Ecma-335）的 .NET 工具，包括 C# 编译器和通用语言架构。与微软的 .NET Framework 不同，Mono 项目不仅可以运行于 Windows 系统上，还可以运行于 Linux、Fre
           </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
+        </a>
+
+        <div class="index-btm post-metas">
+          
+            <div class="post-meta mr-3">
+              <i class="iconfont icon-date"></i>
+              <time datetime="2026-04-22 12:00" pubdate>
+                2026-04-22
+              </time>
+            </div>
+          
+          
+            <div class="post-meta mr-3 d-flex align-items-center">
+              <i class="iconfont icon-category"></i>
+              
 
 <span class="category-chains">
   
@@ -918,26 +942,26 @@
   
 </span>
 
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/C/">#C#</a>
-            
-              <a href="/tags/Unity/">#Unity</a>
-            
-              <a href="/tags/%E7%83%AD%E6%9B%B4%E6%96%B0/">#热更新</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
+            </div>
+          
+          
+            <div class="post-meta index-tags-meta">
+              <i class="iconfont icon-tags"></i>
+              
+                <a href="/tags/C/">#C#</a>
+              
+                <a href="/tags/Unity/">#Unity</a>
+              
+                <a href="/tags/%E7%83%AD%E6%9B%B4%E6%96%B0/">#热更新</a>
+              
+            </div>
+          
+        </div>
+      </article>
+    </div>
+  
 
-
-
+  
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/#board">2</a><a class="page-number" href="/page/3/#board">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/#board">5</a><a class="extend next" rel="next" href="/page/2/#board"><i class="iconfont icon-arrowright"></i></a>
@@ -945,6 +969,7 @@
   </nav>
 
 
+</section>
 
               </div>
             </div>
@@ -1044,21 +1069,6 @@
 <script  src="/js/events.js" ></script>
 <script  src="/js/plugins.js" ></script>
 
-
-  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
-  <script>
-    (function (window, document) {
-      var typing = Fluid.plugins.typing;
-      var subtitle = document.getElementById('subtitle');
-      if (!subtitle || !typing) {
-        return;
-      }
-      var text = subtitle.getAttribute('data-typed-text');
-      
-        typing(text);
-      
-    })(window, document);
-  </script>
 
 
 

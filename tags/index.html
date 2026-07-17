@@ -65,13 +65,14 @@
 
   
 <link rel="stylesheet" href="/css/retro-game-ui.css">
+<link rel="stylesheet" href="/css/platformer-revival.css">
 
 
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"lshgame.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#667eea","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":false,"baidu":null,"google":{"measurement_id":"G-6BJRKXXJ1M"},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"lshgame.com","root":"/","version":"1.9.8","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#667eea","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":false,"baidu":null,"google":{"measurement_id":"G-6BJRKXXJ1M"},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -118,7 +119,7 @@
   <header>
     
 
-<div class="header-inner header-inner--tags" style="height: 80vh;">
+<div class="header-inner header-inner--tags" style="height: 44vh;">
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/">
@@ -229,7 +230,7 @@
         
         
           <li class="nav-item" id="search-btn">
-            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="搜索" title="搜索">
               <i class="iconfont icon-search"></i>
             </a>
           </li>
@@ -237,7 +238,7 @@
         
         
           <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="切换主题" title="切换主题">
               <i class="iconfont icon-dark" id="color-toggle-icon"></i>
             </a>
           </li>
@@ -250,15 +251,19 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/img/retro-game-banner.png') no-repeat center center; background-size: cover;">
+     style="background: url('/img/retro-game-banner-ai.webp') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
-        <div class="h2">
-          
-            <span id="subtitle" data-typed-text="标签"></span>
-          
-        </div>
+        
+
+        
+          <h1 class="banner-title">标签</h1>
+        
+
+        
+
+        
 
         
       </div>
@@ -287,9 +292,337 @@
               <div class="col-12 col-md-10 m-auto">
                 
 
-<div class="text-center tagcloud">
-  <a href="/tags/AI/" style="font-size: 15px; color: #667eea">AI</a> <a href="/tags/AI-Memory/" style="font-size: 15px; color: #667eea">AI Memory</a> <a href="/tags/C/" style="font-size: 30px; color: #a5a5f5">C#</a> <a href="/tags/CSharp/" style="font-size: 17.5px; color: #7185ec">CSharp</a> <a href="/tags/ClaudeCode/" style="font-size: 17.5px; color: #7185ec">ClaudeCode</a> <a href="/tags/DOTS/" style="font-size: 17.5px; color: #7185ec">DOTS</a> <a href="/tags/ECS/" style="font-size: 15px; color: #667eea">ECS</a> <a href="/tags/GC/" style="font-size: 15px; color: #667eea">GC</a> <a href="/tags/GameFramework/" style="font-size: 15px; color: #667eea">GameFramework</a> <a href="/tags/MCP/" style="font-size: 17.5px; color: #7185ec">MCP</a> <a href="/tags/Mermaid/" style="font-size: 15px; color: #667eea">Mermaid</a> <a href="/tags/OOP/" style="font-size: 15px; color: #667eea">OOP</a> <a href="/tags/OpenClaw/" style="font-size: 15px; color: #667eea">OpenClaw</a> <a href="/tags/Test/" style="font-size: 15px; color: #667eea">Test</a> <a href="/tags/UGUI/" style="font-size: 17.5px; color: #7185ec">UGUI</a> <a href="/tags/Unity/" style="font-size: 27.5px; color: #9b9ff3">Unity</a> <a href="/tags/WSL/" style="font-size: 15px; color: #667eea">WSL</a> <a href="/tags/YooAssets/" style="font-size: 20px; color: #7b8bee">YooAssets</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E9%AB%98%E4%BA%AE/" style="font-size: 15px; color: #667eea">代码高亮</a> <a href="/tags/%E4%BC%98%E5%8C%96/" style="font-size: 15px; color: #667eea">优化</a> <a href="/tags/%E4%BC%98%E5%8C%96%EF%BC%8CUGUI/" style="font-size: 17.5px; color: #7185ec">优化，UGUI</a> <a href="/tags/%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F/" style="font-size: 15px; color: #667eea">内存泄漏</a> <a href="/tags/%E5%90%AF%E5%8A%A8%E4%BC%98%E5%8C%96/" style="font-size: 15px; color: #667eea">启动优化</a> <a href="/tags/%E5%BC%82%E6%AD%A5%E5%8A%A0%E8%BD%BD/" style="font-size: 15px; color: #667eea">异步加载</a> <a href="/tags/%E6%80%9D%E8%80%83/" style="font-size: 15px; color: #667eea">思考</a> <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 22.5px; color: #8692f0">性能优化</a> <a href="/tags/%E6%88%90%E9%95%BF/" style="font-size: 15px; color: #667eea">成长</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 15px; color: #667eea">数据结构</a> <a href="/tags/%E6%9D%82%E8%B0%88/" style="font-size: 15px; color: #667eea">杂谈</a> <a href="/tags/%E6%B5%8B%E8%AF%95/" style="font-size: 15px; color: #667eea">测试</a> <a href="/tags/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/" style="font-size: 15px; color: #667eea">游戏开发</a> <a href="/tags/%E7%83%AD%E6%9B%B4%E6%96%B0/" style="font-size: 25px; color: #9098f1">热更新</a> <a href="/tags/%E7%A8%8B%E5%BA%8F%E5%91%98%E5%8F%91%E5%B1%95/" style="font-size: 15px; color: #667eea">程序员发展</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 15px; color: #667eea">算法</a> <a href="/tags/%E7%BB%84%E4%BB%B6%E5%BC%8F/" style="font-size: 15px; color: #667eea">组件式</a> <a href="/tags/%E8%AE%B0%E5%BD%95/" style="font-size: 15px; color: #667eea">记录</a> <a href="/tags/%E8%BD%AF%E6%8A%80%E8%83%BD%E4%BB%A3%E7%A0%81%E4%B9%8B%E5%A4%96%E7%9A%84%E7%94%9F%E5%AD%98%E6%8C%87%E5%8D%97/" style="font-size: 20px; color: #7b8bee">软技能代码之外的生存指南</a> <a href="/tags/%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2/" style="font-size: 15px; color: #667eea">远程桌面</a> <a href="/tags/%E9%83%A8%E7%BD%B2/" style="font-size: 15px; color: #667eea">部署</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 15px; color: #667eea">面试</a>
-</div>
+<section class="tag-world" aria-labelledby="tag-world-title">
+  <header class="tag-world-hud">
+    <p class="tag-world-world">WORLD MAP</p>
+    <h2 id="tag-world-title">标签地图</h2>
+    <span class="tag-world-total">40 TAGS</span>
+  </header>
+
+  <ol class="tag-world-map">
+    
+      <li class="tag-world-node">
+        <a href="/tags/C/" title="C#">
+          <span class="tag-world-node__number" aria-hidden="true">01</span>
+          <span class="tag-world-node__name">C#</span>
+          <span class="tag-world-node__count" aria-label="11 篇文章">11</span>
+        </a>
+      </li>
+    
+      <li class="tag-world-node">
+        <a href="/tags/Unity/" title="Unity">
+          <span class="tag-world-node__number" aria-hidden="true">02</span>
+          <span class="tag-world-node__name">Unity</span>
+          <span class="tag-world-node__count" aria-label="10 篇文章">10</span>
+        </a>
+      </li>
+    
+      <li class="tag-world-node">
+        <a href="/tags/%E7%83%AD%E6%9B%B4%E6%96%B0/" title="热更新">
+          <span class="tag-world-node__number" aria-hidden="true">03</span>
+          <span class="tag-world-node__name">热更新</span>
+          <span class="tag-world-node__count" aria-label="7 篇文章">7</span>
+        </a>
+      </li>
+    
+      <li class="tag-world-node">
+        <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" title="性能优化">
+          <span class="tag-world-node__number" aria-hidden="true">04</span>
+          <span class="tag-world-node__name">性能优化</span>
+          <span class="tag-world-node__count" aria-label="5 篇文章">5</span>
+        </a>
+      </li>
+    
+      <li class="tag-world-node">
+        <a href="/tags/YooAssets/" title="YooAssets">
+          <span class="tag-world-node__number" aria-hidden="true">05</span>
+          <span class="tag-world-node__name">YooAssets</span>
+          <span class="tag-world-node__count" aria-label="3 篇文章">3</span>
+        </a>
+      </li>
+    
+      <li class="tag-world-node">
+        <a href="/tags/%E8%BD%AF%E6%8A%80%E8%83%BD%E4%BB%A3%E7%A0%81%E4%B9%8B%E5%A4%96%E7%9A%84%E7%94%9F%E5%AD%98%E6%8C%87%E5%8D%97/" title="软技能代码之外的生存指南">
+          <span class="tag-world-node__number" aria-hidden="true">06</span>
+          <span class="tag-world-node__name">软技能代码之外的生存指南</span>
+          <span class="tag-world-node__count" aria-label="3 篇文章">3</span>
+        </a>
+      </li>
+    
+      <li class="tag-world-node">
+        <a href="/tags/ClaudeCode/" title="ClaudeCode">
+          <span class="tag-world-node__number" aria-hidden="true">07</span>
+          <span class="tag-world-node__name">ClaudeCode</span>
+          <span class="tag-world-node__count" aria-label="2 篇文章">2</span>
+        </a>
+      </li>
+    
+      <li class="tag-world-node">
+        <a href="/tags/DOTS/" title="DOTS">
+          <span class="tag-world-node__number" aria-hidden="true">08</span>
+          <span class="tag-world-node__name">DOTS</span>
+          <span class="tag-world-node__count" aria-label="2 篇文章">2</span>
+        </a>
+      </li>
+    
+      <li class="tag-world-node">
+        <a href="/tags/MCP/" title="MCP">
+          <span class="tag-world-node__number" aria-hidden="true">09</span>
+          <span class="tag-world-node__name">MCP</span>
+          <span class="tag-world-node__count" aria-label="2 篇文章">2</span>
+        </a>
+      </li>
+    
+      <li class="tag-world-node">
+        <a href="/tags/UGUI/" title="UGUI">
+          <span class="tag-world-node__number" aria-hidden="true">10</span>
+          <span class="tag-world-node__name">UGUI</span>
+          <span class="tag-world-node__count" aria-label="2 篇文章">2</span>
+        </a>
+      </li>
+    
+      <li class="tag-world-node">
+        <a href="/tags/%E4%BC%98%E5%8C%96%EF%BC%8CUGUI/" title="优化，UGUI">
+          <span class="tag-world-node__number" aria-hidden="true">11</span>
+          <span class="tag-world-node__name">优化，UGUI</span>
+          <span class="tag-world-node__count" aria-label="2 篇文章">2</span>
+        </a>
+      </li>
+    
+      <li class="tag-world-node">
+        <a href="/tags/CSharp/" title="CSharp">
+          <span class="tag-world-node__number" aria-hidden="true">12</span>
+          <span class="tag-world-node__name">CSharp</span>
+          <span class="tag-world-node__count" aria-label="2 篇文章">2</span>
+        </a>
+      </li>
+    
+      <li class="tag-world-node">
+        <a href="/tags/GameFramework/" title="GameFramework">
+          <span class="tag-world-node__number" aria-hidden="true">13</span>
+          <span class="tag-world-node__name">GameFramework</span>
+          <span class="tag-world-node__count" aria-label="1 篇文章">1</span>
+        </a>
+      </li>
+    
+      <li class="tag-world-node">
+        <a href="/tags/OpenClaw/" title="OpenClaw">
+          <span class="tag-world-node__number" aria-hidden="true">14</span>
+          <span class="tag-world-node__name">OpenClaw</span>
+          <span class="tag-world-node__count" aria-label="1 篇文章">1</span>
+        </a>
+      </li>
+    
+      <li class="tag-world-node">
+        <a href="/tags/%E4%BC%98%E5%8C%96/" title="优化">
+          <span class="tag-world-node__number" aria-hidden="true">15</span>
+          <span class="tag-world-node__name">优化</span>
+          <span class="tag-world-node__count" aria-label="1 篇文章">1</span>
+        </a>
+      </li>
+    
+      <li class="tag-world-node">
+        <a href="/tags/%E9%83%A8%E7%BD%B2/" title="部署">
+          <span class="tag-world-node__number" aria-hidden="true">16</span>
+          <span class="tag-world-node__name">部署</span>
+          <span class="tag-world-node__count" aria-label="1 篇文章">1</span>
+        </a>
+      </li>
+    
+      <li class="tag-world-node">
+        <a href="/tags/AI-Memory/" title="AI Memory">
+          <span class="tag-world-node__number" aria-hidden="true">17</span>
+          <span class="tag-world-node__name">AI Memory</span>
+          <span class="tag-world-node__count" aria-label="1 篇文章">1</span>
+        </a>
+      </li>
+    
+      <li class="tag-world-node">
+        <a href="/tags/WSL/" title="WSL">
+          <span class="tag-world-node__number" aria-hidden="true">18</span>
+          <span class="tag-world-node__name">WSL</span>
+          <span class="tag-world-node__count" aria-label="1 篇文章">1</span>
+        </a>
+      </li>
+    
+      <li class="tag-world-node">
+        <a href="/tags/ECS/" title="ECS">
+          <span class="tag-world-node__number" aria-hidden="true">19</span>
+          <span class="tag-world-node__name">ECS</span>
+          <span class="tag-world-node__count" aria-label="1 篇文章">1</span>
+        </a>
+      </li>
+    
+      <li class="tag-world-node">
+        <a href="/tags/OOP/" title="OOP">
+          <span class="tag-world-node__number" aria-hidden="true">20</span>
+          <span class="tag-world-node__name">OOP</span>
+          <span class="tag-world-node__count" aria-label="1 篇文章">1</span>
+        </a>
+      </li>
+    
+      <li class="tag-world-node">
+        <a href="/tags/%E7%BB%84%E4%BB%B6%E5%BC%8F/" title="组件式">
+          <span class="tag-world-node__number" aria-hidden="true">21</span>
+          <span class="tag-world-node__name">组件式</span>
+          <span class="tag-world-node__count" aria-label="1 篇文章">1</span>
+        </a>
+      </li>
+    
+      <li class="tag-world-node">
+        <a href="/tags/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/" title="游戏开发">
+          <span class="tag-world-node__number" aria-hidden="true">22</span>
+          <span class="tag-world-node__name">游戏开发</span>
+          <span class="tag-world-node__count" aria-label="1 篇文章">1</span>
+        </a>
+      </li>
+    
+      <li class="tag-world-node">
+        <a href="/tags/%E7%A8%8B%E5%BA%8F%E5%91%98%E5%8F%91%E5%B1%95/" title="程序员发展">
+          <span class="tag-world-node__number" aria-hidden="true">23</span>
+          <span class="tag-world-node__name">程序员发展</span>
+          <span class="tag-world-node__count" aria-label="1 篇文章">1</span>
+        </a>
+      </li>
+    
+      <li class="tag-world-node">
+        <a href="/tags/%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2/" title="远程桌面">
+          <span class="tag-world-node__number" aria-hidden="true">24</span>
+          <span class="tag-world-node__name">远程桌面</span>
+          <span class="tag-world-node__count" aria-label="1 篇文章">1</span>
+        </a>
+      </li>
+    
+      <li class="tag-world-node">
+        <a href="/tags/GC/" title="GC">
+          <span class="tag-world-node__number" aria-hidden="true">25</span>
+          <span class="tag-world-node__name">GC</span>
+          <span class="tag-world-node__count" aria-label="1 篇文章">1</span>
+        </a>
+      </li>
+    
+      <li class="tag-world-node">
+        <a href="/tags/%E7%AE%97%E6%B3%95/" title="算法">
+          <span class="tag-world-node__number" aria-hidden="true">26</span>
+          <span class="tag-world-node__name">算法</span>
+          <span class="tag-world-node__count" aria-label="1 篇文章">1</span>
+        </a>
+      </li>
+    
+      <li class="tag-world-node">
+        <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" title="数据结构">
+          <span class="tag-world-node__number" aria-hidden="true">27</span>
+          <span class="tag-world-node__name">数据结构</span>
+          <span class="tag-world-node__count" aria-label="1 篇文章">1</span>
+        </a>
+      </li>
+    
+      <li class="tag-world-node">
+        <a href="/tags/%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F/" title="内存泄漏">
+          <span class="tag-world-node__number" aria-hidden="true">28</span>
+          <span class="tag-world-node__name">内存泄漏</span>
+          <span class="tag-world-node__count" aria-label="1 篇文章">1</span>
+        </a>
+      </li>
+    
+      <li class="tag-world-node">
+        <a href="/tags/%E6%9D%82%E8%B0%88/" title="杂谈">
+          <span class="tag-world-node__number" aria-hidden="true">29</span>
+          <span class="tag-world-node__name">杂谈</span>
+          <span class="tag-world-node__count" aria-label="1 篇文章">1</span>
+        </a>
+      </li>
+    
+      <li class="tag-world-node">
+        <a href="/tags/Mermaid/" title="Mermaid">
+          <span class="tag-world-node__number" aria-hidden="true">30</span>
+          <span class="tag-world-node__name">Mermaid</span>
+          <span class="tag-world-node__count" aria-label="1 篇文章">1</span>
+        </a>
+      </li>
+    
+      <li class="tag-world-node">
+        <a href="/tags/Test/" title="Test">
+          <span class="tag-world-node__number" aria-hidden="true">31</span>
+          <span class="tag-world-node__name">Test</span>
+          <span class="tag-world-node__count" aria-label="1 篇文章">1</span>
+        </a>
+      </li>
+    
+      <li class="tag-world-node">
+        <a href="/tags/%E6%B5%8B%E8%AF%95/" title="测试">
+          <span class="tag-world-node__number" aria-hidden="true">32</span>
+          <span class="tag-world-node__name">测试</span>
+          <span class="tag-world-node__count" aria-label="1 篇文章">1</span>
+        </a>
+      </li>
+    
+      <li class="tag-world-node">
+        <a href="/tags/%E4%BB%A3%E7%A0%81%E9%AB%98%E4%BA%AE/" title="代码高亮">
+          <span class="tag-world-node__number" aria-hidden="true">33</span>
+          <span class="tag-world-node__name">代码高亮</span>
+          <span class="tag-world-node__count" aria-label="1 篇文章">1</span>
+        </a>
+      </li>
+    
+      <li class="tag-world-node">
+        <a href="/tags/AI/" title="AI">
+          <span class="tag-world-node__number" aria-hidden="true">34</span>
+          <span class="tag-world-node__name">AI</span>
+          <span class="tag-world-node__count" aria-label="1 篇文章">1</span>
+        </a>
+      </li>
+    
+      <li class="tag-world-node">
+        <a href="/tags/%E6%88%90%E9%95%BF/" title="成长">
+          <span class="tag-world-node__number" aria-hidden="true">35</span>
+          <span class="tag-world-node__name">成长</span>
+          <span class="tag-world-node__count" aria-label="1 篇文章">1</span>
+        </a>
+      </li>
+    
+      <li class="tag-world-node">
+        <a href="/tags/%E6%80%9D%E8%80%83/" title="思考">
+          <span class="tag-world-node__number" aria-hidden="true">36</span>
+          <span class="tag-world-node__name">思考</span>
+          <span class="tag-world-node__count" aria-label="1 篇文章">1</span>
+        </a>
+      </li>
+    
+      <li class="tag-world-node">
+        <a href="/tags/%E9%9D%A2%E8%AF%95/" title="面试">
+          <span class="tag-world-node__number" aria-hidden="true">37</span>
+          <span class="tag-world-node__name">面试</span>
+          <span class="tag-world-node__count" aria-label="1 篇文章">1</span>
+        </a>
+      </li>
+    
+      <li class="tag-world-node">
+        <a href="/tags/%E8%AE%B0%E5%BD%95/" title="记录">
+          <span class="tag-world-node__number" aria-hidden="true">38</span>
+          <span class="tag-world-node__name">记录</span>
+          <span class="tag-world-node__count" aria-label="1 篇文章">1</span>
+        </a>
+      </li>
+    
+      <li class="tag-world-node">
+        <a href="/tags/%E5%90%AF%E5%8A%A8%E4%BC%98%E5%8C%96/" title="启动优化">
+          <span class="tag-world-node__number" aria-hidden="true">39</span>
+          <span class="tag-world-node__name">启动优化</span>
+          <span class="tag-world-node__count" aria-label="1 篇文章">1</span>
+        </a>
+      </li>
+    
+      <li class="tag-world-node">
+        <a href="/tags/%E5%BC%82%E6%AD%A5%E5%8A%A0%E8%BD%BD/" title="异步加载">
+          <span class="tag-world-node__number" aria-hidden="true">40</span>
+          <span class="tag-world-node__name">异步加载</span>
+          <span class="tag-world-node__count" aria-label="1 篇文章">1</span>
+        </a>
+      </li>
+    
+  </ol>
+</section>
 
               </div>
             </div>
@@ -389,21 +722,6 @@
 <script  src="/js/events.js" ></script>
 <script  src="/js/plugins.js" ></script>
 
-
-  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
-  <script>
-    (function (window, document) {
-      var typing = Fluid.plugins.typing;
-      var subtitle = document.getElementById('subtitle');
-      if (!subtitle || !typing) {
-        return;
-      }
-      var text = subtitle.getAttribute('data-typed-text');
-      
-        typing(text);
-      
-    })(window, document);
-  </script>
 
 
 

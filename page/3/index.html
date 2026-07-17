@@ -65,13 +65,14 @@
 
   
 <link rel="stylesheet" href="/css/retro-game-ui.css">
+<link rel="stylesheet" href="/css/platformer-revival.css">
 
 
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"lshgame.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#667eea","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":false,"baidu":null,"google":{"measurement_id":"G-6BJRKXXJ1M"},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"lshgame.com","root":"/","version":"1.9.8","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#667eea","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":false,"baidu":null,"google":{"measurement_id":"G-6BJRKXXJ1M"},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -118,7 +119,7 @@
   <header>
     
 
-<div class="header-inner header-inner--index" style="height: 100vh;">
+<div class="header-inner header-inner--index" style="height: 44vh;">
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/">
@@ -229,7 +230,7 @@
         
         
           <li class="nav-item" id="search-btn">
-            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="搜索" title="搜索">
               <i class="iconfont icon-search"></i>
             </a>
           </li>
@@ -237,7 +238,7 @@
         
         
           <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="切换主题" title="切换主题">
               <i class="iconfont icon-dark" id="color-toggle-icon"></i>
             </a>
           </li>
@@ -250,16 +251,38 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/img/retro-game-banner.png') no-repeat center center; background-size: cover;">
+     style="background: url('/img/retro-game-banner-ai.webp') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
-        <div class="h2">
-          
-            <span id="subtitle" data-typed-text="时间会带走很多东西，但总该留下点什么。"></span>
-          
-        </div>
+        
+          <p class="banner-kicker">WORLD 1-1 · 个人技术笔记</p>
+        
 
+        
+          <h1 class="banner-title">苏杭小站</h1>
+        
+
+        
+          <div class="banner-subtitle">
+            
+              <span id="subtitle">时间会带走很多东西，但总该留下点什么。</span>
+            
+          </div>
+        
+
+        
+
+        
+          <div class="banner-stats" aria-label="站点统计">
+            
+              <span class="banner-stat">文章 <strong>48</strong></span>
+            
+              <span class="banner-stat">分类 <strong>11</strong></span>
+            
+              <span class="banner-stat">标签 <strong>40</strong></span>
+            
+          </div>
         
       </div>
 
@@ -280,45 +303,46 @@
     
       <div class="container nopadding-x-md">
         <div id="board"
-          style="margin-top: 0">
+          >
           
           <div class="container">
             <div class="row">
               <div class="col-12 col-md-10 m-auto">
                 
 
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2025/09/27/Blittable_and_Non-Blittable_Typs/" target="_self">
-          Blittable_and_Non-Blittable_Typs
-        </a>
-      </h2>
-
+<section class="index-feed" aria-label="文章列表">
+  
+    <div class="row mx-auto index-card">
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2025/09/27/Blittable_and_Non-Blittable_Typs/" target="_self">
-        <div>
-          背景在 C# &#x2F; .Net 中，有两种内存环境  托管内存（Managed Memory）由 CLR (Common Lauange Runtime) 管理，GC 可移动对象的位置 非托管内存（Unmanaged Memory）原始的内存块，比如操作系统 C API、C++库、显存缓冲区等。问题：如果要把 C# 数据传给 C&#x2F;C++，怎么保证他们在内存中布局是一致的。这就涉及到
-        </div>
-      </a>
+      
+      <article class="col-12 col-md-12 mx-auto index-info">
+        <h3 class="index-header">
+          
+          <a href="/2025/09/27/Blittable_and_Non-Blittable_Typs/" target="_self">
+            Blittable_and_Non-Blittable_Typs
+          </a>
+        </h3>
 
-      <div class="index-btm post-metas">
         
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2025-09-27 07:40" pubdate>
-              2025-09-27
-            </time>
+        <a class="index-excerpt index-excerpt__noimg" href="/2025/09/27/Blittable_and_Non-Blittable_Typs/" target="_self">
+          <div>
+            背景在 C# &#x2F; .Net 中，有两种内存环境  托管内存（Managed Memory）由 CLR (Common Lauange Runtime) 管理，GC 可移动对象的位置 非托管内存（Unmanaged Memory）原始的内存块，比如操作系统 C API、C++库、显存缓冲区等。问题：如果要把 C# 数据传给 C&#x2F;C++，怎么保证他们在内存中布局是一致的。这就涉及到
           </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
+        </a>
+
+        <div class="index-btm post-metas">
+          
+            <div class="post-meta mr-3">
+              <i class="iconfont icon-date"></i>
+              <time datetime="2025-09-27 07:40" pubdate>
+                2025-09-27
+              </time>
+            </div>
+          
+          
+            <div class="post-meta mr-3 d-flex align-items-center">
+              <i class="iconfont icon-category"></i>
+              
 
 <span class="category-chains">
   
@@ -335,51 +359,51 @@
   
 </span>
 
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/C/">#C#</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2025/09/27/Dots_Road_Core_Package_JobSystem_01_WaveCube_Example/" target="_self">
-          Dots之路-核心包_JobSystem_01_WaveCube示例
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2025/09/27/Dots_Road_Core_Package_JobSystem_01_WaveCube_Example/" target="_self">
-        <div>
-          前言本文为 Metaverse大衍神君 Dots 之路的记录。仓库地址 RoadToDotsTutorials 基于 GameObject Component 方式1234567891011121314151617181920212223242526void Start()&#123;   cubesList = new List&lt;Transform&gt;();   for (var z
+            </div>
+          
+          
+            <div class="post-meta index-tags-meta">
+              <i class="iconfont icon-tags"></i>
+              
+                <a href="/tags/C/">#C#</a>
+              
+            </div>
+          
         </div>
-      </a>
+      </article>
+    </div>
+  
+    <div class="row mx-auto index-card">
+      
+      
+      <article class="col-12 col-md-12 mx-auto index-info">
+        <h3 class="index-header">
+          
+          <a href="/2025/09/27/Dots_Road_Core_Package_JobSystem_01_WaveCube_Example/" target="_self">
+            Dots之路-核心包_JobSystem_01_WaveCube示例
+          </a>
+        </h3>
 
-      <div class="index-btm post-metas">
         
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2025-09-27 07:38" pubdate>
-              2025-09-27
-            </time>
+        <a class="index-excerpt index-excerpt__noimg" href="/2025/09/27/Dots_Road_Core_Package_JobSystem_01_WaveCube_Example/" target="_self">
+          <div>
+            前言本文为 Metaverse大衍神君 Dots 之路的记录。仓库地址 RoadToDotsTutorials 基于 GameObject Component 方式1234567891011121314151617181920212223242526void Start()&#123;   cubesList = new List&lt;Transform&gt;();   for (var z
           </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
+        </a>
+
+        <div class="index-btm post-metas">
+          
+            <div class="post-meta mr-3">
+              <i class="iconfont icon-date"></i>
+              <time datetime="2025-09-27 07:38" pubdate>
+                2025-09-27
+              </time>
+            </div>
+          
+          
+            <div class="post-meta mr-3 d-flex align-items-center">
+              <i class="iconfont icon-category"></i>
+              
 
 <span class="category-chains">
   
@@ -396,51 +420,51 @@
   
 </span>
 
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/DOTS/">#DOTS</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2025/09/27/Dots_Road_Core_Package_JobSystem_01/" target="_self">
-          Dots之路-核心包_JobSystem_01
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2025/09/27/Dots_Road_Core_Package_JobSystem_01/" target="_self">
-        <div>
-          前言本文为 Metaverse大衍神君 Dots 之路的记录。仓库地址 RoadToDotsTutorials 如何将主线程逻辑转移到 Jobs 工作线程中执行TODO： Unity Jobs System 是什么 包含 C# Jobs System 与 C++ Jobs System 利用多核计算平台来简单安全的编写与执行多线程代码 **既可以与 ECS 结合使用也可以单独使用 不需要关心平台
+            </div>
+          
+          
+            <div class="post-meta index-tags-meta">
+              <i class="iconfont icon-tags"></i>
+              
+                <a href="/tags/DOTS/">#DOTS</a>
+              
+            </div>
+          
         </div>
-      </a>
+      </article>
+    </div>
+  
+    <div class="row mx-auto index-card">
+      
+      
+      <article class="col-12 col-md-12 mx-auto index-info">
+        <h3 class="index-header">
+          
+          <a href="/2025/09/27/Dots_Road_Core_Package_JobSystem_01/" target="_self">
+            Dots之路-核心包_JobSystem_01
+          </a>
+        </h3>
 
-      <div class="index-btm post-metas">
         
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2025-09-27 07:37" pubdate>
-              2025-09-27
-            </time>
+        <a class="index-excerpt index-excerpt__noimg" href="/2025/09/27/Dots_Road_Core_Package_JobSystem_01/" target="_self">
+          <div>
+            前言本文为 Metaverse大衍神君 Dots 之路的记录。仓库地址 RoadToDotsTutorials 如何将主线程逻辑转移到 Jobs 工作线程中执行TODO： Unity Jobs System 是什么 包含 C# Jobs System 与 C++ Jobs System 利用多核计算平台来简单安全的编写与执行多线程代码 **既可以与 ECS 结合使用也可以单独使用 不需要关心平台
           </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
+        </a>
+
+        <div class="index-btm post-metas">
+          
+            <div class="post-meta mr-3">
+              <i class="iconfont icon-date"></i>
+              <time datetime="2025-09-27 07:37" pubdate>
+                2025-09-27
+              </time>
+            </div>
+          
+          
+            <div class="post-meta mr-3 d-flex align-items-center">
+              <i class="iconfont icon-category"></i>
+              
 
 <span class="category-chains">
   
@@ -457,51 +481,51 @@
   
 </span>
 
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/DOTS/">#DOTS</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2025/09/27/UI_Framework_Get_Other_UI/" target="_self">
-          UI框架-获取其他界面
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2025/09/27/UI_Framework_Get_Other_UI/" target="_self">
-        <div>
-          在最近的开发中，因为最开始在设定框架的时候，在 UIManager 中开放了获取指定 UI 的接口，导致最近重构异常痛苦 为什么不要有获取其他界面的接口如果开放了这类接口会让代码耦合度上升。  1234567891011121314151617// A界面public class AView : BaseView&#123;    public void ShowAni()&#123;    &#
+            </div>
+          
+          
+            <div class="post-meta index-tags-meta">
+              <i class="iconfont icon-tags"></i>
+              
+                <a href="/tags/DOTS/">#DOTS</a>
+              
+            </div>
+          
         </div>
-      </a>
+      </article>
+    </div>
+  
+    <div class="row mx-auto index-card">
+      
+      
+      <article class="col-12 col-md-12 mx-auto index-info">
+        <h3 class="index-header">
+          
+          <a href="/2025/09/27/UI_Framework_Get_Other_UI/" target="_self">
+            UI框架-获取其他界面
+          </a>
+        </h3>
 
-      <div class="index-btm post-metas">
         
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2025-09-27 07:36" pubdate>
-              2025-09-27
-            </time>
+        <a class="index-excerpt index-excerpt__noimg" href="/2025/09/27/UI_Framework_Get_Other_UI/" target="_self">
+          <div>
+            在最近的开发中，因为最开始在设定框架的时候，在 UIManager 中开放了获取指定 UI 的接口，导致最近重构异常痛苦 为什么不要有获取其他界面的接口如果开放了这类接口会让代码耦合度上升。  1234567891011121314151617// A界面public class AView : BaseView&#123;    public void ShowAni()&#123;    &#
           </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
+        </a>
+
+        <div class="index-btm post-metas">
+          
+            <div class="post-meta mr-3">
+              <i class="iconfont icon-date"></i>
+              <time datetime="2025-09-27 07:36" pubdate>
+                2025-09-27
+              </time>
+            </div>
+          
+          
+            <div class="post-meta mr-3 d-flex align-items-center">
+              <i class="iconfont icon-category"></i>
+              
 
 <span class="category-chains">
   
@@ -518,51 +542,51 @@
   
 </span>
 
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/UGUI/">#UGUI</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2025/08/25/YooAsset_Code_Reading_Resource_Loading_and_Unloading/" target="_self">
-          YooAsset源码阅读-资源加载与卸载
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2025/08/25/YooAsset_Code_Reading_Resource_Loading_and_Unloading/" target="_self">
-        <div>
-          YooAsset源码阅读-资源加载卸载继续 YooAsset 的源码研究，本文将详细分析资源加载系统的核心机制，包括ResourcePackage、ResourceManager以及各种资源加载Provider的工作原理。 资源加载系统架构概述YooAsset的资源加载系统采用分层架构设计，主要包含以下核心组件： 核心组件关系图flowchart TB     A["ResourcePackage
+            </div>
+          
+          
+            <div class="post-meta index-tags-meta">
+              <i class="iconfont icon-tags"></i>
+              
+                <a href="/tags/UGUI/">#UGUI</a>
+              
+            </div>
+          
         </div>
-      </a>
+      </article>
+    </div>
+  
+    <div class="row mx-auto index-card">
+      
+      
+      <article class="col-12 col-md-12 mx-auto index-info">
+        <h3 class="index-header">
+          
+          <a href="/2025/08/25/YooAsset_Code_Reading_Resource_Loading_and_Unloading/" target="_self">
+            YooAsset源码阅读-资源加载与卸载
+          </a>
+        </h3>
 
-      <div class="index-btm post-metas">
         
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2025-08-25 17:59" pubdate>
-              2025-08-25
-            </time>
+        <a class="index-excerpt index-excerpt__noimg" href="/2025/08/25/YooAsset_Code_Reading_Resource_Loading_and_Unloading/" target="_self">
+          <div>
+            YooAsset源码阅读-资源加载卸载继续 YooAsset 的源码研究，本文将详细分析资源加载系统的核心机制，包括ResourcePackage、ResourceManager以及各种资源加载Provider的工作原理。 资源加载系统架构概述YooAsset的资源加载系统采用分层架构设计，主要包含以下核心组件： 核心组件关系图flowchart TB     A["ResourcePackage
           </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
+        </a>
+
+        <div class="index-btm post-metas">
+          
+            <div class="post-meta mr-3">
+              <i class="iconfont icon-date"></i>
+              <time datetime="2025-08-25 17:59" pubdate>
+                2025-08-25
+              </time>
+            </div>
+          
+          
+            <div class="post-meta mr-3 d-flex align-items-center">
+              <i class="iconfont icon-category"></i>
+              
 
 <span class="category-chains">
   
@@ -579,51 +603,51 @@
   
 </span>
 
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/YooAssets/">#YooAssets</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2025/08/25/YooAsset_Code_Reading_Download/" target="_self">
-          YooAsset源码阅读-Download
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2025/08/25/YooAsset_Code_Reading_Download/" target="_self">
-        <div>
-          继续 YooAsset 的下载系统代码研究，本文将详细介绍如何创建下载器相关代码 CreateResourceDownloaderByAll关键类 PlayModeImpl.cs   ResourceDownloaderOperation.cs DownloaderOperation.cs BundleInfo.cs  CreateResourceDownloaderByAll 方法用于创建下载所
+            </div>
+          
+          
+            <div class="post-meta index-tags-meta">
+              <i class="iconfont icon-tags"></i>
+              
+                <a href="/tags/YooAssets/">#YooAssets</a>
+              
+            </div>
+          
         </div>
-      </a>
+      </article>
+    </div>
+  
+    <div class="row mx-auto index-card">
+      
+      
+      <article class="col-12 col-md-12 mx-auto index-info">
+        <h3 class="index-header">
+          
+          <a href="/2025/08/25/YooAsset_Code_Reading_Download/" target="_self">
+            YooAsset源码阅读-Download
+          </a>
+        </h3>
 
-      <div class="index-btm post-metas">
         
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2025-08-25 17:55" pubdate>
-              2025-08-25
-            </time>
+        <a class="index-excerpt index-excerpt__noimg" href="/2025/08/25/YooAsset_Code_Reading_Download/" target="_self">
+          <div>
+            继续 YooAsset 的下载系统代码研究，本文将详细介绍如何创建下载器相关代码 CreateResourceDownloaderByAll关键类 PlayModeImpl.cs   ResourceDownloaderOperation.cs DownloaderOperation.cs BundleInfo.cs  CreateResourceDownloaderByAll 方法用于创建下载所
           </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
+        </a>
+
+        <div class="index-btm post-metas">
+          
+            <div class="post-meta mr-3">
+              <i class="iconfont icon-date"></i>
+              <time datetime="2025-08-25 17:55" pubdate>
+                2025-08-25
+              </time>
+            </div>
+          
+          
+            <div class="post-meta mr-3 d-flex align-items-center">
+              <i class="iconfont icon-category"></i>
+              
 
 <span class="category-chains">
   
@@ -640,51 +664,51 @@
   
 </span>
 
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/YooAssets/">#YooAssets</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2025/08/01/Test_Code_Highlight_Functionality/" target="_self">
-          测试代码高亮功能
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2025/08/01/Test_Code_Highlight_Functionality/" target="_self">
-        <div>
-          代码高亮测试测试不同编程语言的代码高亮效果。 C# 代码测试1234567891011121314151617181920212223242526272829303132333435using System;using System.Collections.Generic;using System.Linq;namespace TestNamespace&#123;    public class
+            </div>
+          
+          
+            <div class="post-meta index-tags-meta">
+              <i class="iconfont icon-tags"></i>
+              
+                <a href="/tags/YooAssets/">#YooAssets</a>
+              
+            </div>
+          
         </div>
-      </a>
+      </article>
+    </div>
+  
+    <div class="row mx-auto index-card">
+      
+      
+      <article class="col-12 col-md-12 mx-auto index-info">
+        <h3 class="index-header">
+          
+          <a href="/2025/08/01/Test_Code_Highlight_Functionality/" target="_self">
+            测试代码高亮功能
+          </a>
+        </h3>
 
-      <div class="index-btm post-metas">
         
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2025-08-01 18:00" pubdate>
-              2025-08-01
-            </time>
+        <a class="index-excerpt index-excerpt__noimg" href="/2025/08/01/Test_Code_Highlight_Functionality/" target="_self">
+          <div>
+            代码高亮测试测试不同编程语言的代码高亮效果。 C# 代码测试1234567891011121314151617181920212223242526272829303132333435using System;using System.Collections.Generic;using System.Linq;namespace TestNamespace&#123;    public class
           </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
+        </a>
+
+        <div class="index-btm post-metas">
+          
+            <div class="post-meta mr-3">
+              <i class="iconfont icon-date"></i>
+              <time datetime="2025-08-01 18:00" pubdate>
+                2025-08-01
+              </time>
+            </div>
+          
+          
+            <div class="post-meta mr-3 d-flex align-items-center">
+              <i class="iconfont icon-category"></i>
+              
 
 <span class="category-chains">
   
@@ -701,53 +725,53 @@
   
 </span>
 
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E6%B5%8B%E8%AF%95/">#测试</a>
-            
-              <a href="/tags/%E4%BB%A3%E7%A0%81%E9%AB%98%E4%BA%AE/">#代码高亮</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2025/08/01/YooAssets_Source_Code_Reading_Initialization/" target="_self">
-          YooAssets源码解读-初始化
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2025/08/01/YooAssets_Source_Code_Reading_Initialization/" target="_self">
-        <div>
-          YooAssets源码解读 - 初始化最近打完包，刚好有空，看一下项目中使用的 YooAsset 源码，这部分是关于初始化的代码。 YooAsset.Initialize()初始化，主要记录 YooAsset 在初始化时做了什么 关键类 YooAsset.cs YooAssetDriver.cs OperationSystem.cs  流程图flowchart TD     A["YooAsset
+            </div>
+          
+          
+            <div class="post-meta index-tags-meta">
+              <i class="iconfont icon-tags"></i>
+              
+                <a href="/tags/%E6%B5%8B%E8%AF%95/">#测试</a>
+              
+                <a href="/tags/%E4%BB%A3%E7%A0%81%E9%AB%98%E4%BA%AE/">#代码高亮</a>
+              
+            </div>
+          
         </div>
-      </a>
+      </article>
+    </div>
+  
+    <div class="row mx-auto index-card">
+      
+      
+      <article class="col-12 col-md-12 mx-auto index-info">
+        <h3 class="index-header">
+          
+          <a href="/2025/08/01/YooAssets_Source_Code_Reading_Initialization/" target="_self">
+            YooAssets源码解读-初始化
+          </a>
+        </h3>
 
-      <div class="index-btm post-metas">
         
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2025-08-01 14:42" pubdate>
-              2025-08-01
-            </time>
+        <a class="index-excerpt index-excerpt__noimg" href="/2025/08/01/YooAssets_Source_Code_Reading_Initialization/" target="_self">
+          <div>
+            YooAssets源码解读 - 初始化最近打完包，刚好有空，看一下项目中使用的 YooAsset 源码，这部分是关于初始化的代码。 YooAsset.Initialize()初始化，主要记录 YooAsset 在初始化时做了什么 关键类 YooAsset.cs YooAssetDriver.cs OperationSystem.cs  流程图flowchart TD     A["YooAsset
           </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
+        </a>
+
+        <div class="index-btm post-metas">
+          
+            <div class="post-meta mr-3">
+              <i class="iconfont icon-date"></i>
+              <time datetime="2025-08-01 14:42" pubdate>
+                2025-08-01
+              </time>
+            </div>
+          
+          
+            <div class="post-meta mr-3 d-flex align-items-center">
+              <i class="iconfont icon-category"></i>
+              
 
 <span class="category-chains">
   
@@ -764,51 +788,51 @@
   
 </span>
 
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/YooAssets/">#YooAssets</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2025/08/01/undefined/" target="_self">
-          Test Mermaid Chart Functionality
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2025/08/01/undefined/" target="_self">
-        <div>
-          This is a test post to verify Mermaid diagram rendering. Flowchart12345graph TD;    A--&gt;B;    A--&gt;C;    B--&gt;D;    C--&gt;D;  Sequence Diagram1234567891011sequenceDiagram    participant Alice
+            </div>
+          
+          
+            <div class="post-meta index-tags-meta">
+              <i class="iconfont icon-tags"></i>
+              
+                <a href="/tags/YooAssets/">#YooAssets</a>
+              
+            </div>
+          
         </div>
-      </a>
+      </article>
+    </div>
+  
+    <div class="row mx-auto index-card">
+      
+      
+      <article class="col-12 col-md-12 mx-auto index-info">
+        <h3 class="index-header">
+          
+          <a href="/2025/08/01/undefined/" target="_self">
+            Test Mermaid Chart Functionality
+          </a>
+        </h3>
 
-      <div class="index-btm post-metas">
         
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2025-08-01 14:30" pubdate>
-              2025-08-01
-            </time>
+        <a class="index-excerpt index-excerpt__noimg" href="/2025/08/01/undefined/" target="_self">
+          <div>
+            This is a test post to verify Mermaid diagram rendering. Flowchart12345graph TD;    A--&gt;B;    A--&gt;C;    B--&gt;D;    C--&gt;D;  Sequence Diagram123456789101112sequenceDiagram    participant Alic
           </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
+        </a>
+
+        <div class="index-btm post-metas">
+          
+            <div class="post-meta mr-3">
+              <i class="iconfont icon-date"></i>
+              <time datetime="2025-08-01 14:30" pubdate>
+                2025-08-01
+              </time>
+            </div>
+          
+          
+            <div class="post-meta mr-3 d-flex align-items-center">
+              <i class="iconfont icon-category"></i>
+              
 
 <span class="category-chains">
   
@@ -825,53 +849,53 @@
   
 </span>
 
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/Mermaid/">#Mermaid</a>
-            
-              <a href="/tags/Test/">#Test</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2025/07/29/Using_RIPER-5_to_Enhance_Coding_Efficiency/" target="_self">
-          ClaudeCode使用RIPER-5提升编码效率
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2025/07/29/Using_RIPER-5_to_Enhance_Coding_Efficiency/" target="_self">
-        <div>
-          什么是RIPER-5 针对问题 简述核心 切换窗口记忆 扩展   如何让 AI 操作变得可控   优缺点 优点 缺点   总结 我使用的 RIPER-5 参考  什么是RIPER-5RIPER-5 代表五种模式（研究、创新、计划、执行、回顾），RIPER-5 是 Cursor 社区中分享的一个高效 AI 工作流。 针对问题我对我在使用 AI 时问题有几点：  切换对话窗口后如何获取记忆 如何高效
+            </div>
+          
+          
+            <div class="post-meta index-tags-meta">
+              <i class="iconfont icon-tags"></i>
+              
+                <a href="/tags/Mermaid/">#Mermaid</a>
+              
+                <a href="/tags/Test/">#Test</a>
+              
+            </div>
+          
         </div>
-      </a>
+      </article>
+    </div>
+  
+    <div class="row mx-auto index-card">
+      
+      
+      <article class="col-12 col-md-12 mx-auto index-info">
+        <h3 class="index-header">
+          
+          <a href="/2025/07/29/Using_RIPER-5_to_Enhance_Coding_Efficiency/" target="_self">
+            ClaudeCode使用RIPER-5提升编码效率
+          </a>
+        </h3>
 
-      <div class="index-btm post-metas">
         
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2025-07-29 15:36" pubdate>
-              2025-07-29
-            </time>
+        <a class="index-excerpt index-excerpt__noimg" href="/2025/07/29/Using_RIPER-5_to_Enhance_Coding_Efficiency/" target="_self">
+          <div>
+            什么是RIPER-5 针对问题 简述核心 切换窗口记忆 扩展   如何让 AI 操作变得可控   优缺点 优点 缺点   总结 我使用的 RIPER-5 参考  什么是RIPER-5RIPER-5 代表五种模式（研究、创新、计划、执行、回顾），RIPER-5 是 Cursor 社区中分享的一个高效 AI 工作流。 针对问题我对我在使用 AI 时问题有几点：  切换对话窗口后如何获取记忆 如何高效
           </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
+        </a>
+
+        <div class="index-btm post-metas">
+          
+            <div class="post-meta mr-3">
+              <i class="iconfont icon-date"></i>
+              <time datetime="2025-07-29 15:36" pubdate>
+                2025-07-29
+              </time>
+            </div>
+          
+          
+            <div class="post-meta mr-3 d-flex align-items-center">
+              <i class="iconfont icon-category"></i>
+              
 
 <span class="category-chains">
   
@@ -888,22 +912,22 @@
   
 </span>
 
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/ClaudeCode/">#ClaudeCode</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
+            </div>
+          
+          
+            <div class="post-meta index-tags-meta">
+              <i class="iconfont icon-tags"></i>
+              
+                <a href="/tags/ClaudeCode/">#ClaudeCode</a>
+              
+            </div>
+          
+        </div>
+      </article>
+    </div>
+  
 
-
-
+  
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
       <a class="extend prev" rel="prev" href="/page/2/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/#board">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/#board">4</a><a class="page-number" href="/page/5/#board">5</a><a class="extend next" rel="next" href="/page/4/#board"><i class="iconfont icon-arrowright"></i></a>
@@ -911,6 +935,7 @@
   </nav>
 
 
+</section>
 
               </div>
             </div>
@@ -1010,21 +1035,6 @@
 <script  src="/js/events.js" ></script>
 <script  src="/js/plugins.js" ></script>
 
-
-  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
-  <script>
-    (function (window, document) {
-      var typing = Fluid.plugins.typing;
-      var subtitle = document.getElementById('subtitle');
-      if (!subtitle || !typing) {
-        return;
-      }
-      var text = subtitle.getAttribute('data-typed-text');
-      
-        typing(text);
-      
-    })(window, document);
-  </script>
 
 
 

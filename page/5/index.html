@@ -65,13 +65,14 @@
 
   
 <link rel="stylesheet" href="/css/retro-game-ui.css">
+<link rel="stylesheet" href="/css/platformer-revival.css">
 
 
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"lshgame.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#667eea","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":false,"baidu":null,"google":{"measurement_id":"G-6BJRKXXJ1M"},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"lshgame.com","root":"/","version":"1.9.8","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#667eea","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":false,"baidu":null,"google":{"measurement_id":"G-6BJRKXXJ1M"},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -118,7 +119,7 @@
   <header>
     
 
-<div class="header-inner header-inner--index" style="height: 100vh;">
+<div class="header-inner header-inner--index" style="height: 44vh;">
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/">
@@ -229,7 +230,7 @@
         
         
           <li class="nav-item" id="search-btn">
-            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="搜索" title="搜索">
               <i class="iconfont icon-search"></i>
             </a>
           </li>
@@ -237,7 +238,7 @@
         
         
           <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="切换主题" title="切换主题">
               <i class="iconfont icon-dark" id="color-toggle-icon"></i>
             </a>
           </li>
@@ -250,16 +251,38 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/img/retro-game-banner.png') no-repeat center center; background-size: cover;">
+     style="background: url('/img/retro-game-banner-ai.webp') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
-        <div class="h2">
-          
-            <span id="subtitle" data-typed-text="时间会带走很多东西，但总该留下点什么。"></span>
-          
-        </div>
+        
+          <p class="banner-kicker">WORLD 1-1 · 个人技术笔记</p>
+        
 
+        
+          <h1 class="banner-title">苏杭小站</h1>
+        
+
+        
+          <div class="banner-subtitle">
+            
+              <span id="subtitle">时间会带走很多东西，但总该留下点什么。</span>
+            
+          </div>
+        
+
+        
+
+        
+          <div class="banner-stats" aria-label="站点统计">
+            
+              <span class="banner-stat">文章 <strong>48</strong></span>
+            
+              <span class="banner-stat">分类 <strong>11</strong></span>
+            
+              <span class="banner-stat">标签 <strong>40</strong></span>
+            
+          </div>
         
       </div>
 
@@ -280,45 +303,46 @@
     
       <div class="container nopadding-x-md">
         <div id="board"
-          style="margin-top: 0">
+          >
           
           <div class="container">
             <div class="row">
               <div class="col-12 col-md-10 m-auto">
                 
 
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2025/04/30/Unity_Mesh_Rebuild/" target="_self">
-          Unity网格重建
-        </a>
-      </h2>
-
+<section class="index-feed" aria-label="文章列表">
+  
+    <div class="row mx-auto index-card">
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2025/04/30/Unity_Mesh_Rebuild/" target="_self">
-        <div>
-          什么是网格重建（Mesh Rebuild）在 UGUI 中，如果要渲染一个 UI 元素（Image，Text 等），需要经过 CPU 阶段将渲染所需要数据如：顶点，位置，纹理等信息传递给 GPU 进行渲染。在运行时，UI 元素外观或布局发生变化时，UGUI 会重新计算这些数据并传递给 GPU，这个过程称为网格重建（Mesh Rebuild）。 为什么会造成网格重建每个 UI 元素会维护自己的 Me
-        </div>
-      </a>
+      
+      <article class="col-12 col-md-12 mx-auto index-info">
+        <h3 class="index-header">
+          
+          <a href="/2025/04/30/Unity_Mesh_Rebuild/" target="_self">
+            Unity网格重建
+          </a>
+        </h3>
 
-      <div class="index-btm post-metas">
         
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2025-04-30 17:36" pubdate>
-              2025-04-30
-            </time>
+        <a class="index-excerpt index-excerpt__noimg" href="/2025/04/30/Unity_Mesh_Rebuild/" target="_self">
+          <div>
+            什么是网格重建（Mesh Rebuild）在 UGUI 中，如果要渲染一个 UI 元素（Image，Text 等），需要经过 CPU 阶段将渲染所需要数据如：顶点，位置，纹理等信息传递给 GPU 进行渲染。在运行时，UI 元素外观或布局发生变化时，UGUI 会重新计算这些数据并传递给 GPU，这个过程称为网格重建（Mesh Rebuild）。 为什么会造成网格重建每个 UI 元素会维护自己的 Me
           </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
+        </a>
+
+        <div class="index-btm post-metas">
+          
+            <div class="post-meta mr-3">
+              <i class="iconfont icon-date"></i>
+              <time datetime="2025-04-30 17:36" pubdate>
+                2025-04-30
+              </time>
+            </div>
+          
+          
+            <div class="post-meta mr-3 d-flex align-items-center">
+              <i class="iconfont icon-category"></i>
+              
 
 <span class="category-chains">
   
@@ -335,51 +359,51 @@
   
 </span>
 
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/UGUI/">#UGUI</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2025/03/16/MCP_ServerMemory_NoToolFound/" target="_self">
-          MCP踩坑记录-ServerMemory-无法指定json目录
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2025/03/16/MCP_ServerMemory_NoToolFound/" target="_self">
-        <div>
-          server-memory 无法指定 json 目录官方示例中使用了 env 去设置运行目录，但是我一直没成功 1234567891011&#123;  &quot;mcpServers&quot;: &#123;    &quot;memory&quot;: &#123;      &quot;command&quot;: &quot;npx&quot;,      &quot;args&quo
+            </div>
+          
+          
+            <div class="post-meta index-tags-meta">
+              <i class="iconfont icon-tags"></i>
+              
+                <a href="/tags/UGUI/">#UGUI</a>
+              
+            </div>
+          
         </div>
-      </a>
+      </article>
+    </div>
+  
+    <div class="row mx-auto index-card">
+      
+      
+      <article class="col-12 col-md-12 mx-auto index-info">
+        <h3 class="index-header">
+          
+          <a href="/2025/03/16/MCP_ServerMemory_NoToolFound/" target="_self">
+            MCP踩坑记录-ServerMemory-无法指定json目录
+          </a>
+        </h3>
 
-      <div class="index-btm post-metas">
         
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2025-03-16 11:13" pubdate>
-              2025-03-16
-            </time>
+        <a class="index-excerpt index-excerpt__noimg" href="/2025/03/16/MCP_ServerMemory_NoToolFound/" target="_self">
+          <div>
+            server-memory 无法指定 json 目录官方示例中使用了 env 去设置运行目录，但是我一直没成功 1234567891011&#123;  &quot;mcpServers&quot;: &#123;    &quot;memory&quot;: &#123;      &quot;command&quot;: &quot;npx&quot;,      &quot;args&quo
           </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
+        </a>
+
+        <div class="index-btm post-metas">
+          
+            <div class="post-meta mr-3">
+              <i class="iconfont icon-date"></i>
+              <time datetime="2025-03-16 11:13" pubdate>
+                2025-03-16
+              </time>
+            </div>
+          
+          
+            <div class="post-meta mr-3 d-flex align-items-center">
+              <i class="iconfont icon-category"></i>
+              
 
 <span class="category-chains">
   
@@ -396,51 +420,51 @@
   
 </span>
 
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/MCP/">#MCP</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2025/03/16/MCP_WIndows_NoToolFound/" target="_self">
-          MCP踩坑记录-关于windows配置报错-NoToolFound
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2025/03/16/MCP_WIndows_NoToolFound/" target="_self">
-        <div>
-          在windows配置mcp出现的问题记录 No tool  found官方使用方法1npx @modelcontextprotocol/server-memory 解决方法1找到对应服务器的index.js,直接使用node运行。 1node C:\Users\user\AppData\Roaming\npm-cache\_npx\15b07286cbcc3329\node_modules\@mo
+            </div>
+          
+          
+            <div class="post-meta index-tags-meta">
+              <i class="iconfont icon-tags"></i>
+              
+                <a href="/tags/MCP/">#MCP</a>
+              
+            </div>
+          
         </div>
-      </a>
+      </article>
+    </div>
+  
+    <div class="row mx-auto index-card">
+      
+      
+      <article class="col-12 col-md-12 mx-auto index-info">
+        <h3 class="index-header">
+          
+          <a href="/2025/03/16/MCP_WIndows_NoToolFound/" target="_self">
+            MCP踩坑记录-关于windows配置报错-NoToolFound
+          </a>
+        </h3>
 
-      <div class="index-btm post-metas">
         
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2025-03-16 11:08" pubdate>
-              2025-03-16
-            </time>
+        <a class="index-excerpt index-excerpt__noimg" href="/2025/03/16/MCP_WIndows_NoToolFound/" target="_self">
+          <div>
+            在windows配置mcp出现的问题记录 No tool  found官方使用方法1npx @modelcontextprotocol/server-memory 解决方法1找到对应服务器的index.js,直接使用node运行。 1node C:\Users\user\AppData\Roaming\npm-cache\_npx\15b07286cbcc3329\node_modules\@mo
           </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
+        </a>
+
+        <div class="index-btm post-metas">
+          
+            <div class="post-meta mr-3">
+              <i class="iconfont icon-date"></i>
+              <time datetime="2025-03-16 11:08" pubdate>
+                2025-03-16
+              </time>
+            </div>
+          
+          
+            <div class="post-meta mr-3 d-flex align-items-center">
+              <i class="iconfont icon-category"></i>
+              
 
 <span class="category-chains">
   
@@ -457,51 +481,51 @@
   
 </span>
 
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/MCP/">#MCP</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2025/03/16/All_types_derive_from_SystemObject/" target="_self">
-          重学C#-类型基础-所有的类型都从System.Object派生
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2025/03/16/All_types_derive_from_SystemObject/" target="_self">
-        <div>
-          所有的类型都从 System.Object 派生“运行时”要求每个类型最终都从 System.Object 类型派生。以下两个定义完全一致 123456789// 隐式派生于 System.Objectclass Employee&#123;    ...&#125;// 显式派生于 System.Objectclass Employee : System.Object&#123;    ...&
+            </div>
+          
+          
+            <div class="post-meta index-tags-meta">
+              <i class="iconfont icon-tags"></i>
+              
+                <a href="/tags/MCP/">#MCP</a>
+              
+            </div>
+          
         </div>
-      </a>
+      </article>
+    </div>
+  
+    <div class="row mx-auto index-card">
+      
+      
+      <article class="col-12 col-md-12 mx-auto index-info">
+        <h3 class="index-header">
+          
+          <a href="/2025/03/16/All_types_derive_from_SystemObject/" target="_self">
+            重学C#-类型基础-所有的类型都从System.Object派生
+          </a>
+        </h3>
 
-      <div class="index-btm post-metas">
         
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2025-03-16 10:58" pubdate>
-              2025-03-16
-            </time>
+        <a class="index-excerpt index-excerpt__noimg" href="/2025/03/16/All_types_derive_from_SystemObject/" target="_self">
+          <div>
+            所有的类型都从 System.Object 派生“运行时”要求每个类型最终都从 System.Object 类型派生。以下两个定义完全一致 123456789// 隐式派生于 System.Objectclass Employee&#123;    ...&#125;// 显式派生于 System.Objectclass Employee : System.Object&#123;    ...&
           </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
+        </a>
+
+        <div class="index-btm post-metas">
+          
+            <div class="post-meta mr-3">
+              <i class="iconfont icon-date"></i>
+              <time datetime="2025-03-16 10:58" pubdate>
+                2025-03-16
+              </time>
+            </div>
+          
+          
+            <div class="post-meta mr-3 d-flex align-items-center">
+              <i class="iconfont icon-category"></i>
+              
 
 <span class="category-chains">
   
@@ -518,51 +542,51 @@
   
 </span>
 
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/C/">#C#</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/10/30/frp_remote_desktop/" target="_self">
-          内网穿透—基于frp实现远程桌面
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2024/10/30/frp_remote_desktop/" target="_self">
-        <div>
-          要做好保护工作，有被入侵风险！！！！要做好保护工作，有被入侵风险！！！！要做好保护工作，有被入侵风险！！！！   使用frp配置远程桌面用户账户限制阻止登录解决修复你的凭据不工作 连接时的用户名和密码是 电脑用户和锁屏密码。如果使用了微软账号登录，而非本地账户，使用电脑用户名和微软账号密码
+            </div>
+          
+          
+            <div class="post-meta index-tags-meta">
+              <i class="iconfont icon-tags"></i>
+              
+                <a href="/tags/C/">#C#</a>
+              
+            </div>
+          
         </div>
-      </a>
+      </article>
+    </div>
+  
+    <div class="row mx-auto index-card">
+      
+      
+      <article class="col-12 col-md-12 mx-auto index-info">
+        <h3 class="index-header">
+          
+          <a href="/2024/10/30/frp_remote_desktop/" target="_self">
+            内网穿透—基于frp实现远程桌面
+          </a>
+        </h3>
 
-      <div class="index-btm post-metas">
         
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-10-30 17:01" pubdate>
-              2024-10-30
-            </time>
+        <a class="index-excerpt index-excerpt__noimg" href="/2024/10/30/frp_remote_desktop/" target="_self">
+          <div>
+            要做好保护工作，有被入侵风险！！！！要做好保护工作，有被入侵风险！！！！要做好保护工作，有被入侵风险！！！！   使用frp配置远程桌面用户账户限制阻止登录解决修复你的凭据不工作 连接时的用户名和密码是 电脑用户和锁屏密码。如果使用了微软账号登录，而非本地账户，使用电脑用户名和微软账号密码
           </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
+        </a>
+
+        <div class="index-btm post-metas">
+          
+            <div class="post-meta mr-3">
+              <i class="iconfont icon-date"></i>
+              <time datetime="2024-10-30 17:01" pubdate>
+                2024-10-30
+              </time>
+            </div>
+          
+          
+            <div class="post-meta mr-3 d-flex align-items-center">
+              <i class="iconfont icon-category"></i>
+              
 
 <span class="category-chains">
   
@@ -579,51 +603,51 @@
   
 </span>
 
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2/">#远程桌面</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/10/30/vim_E117/" target="_self">
-          vim踩坑记录-E117
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2024/10/30/vim_E117/" target="_self">
-        <div>
-          最近刚换了新的电脑，在最初使用的时候也没有记录一下配置流程，所以遇到一些问题，这次统一记录一下。 E117问题：在代码中有插件管理下载，但是 运行时报错”E117” 12345&quot; 安装 vim-plug 插件管理器if empty(glob(&#x27;~/.vim/autoload/plug.vim&#x27;))c  silent !curl -fLo ~/.vim/autoload
+            </div>
+          
+          
+            <div class="post-meta index-tags-meta">
+              <i class="iconfont icon-tags"></i>
+              
+                <a href="/tags/%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2/">#远程桌面</a>
+              
+            </div>
+          
         </div>
-      </a>
+      </article>
+    </div>
+  
+    <div class="row mx-auto index-card">
+      
+      
+      <article class="col-12 col-md-12 mx-auto index-info">
+        <h3 class="index-header">
+          
+          <a href="/2024/10/30/vim_E117/" target="_self">
+            vim踩坑记录-E117
+          </a>
+        </h3>
 
-      <div class="index-btm post-metas">
         
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-10-30 16:49" pubdate>
-              2024-10-30
-            </time>
+        <a class="index-excerpt index-excerpt__noimg" href="/2024/10/30/vim_E117/" target="_self">
+          <div>
+            最近刚换了新的电脑，在最初使用的时候也没有记录一下配置流程，所以遇到一些问题，这次统一记录一下。 E117问题：在代码中有插件管理下载，但是 运行时报错”E117” 12345&quot; 安装 vim-plug 插件管理器if empty(glob(&#x27;~/.vim/autoload/plug.vim&#x27;))c  silent !curl -fLo ~/.vim/autoload
           </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
+        </a>
+
+        <div class="index-btm post-metas">
+          
+            <div class="post-meta mr-3">
+              <i class="iconfont icon-date"></i>
+              <time datetime="2024-10-30 16:49" pubdate>
+                2024-10-30
+              </time>
+            </div>
+          
+          
+            <div class="post-meta mr-3 d-flex align-items-center">
+              <i class="iconfont icon-category"></i>
+              
 
 <span class="category-chains">
   
@@ -640,51 +664,51 @@
   
 </span>
 
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E9%83%A8%E7%BD%B2/">#部署</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/08/08/Interview/" target="_self">
-          记录一下最近面试,总结
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2024/08/08/Interview/" target="_self">
-        <div>
-          最近这段时间因为项目放缓了几个星期，就出去面试了三家吧，过了一家，寄掉两家。没面多少但还是记录记录吧。    对自己做过的功能其实还不够了解。这个是有一家公司面试问了自己做过的一些功能，现场跟技术说怎么用 MVC 思想如何去设计，有什么函数，怎样的数结构。其实问的不算难，只是很多细节的考虑而已，功能自己是做过的，但是面试时还是很多点没说到。没说明白。因该是寄的原因。 对一些原理性的东西还不够了解，
+            </div>
+          
+          
+            <div class="post-meta index-tags-meta">
+              <i class="iconfont icon-tags"></i>
+              
+                <a href="/tags/%E9%83%A8%E7%BD%B2/">#部署</a>
+              
+            </div>
+          
         </div>
-      </a>
+      </article>
+    </div>
+  
+    <div class="row mx-auto index-card">
+      
+      
+      <article class="col-12 col-md-12 mx-auto index-info">
+        <h3 class="index-header">
+          
+          <a href="/2024/08/08/Interview/" target="_self">
+            记录一下最近面试,总结
+          </a>
+        </h3>
 
-      <div class="index-btm post-metas">
         
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-08-08 22:27" pubdate>
-              2024-08-08
-            </time>
+        <a class="index-excerpt index-excerpt__noimg" href="/2024/08/08/Interview/" target="_self">
+          <div>
+            最近这段时间因为项目放缓了几个星期，就出去面试了三家吧，过了一家，寄掉两家。没面多少但还是记录记录吧。    对自己做过的功能其实还不够了解。这个是有一家公司面试问了自己做过的一些功能，现场跟技术说怎么用 MVC 思想如何去设计，有什么函数，怎样的数结构。其实问的不算难，只是很多细节的考虑而已，功能自己是做过的，但是面试时还是很多点没说到。没说明白。因该是寄的原因。 对一些原理性的东西还不够了解，
           </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
+        </a>
+
+        <div class="index-btm post-metas">
+          
+            <div class="post-meta mr-3">
+              <i class="iconfont icon-date"></i>
+              <time datetime="2024-08-08 22:27" pubdate>
+                2024-08-08
+              </time>
+            </div>
+          
+          
+            <div class="post-meta mr-3 d-flex align-items-center">
+              <i class="iconfont icon-category"></i>
+              
 
 <span class="category-chains">
   
@@ -701,51 +725,51 @@
   
 </span>
 
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E9%9D%A2%E8%AF%95/">#面试</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/07/18/Low_Blood_Sugar/" target="_self">
-          记一次低血糖感受
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2024/07/18/Low_Blood_Sugar/" target="_self">
-        <div>
-          起因起因是因为上一个星期去拔了一颗智齿，这周就过去拆线了。然后因为肉长到线上面去了。医生就用剪刀，镊子和钩子慢慢把肉剪开把线挑出来，给我疼傻了。 经过可能因为太疼了，自己一直紧绷着。在下椅子的时候已经开始感觉不对劲了。等医生开完账单后。就出去到牙科门口的椅子上坐着，做到椅子上时候眼睛已经开始看不清了。最开始是趴着的，能感觉到自己在慢慢恢复和发抖，然后过了一会，眼睛又开始看清了，就从趴着到坐着靠着后
+            </div>
+          
+          
+            <div class="post-meta index-tags-meta">
+              <i class="iconfont icon-tags"></i>
+              
+                <a href="/tags/%E9%9D%A2%E8%AF%95/">#面试</a>
+              
+            </div>
+          
         </div>
-      </a>
+      </article>
+    </div>
+  
+    <div class="row mx-auto index-card">
+      
+      
+      <article class="col-12 col-md-12 mx-auto index-info">
+        <h3 class="index-header">
+          
+          <a href="/2024/07/18/Low_Blood_Sugar/" target="_self">
+            记一次低血糖感受
+          </a>
+        </h3>
 
-      <div class="index-btm post-metas">
         
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-07-18 20:23" pubdate>
-              2024-07-18
-            </time>
+        <a class="index-excerpt index-excerpt__noimg" href="/2024/07/18/Low_Blood_Sugar/" target="_self">
+          <div>
+            起因起因是因为上一个星期去拔了一颗智齿，这周就过去拆线了。然后因为肉长到线上面去了。医生就用剪刀，镊子和钩子慢慢把肉剪开把线挑出来，给我疼傻了。 经过可能因为太疼了，自己一直紧绷着。在下椅子的时候已经开始感觉不对劲了。等医生开完账单后。就出去到牙科门口的椅子上坐着，做到椅子上时候眼睛已经开始看不清了。最开始是趴着的，能感觉到自己在慢慢恢复和发抖，然后过了一会，眼睛又开始看清了，就从趴着到坐着靠着后
           </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
+        </a>
+
+        <div class="index-btm post-metas">
+          
+            <div class="post-meta mr-3">
+              <i class="iconfont icon-date"></i>
+              <time datetime="2024-07-18 20:23" pubdate>
+                2024-07-18
+              </time>
+            </div>
+          
+          
+            <div class="post-meta mr-3 d-flex align-items-center">
+              <i class="iconfont icon-category"></i>
+              
 
 <span class="category-chains">
   
@@ -762,22 +786,22 @@
   
 </span>
 
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E8%AE%B0%E5%BD%95/">#记录</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
+            </div>
+          
+          
+            <div class="post-meta index-tags-meta">
+              <i class="iconfont icon-tags"></i>
+              
+                <a href="/tags/%E8%AE%B0%E5%BD%95/">#记录</a>
+              
+            </div>
+          
+        </div>
+      </article>
+    </div>
+  
 
-
-
+  
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
       <a class="extend prev" rel="prev" href="/page/4/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/#board">3</a><a class="page-number" href="/page/4/#board">4</a><span class="page-number current">5</span>
@@ -785,6 +809,7 @@
   </nav>
 
 
+</section>
 
               </div>
             </div>
@@ -884,21 +909,6 @@
 <script  src="/js/events.js" ></script>
 <script  src="/js/plugins.js" ></script>
 
-
-  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
-  <script>
-    (function (window, document) {
-      var typing = Fluid.plugins.typing;
-      var subtitle = document.getElementById('subtitle');
-      if (!subtitle || !typing) {
-        return;
-      }
-      var text = subtitle.getAttribute('data-typed-text');
-      
-        typing(text);
-      
-    })(window, document);
-  </script>
 
 
 

@@ -1,0 +1,87 @@
+/* Adaptive Mermaid viewport rules load after the site's broad diagram styles. */
+.mermaid-wrap {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.mermaid-wrap__viewport {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.mermaid-wrap__viewport--overflowing {
+  max-height: min(70vh, 40rem);
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable both-edges;
+  touch-action: pan-x pan-y;
+}
+
+.mermaid-wrap__viewport--overflowing {
+  cursor: grab;
+}
+
+.mermaid-wrap__viewport--dragging {
+  cursor: grabbing;
+  user-select: none;
+}
+
+.mermaid-wrap__viewport:focus-visible {
+  outline: 3px solid var(--retro-blue, #1d4ed8);
+  outline-offset: -3px;
+}
+
+.mermaid-wrap__viewport > .mermaid {
+  min-width: 100%;
+  margin: 0;
+  padding: 1rem;
+  box-sizing: border-box;
+  overflow: visible;
+  color: inherit;
+  background: transparent !important;
+  border: 0;
+  box-shadow: none;
+}
+
+.mermaid-wrap__viewport > .mermaid:not(.mermaid--wide) {
+  display: grid;
+  place-items: start center;
+  width: 100%;
+}
+
+.mermaid-wrap__viewport > .mermaid:not(.mermaid--wide) svg {
+  display: block;
+  width: var(--mermaid-display-width) !important;
+  max-width: 100% !important;
+  max-height: none !important;
+  height: auto !important;
+  margin: 0 auto;
+}
+
+.mermaid-wrap__viewport > .mermaid.mermaid--wide {
+  display: block;
+  width: max-content;
+  min-width: 100%;
+}
+
+.mermaid-wrap__viewport > .mermaid.mermaid--wide svg {
+  display: block;
+  width: var(--mermaid-display-width) !important;
+  max-width: none !important;
+  max-height: none !important;
+  height: auto !important;
+  margin: 0;
+}
+
+@media (max-width: 767.98px) {
+  .mermaid-wrap__viewport--overflowing {
+    max-height: min(62vh, 30rem);
+  }
+
+  .mermaid-wrap__viewport > .mermaid {
+    padding: 0.75rem;
+  }
+}

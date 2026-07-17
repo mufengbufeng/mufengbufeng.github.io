@@ -19,9 +19,9 @@
   var pjaxPrefetchQueued = new Set();
   var pjaxPrefetchTimer = 0;
   var PJAX_CACHE_LIMIT = 24;
-  var PJAX_PREFETCH_LIMIT = isMobile ? 6 : 14;
-  var PJAX_PREFETCH_BATCH = isMobile ? 2 : 4;
-  var PJAX_PREFETCH_DELAY = isMobile ? 360 : 180;
+  var PJAX_PREFETCH_LIMIT = isMobile ? 3 : 8;
+  var PJAX_PREFETCH_BATCH = isMobile ? 1 : 2;
+  var PJAX_PREFETCH_DELAY = isMobile ? 520 : 260;
 
   function ready(callback) {
     if (document.readyState === "loading") {
@@ -37,7 +37,7 @@
     }
 
     var layer = document.createElement("div");
-    var count = isMobile ? 8 : 18;
+    var count = isMobile ? 6 : 12;
     layer.className = "retro-layer";
     layer.setAttribute("aria-hidden", "true");
 
@@ -123,9 +123,9 @@
       return;
     }
 
-    for (var i = 0; i < 6; i++) {
+    for (var i = 0; i < 4; i++) {
       var spark = getSparkNode();
-      var angle = (Math.PI * 2 * i) / 6;
+      var angle = (Math.PI * 2 * i) / 4;
       var distance = 26 + (i % 3) * 11;
       spark.style.left = x + "px";
       spark.style.top = y + "px";
@@ -655,25 +655,14 @@
     var currentBanner = document.getElementById("banner");
     var nextBanner = nextDoc.getElementById("banner");
     if (currentBanner && nextBanner) {
+      currentBanner.className = nextBanner.className;
       currentBanner.setAttribute("style", nextBanner.getAttribute("style") || "");
       if (nextBanner.hasAttribute("parallax")) {
         currentBanner.setAttribute("parallax", nextBanner.getAttribute("parallax") || "true");
       } else {
         currentBanner.removeAttribute("parallax");
       }
-    }
-
-    var currentSubtitle = document.getElementById("subtitle");
-    var nextSubtitle = nextDoc.getElementById("subtitle");
-    if (currentSubtitle && nextSubtitle) {
-      var typedText = nextSubtitle.getAttribute("data-typed-text");
-      if (typedText) {
-        currentSubtitle.setAttribute("data-typed-text", typedText);
-        currentSubtitle.textContent = typedText;
-      } else {
-        currentSubtitle.removeAttribute("data-typed-text");
-        currentSubtitle.textContent = nextSubtitle.textContent || "";
-      }
+      currentBanner.innerHTML = nextBanner.innerHTML;
     }
   }
 
