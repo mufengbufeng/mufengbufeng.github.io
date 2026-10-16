@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>重学C#-类型基础-所有的类型都从System.Object派生 · 苏杭小站</title>
+  <meta name="description" content="所有的类型都从 System.Object 派生“运行时”要求每个类型最终都从 System.Object 类型派生。以下两个定义完全一致
+123456789// 隐式派生于 System.Objectclass Employee&amp;#123;    ...&amp;#125;// 显式派生于 Syst...">
+  <meta name="theme-color" content="#e60012"><meta name="color-scheme" content="only light">
+  <link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/journal.css">
+  <link rel="canonical" href="https://lshgame.com/2025/03/16/All_types_derive_from_SystemObject/">
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+  <div class="reading-progress" aria-hidden="true"></div>
+  <a class="skip" href="#main">跳转到内容</a>
+  <header class="header"><div class="header-inner">
+    <a class="brand" href="/" aria-label="苏杭小站首页"><span class="brand-word">苏杭小站</span><small>SUHANG'S JOURNAL</small></a>
+    <nav id="main-nav" aria-label="主导航">
+      <a class=""  href="/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10h-6v-7H9v7H3Z"/></svg>首页</a>
+      <a class="active" href="/archives/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h5"/></svg>文章手记</a>
+      <a class="" href="/categories/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/></svg>探索分类</a>
+      <a class="" href="/about/"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21v-3a8 8 0 0 1 16 0v3"/></svg>关于我</a>
+    </nav>
+    <div class="header-actions"><button class="search-open" aria-label="搜索文章"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 6 6"/></svg><span>搜索</span></button><button class="menu-toggle" aria-label="打开导航" aria-controls="main-nav" aria-expanded="false"><span></span><span></span><span></span></button></div>
+  </div></header>
+  <main id="main" class="shell inner-main"><div class="post-breadcrumb"><a href="/">首页</a><span>/</span><a href="/archives/">文章</a><span>/</span> 开发与生活</div>
+<header class="post-header"><div class="eyebrow"><a href="/categories/%E7%BC%96%E7%A8%8B/">编程</a><span>2025.03.16</span><span>2 分钟阅读</span></div><h1>重学C#-类型基础-所有的类型都从System.Object派生</h1><div class="post-author"><span class="mini-avatar">S</span> SuHang <span>·</span> 游戏开发手记</div></header>
+<div class="post-layout"><article class="prose"><h2 id="所有的类型都从-System-Object-派生"><a href="#所有的类型都从-System-Object-派生" class="headerlink" title="所有的类型都从 System.Object 派生"></a>所有的类型都从 System.Object 派生</h2><p>“运行时”要求每个类型最终都从 System.Object 类型派生。<br>以下两个定义完全一致</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs C#"><span class="hljs-comment">// 隐式派生于 System.Object</span><br><span class="hljs-keyword">class</span> <span class="hljs-title">Employee</span>&#123;<br>    ...<br>&#125;<br><br><span class="hljs-comment">// 显式派生于 System.Object</span><br><span class="hljs-keyword">class</span> <span class="hljs-title">Employee</span> : <span class="hljs-title">System.Object</span>&#123;<br>    ...<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>由于所有的类型都从 System.Object 中派生，所以每个类型都保证了一组最基本的方法。</p>
+<ol>
+<li>公共方法<ul>
+<li>Equals</li>
+<li>GetHashCode</li>
+<li>ToString</li>
+<li>GetType</li>
+</ul>
+</li>
+<li>收到保护方法<ul>
+<li>MemberwiseClose</li>
+<li>Finalize<br>CLR 要求所有的对象都用<b> new </b>操作符创建</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C#">Employee e = <span class="hljs-keyword">new</span> Employee(<span class="hljs-string">&quot;Parama&quot;</span>);<br></code></pre></td></tr></table></figure>
+
+<p><b> new </b>操作符会做以下事情</p>
+<ol>
+<li>计算类型及其所有的基类（一直到 System.Object）和”同步块索引”.</li>
+<li>从托管堆中分配类型所需要的字节数，从而分配对象的内存，分配的所有字节都设为 0</li>
+<li>初始化对象的”类型对象指针” 和 “同步块索引” 成员</li>
+<li>调用类型的实例构造器，传递在<b> new </b> 调用中指定的实参(上述中的 “Parama”)，每个类型的构造器负责初始化该类型定义的实例字段，最终调用 System.Object 的构造器(该构造器什么都不做，简单的返回)。<br><b>new</b> 执行了所有操作后，返回指向新建对象的一个引用（或指针）。</li>
+</ol>
+<div class="post-tags"><a href="/tags/C/"># C#</a></div><nav class="post-pagination" aria-label="相邻文章"><a href="/2025/03/16/MCP_WIndows_NoToolFound/"><small>← 上一篇</small>MCP踩坑记录-关于windows配置报错-NoToolFound</a><a href="/2024/10/30/frp_remote_desktop/"><small>下一篇 →</small>内网穿透—基于frp实现远程桌面</a></nav></article><aside class="post-toc"><div class="panel-top">本篇导航 <span>↙</span></div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%89%80%E6%9C%89%E7%9A%84%E7%B1%BB%E5%9E%8B%E9%83%BD%E4%BB%8E-System-Object-%E6%B4%BE%E7%94%9F"><span class="toc-text">所有的类型都从 System.Object 派生</span></a></li></ol><a href="#main" class="back-top">返回顶部 ↑</a></aside></div>
+</main>
+  <footer class="footer"><div class="footer-red"><div class="shell"><a class="footer-brand" href="/">苏杭小站</a><span>每一份热爱，都值得存档。</span><a href="#main" class="footer-top" aria-label="返回页面顶部">↑</a></div></div><div class="footer-links shell"><div><a href="/archives/">文章归档</a><a href="/categories/">分类索引</a><a href="/tags/">全部标签</a><a href="/about/">关于与联系</a></div><span>© 2026 SuHang · 用 Hexo 记录日常</span></div></footer>
+  <dialog id="search-dialog" aria-labelledby="search-title" data-index="/journal-search.json" data-root="/">
+    <div class="search-head"><label id="search-title" for="search-input">发现一篇好文章</label><button class="search-close" aria-label="关闭搜索">×</button></div>
+    <input id="search-input" type="search" placeholder="搜索 Unity、热更新、C#…" autocomplete="off">
+    <p id="search-status" role="status">输入关键词，探索所有文章。</p><div id="search-results"></div>
+  </dialog>
+  <dialog id="image-dialog" aria-label="查看文章配图"><button class="image-close" aria-label="关闭配图">×</button><img alt=""><p></p></dialog>
+  <button class="floating-top" aria-label="回到顶部" title="回到顶部">↑</button><div class="toast" role="status"></div>
+  <script src="/assets/journal.js" defer></script>
+</body></html>

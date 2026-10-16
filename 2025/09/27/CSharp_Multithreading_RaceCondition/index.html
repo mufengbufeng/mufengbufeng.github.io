@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CSharp多线程之RaceCondition · 苏杭小站</title>
+  <meta name="description" content="1. 什么是 Race Condition当多个线程在没有同步机制的情况下同时读写共享数据，就可能导致数据不一致。典型场景：
+1234567int counter = 0;void Increment()&amp;#123;    // 多个线程同时运行时，counter++ 不是原子操作    co...">
+  <meta name="theme-color" content="#e60012"><meta name="color-scheme" content="only light">
+  <link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/journal.css">
+  <link rel="canonical" href="https://lshgame.com/2025/09/27/CSharp_Multithreading_RaceCondition/">
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+  <div class="reading-progress" aria-hidden="true"></div>
+  <a class="skip" href="#main">跳转到内容</a>
+  <header class="header"><div class="header-inner">
+    <a class="brand" href="/" aria-label="苏杭小站首页"><span class="brand-word">苏杭小站</span><small>SUHANG'S JOURNAL</small></a>
+    <nav id="main-nav" aria-label="主导航">
+      <a class=""  href="/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10h-6v-7H9v7H3Z"/></svg>首页</a>
+      <a class="active" href="/archives/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h5"/></svg>文章手记</a>
+      <a class="" href="/categories/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/></svg>探索分类</a>
+      <a class="" href="/about/"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21v-3a8 8 0 0 1 16 0v3"/></svg>关于我</a>
+    </nav>
+    <div class="header-actions"><button class="search-open" aria-label="搜索文章"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 6 6"/></svg><span>搜索</span></button><button class="menu-toggle" aria-label="打开导航" aria-controls="main-nav" aria-expanded="false"><span></span><span></span><span></span></button></div>
+  </div></header>
+  <main id="main" class="shell inner-main"><div class="post-breadcrumb"><a href="/">首页</a><span>/</span><a href="/archives/">文章</a><span>/</span> 开发与生活</div>
+<header class="post-header"><div class="eyebrow"><a href="/categories/Unity/">Unity</a><span>2025.09.27</span><span>4 分钟阅读</span></div><h1>CSharp多线程之RaceCondition</h1><div class="post-author"><span class="mini-avatar">S</span> SuHang <span>·</span> 游戏开发手记</div></header>
+<div class="post-layout"><article class="prose"><h2 id="1-什么是-Race-Condition"><a href="#1-什么是-Race-Condition" class="headerlink" title="1. 什么是 Race Condition"></a>1. 什么是 Race Condition</h2><p>当多个线程在<strong>没有同步机制</strong>的情况下同时读写共享数据，就可能导致数据不一致。<br>典型场景：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-built_in">int</span> counter = <span class="hljs-number">0</span>;<br><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Increment</span>()</span><br>&#123;<br>    <span class="hljs-comment">// 多个线程同时运行时，counter++ 不是原子操作</span><br>    counter++;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>可能结果并不是预期的 <code>counter == 线程数</code>，而是小于，因为：</p>
+<ul>
+<li><p><code>counter++</code> 实际上分为三步：读取值 → 加 1 → 写回。</p>
+</li>
+<li><p>如果两个线程同时读到相同值，最后一个写入会覆盖前一个。</p>
+</li>
+</ul>
+<hr>
+<h2 id="2-常见的解决方法"><a href="#2-常见的解决方法" class="headerlink" title="2. 常见的解决方法"></a>2. 常见的解决方法</h2><h3 id="🔹-方法-1：lock（最常用）"><a href="#🔹-方法-1：lock（最常用）" class="headerlink" title="🔹 方法 1：lock（最常用）"></a>🔹 方法 1：<code>lock</code>（最常用）</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">private</span> <span class="hljs-built_in">object</span> _lockObj = <span class="hljs-keyword">new</span> <span class="hljs-built_in">object</span>();<br><span class="hljs-built_in">int</span> counter = <span class="hljs-number">0</span>;<br><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Increment</span>()</span><br>&#123;<br>    <span class="hljs-keyword">lock</span> (_lockObj)<br>    &#123;<br>        counter++;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p><code>lock</code> 确保同一时间只有一个线程能进入代码块。</p>
+</li>
+<li><p>性能较好，适合大多数情况。</p>
+</li>
+</ul>
+<hr>
+<h3 id="🔹-方法-2：Interlocked（更轻量）"><a href="#🔹-方法-2：Interlocked（更轻量）" class="headerlink" title="🔹 方法 2：Interlocked（更轻量）"></a>🔹 方法 2：<code>Interlocked</code>（更轻量）</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-built_in">int</span> counter = <span class="hljs-number">0</span>;<br><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Increment</span>()</span><br>&#123;<br>    Interlocked.Increment(<span class="hljs-keyword">ref</span> counter);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p><code>Interlocked</code> 提供原子操作（<code>Increment</code>、<code>Decrement</code>、<code>Add</code>、<code>CompareExchange</code>）。</p>
+</li>
+<li><p>比 <code>lock</code> 更快，适合简单的数值操作。</p>
+</li>
+</ul>
+<hr>
+<h3 id="🔹-方法-3：Monitor（比-lock-更底层）"><a href="#🔹-方法-3：Monitor（比-lock-更底层）" class="headerlink" title="🔹 方法 3：Monitor（比 lock 更底层）"></a>🔹 方法 3：<code>Monitor</code>（比 lock 更底层）</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">private</span> <span class="hljs-built_in">object</span> _lockObj = <span class="hljs-keyword">new</span> <span class="hljs-built_in">object</span>();<br><span class="hljs-built_in">int</span> counter = <span class="hljs-number">0</span>;<br><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Increment</span>()</span><br>&#123;<br>    Monitor.Enter(_lockObj);<br>    <span class="hljs-keyword">try</span><br>    &#123;<br>        counter++;<br>    &#125;<br>    <span class="hljs-keyword">finally</span><br>    &#123;<br>        Monitor.Exit(_lockObj);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p><code>lock</code> 其实就是 <code>Monitor</code> 的语法糖。</p>
+</li>
+<li><p>如果需要更复杂的控制（<code>Wait/Pulse</code>），可以直接用 <code>Monitor</code>。</p>
+</li>
+</ul>
+<hr>
+<h3 id="🔹-方法-4：ReaderWriterLockSlim（读多写少场景）"><a href="#🔹-方法-4：ReaderWriterLockSlim（读多写少场景）" class="headerlink" title="🔹 方法 4：ReaderWriterLockSlim（读多写少场景）"></a>🔹 方法 4：<code>ReaderWriterLockSlim</code>（读多写少场景）</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs csharp">ReaderWriterLockSlim rwLock = <span class="hljs-keyword">new</span> ReaderWriterLockSlim();<br>List&lt;<span class="hljs-built_in">int</span>&gt; list = <span class="hljs-keyword">new</span> List&lt;<span class="hljs-built_in">int</span>&gt;();<br><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">AddItem</span>(<span class="hljs-params"><span class="hljs-built_in">int</span> item</span>)</span><br>&#123;<br>    rwLock.EnterWriteLock();<br>    <span class="hljs-keyword">try</span><br>    &#123;<br>        list.Add(item);<br>    &#125;<br>    <span class="hljs-keyword">finally</span><br>    &#123;<br>        rwLock.ExitWriteLock();<br>    &#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-built_in">int</span> <span class="hljs-title">GetItem</span>(<span class="hljs-params"><span class="hljs-built_in">int</span> index</span>)</span><br>&#123;<br>    rwLock.EnterReadLock();<br>    <span class="hljs-keyword">try</span><br>    &#123;<br>        <span class="hljs-keyword">return</span> list[index];<br>    &#125;<br>    <span class="hljs-keyword">finally</span><br>    &#123;<br>        rwLock.ExitReadLock();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>多个线程可同时读，但写时必须独占。</p>
+</li>
+<li><p>比单纯的 <code>lock</code> 更高效（在读操作远多于写操作的情况下）。</p>
+</li>
+</ul>
+<div class="post-tags"><a href="/tags/C/"># C#</a></div><nav class="post-pagination" aria-label="相邻文章"><a href="/2025/11/02/Thoughts_on_OOP_to_Component-Based_to_ECS/"><small>← 上一篇</small>关于OOP到组件式到ECS的思考</a><a href="/2025/09/27/Blittable_and_Non-Blittable_Typs/"><small>下一篇 →</small>Blittable_and_Non-Blittable_Typs</a></nav></article><aside class="post-toc"><div class="panel-top">本篇导航 <span>↙</span></div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF-Race-Condition"><span class="toc-text">1. 什么是 Race Condition</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%B8%B8%E8%A7%81%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95"><span class="toc-text">2. 常见的解决方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%94%B9-%E6%96%B9%E6%B3%95-1%EF%BC%9Alock%EF%BC%88%E6%9C%80%E5%B8%B8%E7%94%A8%EF%BC%89"><span class="toc-text">🔹 方法 1：lock（最常用）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%94%B9-%E6%96%B9%E6%B3%95-2%EF%BC%9AInterlocked%EF%BC%88%E6%9B%B4%E8%BD%BB%E9%87%8F%EF%BC%89"><span class="toc-text">🔹 方法 2：Interlocked（更轻量）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%94%B9-%E6%96%B9%E6%B3%95-3%EF%BC%9AMonitor%EF%BC%88%E6%AF%94-lock-%E6%9B%B4%E5%BA%95%E5%B1%82%EF%BC%89"><span class="toc-text">🔹 方法 3：Monitor（比 lock 更底层）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%94%B9-%E6%96%B9%E6%B3%95-4%EF%BC%9AReaderWriterLockSlim%EF%BC%88%E8%AF%BB%E5%A4%9A%E5%86%99%E5%B0%91%E5%9C%BA%E6%99%AF%EF%BC%89"><span class="toc-text">🔹 方法 4：ReaderWriterLockSlim（读多写少场景）</span></a></li></ol></li></ol><a href="#main" class="back-top">返回顶部 ↑</a></aside></div>
+</main>
+  <footer class="footer"><div class="footer-red"><div class="shell"><a class="footer-brand" href="/">苏杭小站</a><span>每一份热爱，都值得存档。</span><a href="#main" class="footer-top" aria-label="返回页面顶部">↑</a></div></div><div class="footer-links shell"><div><a href="/archives/">文章归档</a><a href="/categories/">分类索引</a><a href="/tags/">全部标签</a><a href="/about/">关于与联系</a></div><span>© 2026 SuHang · 用 Hexo 记录日常</span></div></footer>
+  <dialog id="search-dialog" aria-labelledby="search-title" data-index="/journal-search.json" data-root="/">
+    <div class="search-head"><label id="search-title" for="search-input">发现一篇好文章</label><button class="search-close" aria-label="关闭搜索">×</button></div>
+    <input id="search-input" type="search" placeholder="搜索 Unity、热更新、C#…" autocomplete="off">
+    <p id="search-status" role="status">输入关键词，探索所有文章。</p><div id="search-results"></div>
+  </dialog>
+  <dialog id="image-dialog" aria-label="查看文章配图"><button class="image-close" aria-label="关闭配图">×</button><img alt=""><p></p></dialog>
+  <button class="floating-top" aria-label="回到顶部" title="回到顶部">↑</button><div class="toast" role="status"></div>
+  <script src="/assets/journal.js" defer></script>
+</body></html>

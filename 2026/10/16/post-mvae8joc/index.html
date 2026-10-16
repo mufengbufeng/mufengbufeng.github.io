@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>与智能体的协作 · 苏杭小站</title>
+  <meta name="description" content="从 Cursor ， Aider 这样的编程助手，到近两年 Claude Code ， Codex 这样的编程智能体出现，新一代的工具真的很诱人，我们都可以尝试哪些想做很多年，但是一直没有空做的项目。这并没有什么问题，利用空闲时间构建自己的东西非常有趣，大多数时候，你也不需要考虑太多的维护性和...">
+  <meta name="theme-color" content="#e60012"><meta name="color-scheme" content="only light">
+  <link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/journal.css">
+  <link rel="canonical" href="https://lshgame.com/2026/10/16/post-mvae8joc/">
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+  <div class="reading-progress" aria-hidden="true"></div>
+  <a class="skip" href="#main">跳转到内容</a>
+  <header class="header"><div class="header-inner">
+    <a class="brand" href="/" aria-label="苏杭小站首页"><span class="brand-word">苏杭小站</span><small>SUHANG'S JOURNAL</small></a>
+    <nav id="main-nav" aria-label="主导航">
+      <a class=""  href="/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10h-6v-7H9v7H3Z"/></svg>首页</a>
+      <a class="active" href="/archives/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h5"/></svg>文章手记</a>
+      <a class="" href="/categories/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/></svg>探索分类</a>
+      <a class="" href="/about/"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21v-3a8 8 0 0 1 16 0v3"/></svg>关于我</a>
+    </nav>
+    <div class="header-actions"><button class="search-open" aria-label="搜索文章"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 6 6"/></svg><span>搜索</span></button><button class="menu-toggle" aria-label="打开导航" aria-controls="main-nav" aria-expanded="false"><span></span><span></span><span></span></button></div>
+  </div></header>
+  <main id="main" class="shell inner-main"><div class="post-breadcrumb"><a href="/">首页</a><span>/</span><a href="/archives/">文章</a><span>/</span> 开发与生活</div>
+<header class="post-header"><div class="eyebrow"><span>2026.10.16</span><span>9 分钟阅读</span></div><h1>与智能体的协作</h1><div class="post-author"><span class="mini-avatar">S</span> SuHang <span>·</span> 游戏开发手记</div></header>
+<div class="post-layout"><article class="prose"><p>从 Cursor ， Aider 这样的编程助手，到近两年 Claude Code ， Codex 这样的编程智能体出现，新一代的工具真的很诱人，我们都可以尝试哪些想做很多年，但是一直没有空做的项目。<br>这并没有什么问题，利用空闲时间构建自己的东西非常有趣，大多数时候，你也不需要考虑太多的维护性和代码质量。<br>随着更加便宜的 Token 和行业的推广，越来越多的人都迷上了这个令人上瘾的“老虎机”。不断有人感受到智能体编程的魔力。参与的人越来越多了。<br>随着编程智能体被引入生产代码。一年过去后，这些“进步”也带来了一些影响。</p>
+<h2 id="一切都坏掉了"><a href="#一切都坏掉了" class="headerlink" title="一切都坏掉了"></a>一切都坏掉了</h2><p>虽然这些都是个人见闻，但是软件似乎确实变成了脆弱的一团乱麻。程序只有 98% 正常运行似乎成了常态，一些大型服务似乎也不例外，用户界面会出现一些奇葩的 bug， QA 团队因该早就发现这些问题。早在智能体出现以前，情况也会如此，但是我们似乎正在加速走向更糟。</p>
+<p>微软 CEO 一直再说，<a target="_blank" rel="noopener" href="https://techcrunch.com/2025/04/29/microsoft-ceo-says-up-to-30-of-the-companys-code-was-written-by-ai/">微软现在有多少代码是 Ai 编写的</a>。</p>
+<p>那些生成产品代码如今 100% 都由 AI 编写的公司，交出来的东西总是都烂的难以想象。但是动辄数 GB 的内存泄露，UI 故障，功能失灵，程序崩溃 – 这可不是他们以为的质量保证。更别提这种<strong>让智能体替你包办一切的幻想</strong>，这绝对不算什么好的宣传。</p>
+<h2 id="我们不该如何跟智能体协作"><a href="#我们不该如何跟智能体协作" class="headerlink" title="我们不该如何跟智能体协作"></a>我们不该如何跟智能体协作</h2><p>我们基本放弃了项目所有的主导权，陷入了一种成瘾：以在最短时间内产出最多的代码为目标。至于后果是什么？谁会在乎呢？</p>
+<p>你正在搭建一个游戏，使用你的智能体大军，他替你安装了各种库，完全不会意识到它们的性能甚至非常差。它实现了一个游戏，它似乎有一些 bug，但是没事的，下一代 LLM 肯定会修好它们！软件的未来将会在 6 个月内彻底解决，我奶奶也可以使用她的 Claw 给自己做一个原神！</p>
+<p>不过，这似乎只能用在你的个人项目中–基本没人会用，甚至你自己也不会用。不过也许真的有人可以把这个用在一个软件产品上。</p>
+<p>如果你是这样的人，那再好不过。但只是我周围的同行里，还没有任何证据证明这套东西能行得通，获取因为我们能力不行。</p>
+<h3 id="小错不断积累，缺毫无长进；没有瓶颈，痛苦却珊珊来迟"><a href="#小错不断积累，缺毫无长进；没有瓶颈，痛苦却珊珊来迟" class="headerlink" title="小错不断积累，缺毫无长进；没有瓶颈，痛苦却珊珊来迟"></a>小错不断积累，缺毫无长进；没有瓶颈，痛苦却珊珊来迟</h3><p>智能体的问题在于他们也会犯错。这倒没什么，人也会犯错。也许只是正确性上的错误，很容易发现和修复。再补一个测试。也可能代码异味，连你的代码检查工具都没有发现。这里有个没用的方法，那里有个不通的类型，再有一处重复的代码。单独来看，这些都无伤大雅，人也会犯这种小错误。毕竟，软件还在跑嘛。</p>
+<p>但智能体不是人，人会把同一个问题犯上几次，但最终学会不再犯。可能是有人开始对他大吼，可能能是他们真的在学习。</p>
+<p>不过智能体可没有这种学习能力，至少开箱即用的时候没有，它会一遍一遍的犯着同样的错误。根据训练数据，它还可能把不同的错误拼接起来，创造一个精彩的可运行的新的错误。</p>
+<p>现在你可以试着教你的智能体。在 AGENTS.md 中告诉它别再犯这种小错误。再打造一个复杂的高回归的记忆系统，它可以查阅以前犯错和最佳实践。对于一类错误来说，这或许确实有效。但前提是你得亲眼看到智能体犯了这个错。</p>
+<p>智能体和人类之间有一个重要的区别：人类是瓶颈。人类无法在几个小时内，一口气在项目中拉出两万多行代码。就算人类频繁的犯这种低级错误，每天能在代码库中引入的错误也有限。错误只会以极慢的速度积累。通常，这些错误带来的痛苦极大，讨厌痛苦的人会花时间修复这些错误。或者，人类被解雇，换人来修复这些错误，于是痛苦就消失了。</p>
+<p>有了一支进过统筹调度的智能体大军，就不会有瓶颈，也没有人类的痛苦，只有一些小小的，看似无伤大雅的失误，突然以难以为继的速度不断积累。你把自己从整个流程中抽离了出去，甚至不知道这些无伤大雅的小失误已经堆成了一座庞大的代码库。等你感到痛苦时，一切都已经太迟了。</p>
+<p>然后有一天，你突然想添加一个新的功能。可这时候架构早已经是各种糟糕的设计，根本无法让你庞大的智能体大军顺利完成这个改动。又或者，用户正在对你大喊大叫，因为新版本里有某个问题导致一些用户的数据被删除了。</p>
+<p>你意识到，自己已经无法再信任这套代码库。更糟糕的是，你还发现，那些你让智能体们写的成千上万条单元测试，快照测试，端到端测试，同样不值得信任。如今，唯一还能可靠判断“这东西到底能不能用”的方法，就是手动测试产品。恭喜，你把自己坑惨了。</p>
+<h3 id="复杂性风险"><a href="#复杂性风险" class="headerlink" title="复杂性风险"></a>复杂性风险</h3><p>你根本不知道发生了什么，因为你把所有的决策权都交给了你的智能体，你放任它们自由发挥，而他们就是复杂性的创造者。他们在训练数据和训练过程中见过许多糟糕的架构决策，你让它们来设计你的应用。猜猜会发生什么？</p>
+<p>复杂性多的惊人，混杂着一堆糟糕的，盲目照搬的“行业最佳实践”–你没能及时把他们约束住，但事实还不止于此</p>
+<p>你的智能体永远看不到彼此的运行过程，也看不到你的整个代码库，更看不到你或其他智能体在它们做出改动之前做过的所有决策。因此，智能体做出的决策总是局部的，这就导致上面所说的那些糟糕的问题：代码大量重复，为了抽象而抽象。</p>
+<p>所有这些问题叠加起来，最终会演化成一个无法收拾的复杂屎山。和人类所编写的企业级代码库一模一样的屎山。他们之所以会变成这样，是因为痛苦分散在大量人身上。每个人所承受的痛苦都没有达到“我得解决这个问题”的程度。甚至个人可能没有能力解决问题。而组织的忍痛能力又极强。不过，人类编写的企业级代码要好几年才会发展到这个地步，组织会和复杂性一起缓慢演变，以一种扭曲的方式逐渐学会如何应对。</p>
+<p>有了智能体和一个由两个人组成的团队，短短几周就能陷入这种复杂局面。</p>
+<h3 id="Agent-搜索召回率很低"><a href="#Agent-搜索召回率很低" class="headerlink" title="Agent 搜索召回率很低"></a>Agent 搜索召回率很低</h3><p>所以现在，你希望智能体可以收拾这个烂摊子，重构代码，让一切变得井井有条。但智能体也已经无力应对了。因为代码库规模太大，复杂度太高，而它们始终只能局部的看到这个烂摊子。</p>
+<p>我说的不只是上下文窗口大小，或是上下文注意力机制看到 100 万行代码的庞然大物就失灵。这些都是显而易见的技术限制。问题要隐蔽的多。</p>
+<p>在你的智能体尝试收拾这团乱麻之前，它需要找出所有需要修改的代码，以及所有可以复用的现有代码。这个过程称为智能体搜索。智能体如何搜索取决于它使用哪些工具。你可以给他一个 Bash 工具，让他用 ripgrep 在整个代码库中搜索；也可以给他一个可以查询代码库索引，LSP 服务器或向量数据库。归根结底，工具是什么并不太重要。代码库越大，召回率就越低。召回率低意味着，实际上，智能体找不全完成工作所需要的代码。</p>
+<p>这也就是那些代码异味小毛病最初出现的原因。智能体漏掉现有代码，重复造轮子，还引入了不一致。然后，这些问题就会开枝散叶，最终长成一个复杂度的漂亮屎花。</p>
+<h2 id="目前如何和智能体协作"><a href="#目前如何和智能体协作" class="headerlink" title="目前如何和智能体协作"></a>目前如何和智能体协作</h2><p>智能体编程就像毒品，以飞快的代码生成速度和参次不齐的智能引诱你上钩；它们常常能以惊人的速度高质量地完成简单任务。当你开始想：“诶呀，这东西真不错。电脑，替我干活吧！”事情就开始变坏了。</p>
+<p>把任务交给智能体并没有什么不对。适合交给智能体的任务通常有几个特点：范围明确，智能体不需要了解整个系统；可以形成闭环，也就是说，智能体有办法评估自己的工作；产出并非事关重大，只是某个临时工具或内部软件，没有人的生命或收入依赖于它。或者，你只是需要一个临时的工具来帮你验证想法–说白了，就是那你的想法去和互联网浓缩出的只会及合成训练数据碰一碰。只要符合任意一点，你就找到了适合交给智能体的任务，前提是你这个人类要把好最终的质量关。</p>
+<p>使用 Ai 帮助制作软件，很不错。前提是你明白，它吐出来的代码绝对还没法达到生产就绪的水平。自动测试之所以有效，是因为你给他一个评估的函数，让智能体根据某个指标衡量自己的工作，而这个预估函数只涵盖了非常狭窄的一项指标。对于评估函数没有涵盖的指标，智能体会置之不理，比如代码质量，复杂度，甚至正确性–尤其当你的评估函数本身就一团糟的时候。</p>
+<p>重点是：让智能体去做那些枯燥的事，那些不会让你学到任何新东西的事，或者让它尝试一些你平时没有时间尝试的不同做法。然后你来评估它的成果，挑出真正合理，正确的想法，最后完成实现。</p>
+<p>我想说，慢下来才是正路，给自己留些时间，想清楚你究竟在构建什么，为什么要构建？给自己一个机会，说一句:“操，我们不需要这个。”根据自己实际审查代码的能力，限制每天让这破玩意生成多少代码。</p>
+<p>凡事决定整个系统整体面貌的东西，比如架构，API 等，都要亲手写。也许可以用用自动补全，找回一点怀旧的感觉；或者和你的智能体结对编程。亲自参与代码编写。因为，光是请手写下这些东西，或是看着他们一步步成型，就会带来一些阻力，而这能让你更好地理解自己想构建什么，以及这个系统“感觉”如何。这正是你的经验和品味发挥作用的敌方，而这些恰恰是当下最先进的模型还无法取代的。放慢速度，忍受阻力，才能让你学会并成长。</p>
+<p>最终，我们将拥有依然易于维护的系统和代码库，至少能达到智能体出现以前旧系统的可维护程度。当然，旧系统也并非完美。你的用户会感谢你，因为你的产品能带来愉悦，而不知一堆粗制滥造的东西。你会少做一些功能，但会把功能做对。学会说“不”，本身就是一种能力。</p>
+<p>你可以安心入睡，你因你仍然知道到底会发生什么，也仍然掌握着主动权。你的理解帮你解决智能体搜索中的召回问题，从而产出更好的机器生成结果，也不需要费这么大劲去修修补补。要是出什么大乱子，你也能亲自上手修好。或者，你最初的设计不够立项，你能明白它为什么不立项，以及如何重构得更好。用不用智能体，谁在乎呢？</p>
+<p>这一切都需要自律和主动权。</p>
+<p>这一切都离不开人。</p>
+<div class="post-tags"></div><nav class="post-pagination" aria-label="相邻文章"><a href="/2026/10/09/post-mv0jwbet/"><small>下一篇 →</small>关于英语长句</a></nav></article><aside class="post-toc"><div class="panel-top">本篇导航 <span>↙</span></div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E5%88%87%E9%83%BD%E5%9D%8F%E6%8E%89%E4%BA%86"><span class="toc-text">一切都坏掉了</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%88%91%E4%BB%AC%E4%B8%8D%E8%AF%A5%E5%A6%82%E4%BD%95%E8%B7%9F%E6%99%BA%E8%83%BD%E4%BD%93%E5%8D%8F%E4%BD%9C"><span class="toc-text">我们不该如何跟智能体协作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%8F%E9%94%99%E4%B8%8D%E6%96%AD%E7%A7%AF%E7%B4%AF%EF%BC%8C%E7%BC%BA%E6%AF%AB%E6%97%A0%E9%95%BF%E8%BF%9B%EF%BC%9B%E6%B2%A1%E6%9C%89%E7%93%B6%E9%A2%88%EF%BC%8C%E7%97%9B%E8%8B%A6%E5%8D%B4%E7%8F%8A%E7%8F%8A%E6%9D%A5%E8%BF%9F"><span class="toc-text">小错不断积累，缺毫无长进；没有瓶颈，痛苦却珊珊来迟</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%8D%E6%9D%82%E6%80%A7%E9%A3%8E%E9%99%A9"><span class="toc-text">复杂性风险</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Agent-%E6%90%9C%E7%B4%A2%E5%8F%AC%E5%9B%9E%E7%8E%87%E5%BE%88%E4%BD%8E"><span class="toc-text">Agent 搜索召回率很低</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E5%89%8D%E5%A6%82%E4%BD%95%E5%92%8C%E6%99%BA%E8%83%BD%E4%BD%93%E5%8D%8F%E4%BD%9C"><span class="toc-text">目前如何和智能体协作</span></a></li></ol><a href="#main" class="back-top">返回顶部 ↑</a></aside></div>
+</main>
+  <footer class="footer"><div class="footer-red"><div class="shell"><a class="footer-brand" href="/">苏杭小站</a><span>每一份热爱，都值得存档。</span><a href="#main" class="footer-top" aria-label="返回页面顶部">↑</a></div></div><div class="footer-links shell"><div><a href="/archives/">文章归档</a><a href="/categories/">分类索引</a><a href="/tags/">全部标签</a><a href="/about/">关于与联系</a></div><span>© 2026 SuHang · 用 Hexo 记录日常</span></div></footer>
+  <dialog id="search-dialog" aria-labelledby="search-title" data-index="/journal-search.json" data-root="/">
+    <div class="search-head"><label id="search-title" for="search-input">发现一篇好文章</label><button class="search-close" aria-label="关闭搜索">×</button></div>
+    <input id="search-input" type="search" placeholder="搜索 Unity、热更新、C#…" autocomplete="off">
+    <p id="search-status" role="status">输入关键词，探索所有文章。</p><div id="search-results"></div>
+  </dialog>
+  <dialog id="image-dialog" aria-label="查看文章配图"><button class="image-close" aria-label="关闭配图">×</button><img alt=""><p></p></dialog>
+  <button class="floating-top" aria-label="回到顶部" title="回到顶部">↑</button><div class="toast" role="status"></div>
+  <script src="/assets/journal.js" defer></script>
+</body></html>

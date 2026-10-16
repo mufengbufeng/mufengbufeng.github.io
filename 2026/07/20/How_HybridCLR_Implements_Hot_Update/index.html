@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>热更新系列-09-HybridCLR如何实现热更新 · 苏杭小站</title>
+  <meta name="description" content="什么是热更新在用户没有感知或者低感知的情况下，让用户可以不用安装新的安装包实现功能增加或更新。
+Mono 本身就可以热更新Mono 可以在支持 JIT 的平台上执行运行时加载的新 IL，因此具备做 C# 热更新的基础。但是 iOS 等设备因为权限问题，不能依赖 JIT，所以大部分热更新方案都在...">
+  <meta name="theme-color" content="#e60012"><meta name="color-scheme" content="only light">
+  <link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/journal.css">
+  <link rel="canonical" href="https://lshgame.com/2026/07/20/How_HybridCLR_Implements_Hot_Update/">
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+  <div class="reading-progress" aria-hidden="true"></div>
+  <a class="skip" href="#main">跳转到内容</a>
+  <header class="header"><div class="header-inner">
+    <a class="brand" href="/" aria-label="苏杭小站首页"><span class="brand-word">苏杭小站</span><small>SUHANG'S JOURNAL</small></a>
+    <nav id="main-nav" aria-label="主导航">
+      <a class=""  href="/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10h-6v-7H9v7H3Z"/></svg>首页</a>
+      <a class="active" href="/archives/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h5"/></svg>文章手记</a>
+      <a class="" href="/categories/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/></svg>探索分类</a>
+      <a class="" href="/about/"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21v-3a8 8 0 0 1 16 0v3"/></svg>关于我</a>
+    </nav>
+    <div class="header-actions"><button class="search-open" aria-label="搜索文章"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 6 6"/></svg><span>搜索</span></button><button class="menu-toggle" aria-label="打开导航" aria-controls="main-nav" aria-expanded="false"><span></span><span></span><span></span></button></div>
+  </div></header>
+  <main id="main" class="shell inner-main"><div class="post-breadcrumb"><a href="/">首页</a><span>/</span><a href="/archives/">文章</a><span>/</span> 开发与生活</div>
+<header class="post-header"><div class="eyebrow"><a href="/categories/%E7%BC%96%E7%A8%8B/">编程</a><span>2026.07.20</span><span>13 分钟阅读</span></div><h1>热更新系列-09-HybridCLR如何实现热更新</h1><div class="post-author"><span class="mini-avatar">S</span> SuHang <span>·</span> 游戏开发手记</div></header>
+<div class="post-layout"><article class="prose"><h2 id="什么是热更新"><a href="#什么是热更新" class="headerlink" title="什么是热更新"></a>什么是热更新</h2><p>在用户没有感知或者低感知的情况下，让用户可以不用安装新的安装包实现功能增加或更新。</p>
+<h3 id="Mono-本身就可以热更新"><a href="#Mono-本身就可以热更新" class="headerlink" title="Mono 本身就可以热更新"></a>Mono 本身就可以热更新</h3><p>Mono 可以在支持 JIT 的平台上执行运行时加载的新 IL，因此具备做 C# 热更新的基础。但是 iOS 等设备因为权限问题，不能依赖 JIT，所以大部分热更新方案都在解决“如何在 iOS 上执行新代码”这个问题。详见<a href="/2026/07/20/Why_JIT_Cannot_Be_Used_for_Hot_Update_on_iOS/">为什么无法使用 JIT 在 iOS 上实现热更新</a>。</p>
+<h3 id="虚拟机解决方案"><a href="#虚拟机解决方案" class="headerlink" title="虚拟机解决方案"></a>虚拟机解决方案</h3><p>为了解决权限问题，可以在代码中添加虚拟机，以解释执行的方式实现热更新能力，例如 xLua、ToLua，以及各种 Python 热更新方案。原理是通过虚拟机在运行时执行热更新代码。</p>
+<h2 id="HybridCLR-官方说"><a href="#HybridCLR-官方说" class="headerlink" title="HybridCLR 官方说"></a>HybridCLR 官方说</h2><p>HybridCLR 从 Mono 的 <a target="_blank" rel="noopener" href="https://www.mono-project.com/news/2017/11/13/mono-interpreter/">mixed mode execution</a> 技术中得到启发，为 Unity 的 IL2CPP 这类 AOT runtime 额外提供 Interpreter 模块，将它们由纯 AOT 运行时改造为“AOT + Interpreter”混合运行方式。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/focus-creative-games/hybridclr/blob/main/docs/images/architecture.png"><img src="/images/article-assets/hybridclr-architecture.png" alt="HybridCLR 架构图"></a></p>
+<p>更具体地说，HybridCLR 做了以下几点工作：</p>
+<ul>
+<li>实现了一个高效的元数据（DLL）解析库。</li>
+<li>改造了元数据管理模块，实现了元数据的动态注册。</li>
+<li>实现了一个从 IL 指令集到自定义寄存器指令集的 compiler。</li>
+<li>实现了一个高效的寄存器解释器。</li>
+<li>额外提供大量 intrinsic（内建）函数，提升解释器性能。</li>
+</ul>
+<h2 id="如何理解官方所说"><a href="#如何理解官方所说" class="headerlink" title="如何理解官方所说"></a>如何理解官方所说</h2><p>本部分不深究源码，只通过逻辑解释 HybridCLR 是如何实现的。</p>
+<h3 id="先看原来的问题"><a href="#先看原来的问题" class="headerlink" title="先看原来的问题"></a>先看原来的问题</h3><p>普通的 IL2CPP 流程是这样的：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs text">C# 代码<br>  -&gt; IL<br>  -&gt; IL2CPP 转成 C++<br>  -&gt; 平台 C++ 编译器<br>  -&gt; 机器码<br></code></pre></td></tr></table></figure>
+
+<p>主工程里的 <code>Assembly-CSharp.dll</code> 在打包时已经走完了这条路。比如下面这段代码：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Attack</span>()</span><br>&#123;<br>    HP--;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>最终会变成一段可以直接修改 <code>HP</code> 的 C++ 函数，再被编译成机器码。</p>
+<p>但运行时下载的 <code>HotUpdate.dll</code> 只有 IL 和元数据：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs text">HotUpdate.dll<br>  -&gt; IL<br>  -&gt; 这里原本没有路了<br></code></pre></td></tr></table></figure>
+
+<p>IL2CPP 不会在运行时再把这份 IL 编译成新的机器码。尤其是在 iOS 上，不能依赖运行时生成机器码的 JIT，所以需要另一条路。</p>
+<h3 id="HybridCLR-加了一台能跑-IL-的“虚拟机”"><a href="#HybridCLR-加了一台能跑-IL-的“虚拟机”" class="headerlink" title="HybridCLR 加了一台能跑 IL 的“虚拟机”"></a>HybridCLR 加了一台能跑 IL 的“虚拟机”</h3><p>HybridCLR 把解释器编进最终的 App。这样，热更新 DLL 加载后，不是直接交给 CPU 执行，而是交给 HybridCLR：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs text">HotUpdate.dll<br>  -&gt; 解析 DLL 中的类型、方法和 IL<br>  -&gt; 转成解释器自己的寄存器指令<br>  -&gt; HybridCLR Interpreter 执行<br>  -&gt; 游戏逻辑<br></code></pre></td></tr></table></figure>
+
+<p>这里的“寄存器”是解释器内部用来保存参数、局部变量和临时结果的数据位置，不是说热更新代码直接在 ARM 或 x64 的 CPU 寄存器里运行。</p>
+<p>真正被 CPU 执行的，仍然是已经编译进 App 的 C++ 解释器。它负责读取热更新方法的指令，并完成加法、分支、创建对象、调用方法、抛异常这些动作。</p>
+<p>本文讲的是最常见的“单独热更新 DLL”路径。HybridCLR 的 Hybrid 指的是 <strong>AOT + Interpreter</strong>，不是 AOT + JIT。它还有差分混合执行（DHE）等能力，可以让未改动的函数继续使用已有 AOT 代码，但新增或改动的函数仍然不是运行时 JIT 出来的。</p>
+<h3 id="IL-到底是怎样被执行的"><a href="#IL-到底是怎样被执行的" class="headerlink" title="IL 到底是怎样被执行的"></a>IL 到底是怎样被执行的</h3><p>先用一个最小的例子理解。C# 代码：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-built_in">int</span> <span class="hljs-title">Add</span>(<span class="hljs-params"><span class="hljs-built_in">int</span> a, <span class="hljs-built_in">int</span> b</span>)</span><br>&#123;<br>    <span class="hljs-keyword">return</span> a + b;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>大意会对应这样的 IL：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs text">ldarg.0    // 取参数 a<br>ldarg.1    // 取参数 b<br>add        // 相加<br>ret        // 返回结果<br></code></pre></td></tr></table></figure>
+
+<p>从概念上看，解释器会做下面这些事：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs text">ldarg.0  -&gt; 把 a 放到临时位置<br>ldarg.1  -&gt; 把 b 放到临时位置<br>add      -&gt; 取出 a 和 b，算出 a + b<br>ret      -&gt; 把结果交回调用方<br></code></pre></td></tr></table></figure>
+
+<p>如果只是教学用的解释器，通常会写成一个不断 <code>switch(opcode)</code> 的循环。HybridCLR 实际上会先把 IL 转成更适合自己执行的寄存器指令，再进入解释器循环。这样不需要每次调用方法都重新解析 DLL，也减少了栈式 IL 指令带来的搬运成本。</p>
+<p>所以可以把它类比成 Lua VM 或 JVM，但不要把它理解成“模拟 CPU”。它是在原生 C++ 代码里执行一套 CLR 语义。</p>
+<h3 id="热更新代码调用-Unity-API-为什么能工作"><a href="#热更新代码调用-Unity-API-为什么能工作" class="headerlink" title="热更新代码调用 Unity API 为什么能工作"></a>热更新代码调用 Unity API 为什么能工作</h3><p>热更新代码里很自然会写：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs csharp">Debug.Log(<span class="hljs-string">&quot;玩家受到伤害&quot;</span>);<br>transform.position = targetPosition;<br></code></pre></td></tr></table></figure>
+
+<p>在 IL2CPP Player 中，<code>Debug.Log</code>、<code>Transform.position</code> 以及主工程中的普通方法，都有可供调用的 AOT 包装或原生绑定。难点在于：解释器里的参数放在解释器栈上，而 AOT 函数要按照平台 ABI 接收参数。<code>int</code>、引用类型、<code>Vector3</code> 这类结构体的传递方式都可能不同，解释器不能拿着一组通用数据直接跳到任意 C++ 函数地址。</p>
+<p>HybridCLR 用 <strong>MethodBridge（桥接函数）</strong> 解决这个问题：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs text">热更新 IL<br>  -&gt; Interpreter 栈上的参数<br>  -&gt; MethodBridge 负责整理参数和返回值<br>  -&gt; IL2CPP 生成的 C++ 函数<br>  -&gt; Unity API 或 AOT 主工程代码<br></code></pre></td></tr></table></figure>
+
+<p>桥接函数可以理解成翻译。它把解释器里的参数翻译成 AOT 函数能接收的形式，调用结束后再把返回值翻译回来。</p>
+<p>反过来也一样。AOT 代码通过接口、虚函数或 delegate 回调热更新方法时，也需要通过桥接函数把 AOT 侧的参数送进解释器。</p>
+<p>桥接函数不是运行时临时生成的。打包前执行 <code>HybridCLR/Generate/All</code> 时，工具会分析程序集，为需要的函数签名生成 C++ 桥接代码，并随 Player 一起编译进去。映射到同一个 HybridCLR 桥接签名的方法可以复用同一个桥接函数；签名会考虑参数、返回值和结构体等 ABI 相关信息，不是只看方法名。这样也满足 iOS 不能在运行时生成代码的限制。</p>
+<p>官方对桥接函数的说明在这里：<a target="_blank" rel="noopener" href="https://www.hybridclr.cn/docs/basic/methodbridge">桥接函数</a>。</p>
+<h3 id="AOT-代码最开始如何进入热更新代码"><a href="#AOT-代码最开始如何进入热更新代码" class="headerlink" title="AOT 代码最开始如何进入热更新代码"></a>AOT 代码最开始如何进入热更新代码</h3><p>AOT 主工程在编译时不知道以后会下载哪些热更新类型，因此一般不会直接写：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">new</span> HotUpdate.Entry().Start();<br></code></pre></td></tr></table></figure>
+
+<p>常见做法是先加载 DLL，再用约定好的入口类型启动它：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">var</span> assembly = Assembly.Load(hotUpdateDllBytes);<br><span class="hljs-keyword">var</span> entryType = assembly.GetType(<span class="hljs-string">&quot;HotUpdate.Entry&quot;</span>);<br>entryType.GetMethod(<span class="hljs-string">&quot;Start&quot;</span>).Invoke(<span class="hljs-literal">null</span>, <span class="hljs-literal">null</span>);<br></code></pre></td></tr></table></figure>
+
+<p>这一次 <code>Invoke</code> 的目标是热更新程序集中的方法，运行时会把它分派给 HybridCLR 解释器，创建解释器栈帧，然后从 <code>Start</code> 的 IL 开始跑。之后热更新代码调用 Unity API 会走 AOT 调用路径，并由匹配的 MethodBridge 整理参数和返回值；主工程通过接口、虚函数或 delegate 跨边界回调热更新代码时，也会使用对应的桥接函数。</p>
+<p>反射通常只适合做启动入口，不适合放到每帧或高频逻辑里。</p>
+<h3 id="元数据补充解决的是什么问题"><a href="#元数据补充解决的是什么问题" class="headerlink" title="元数据补充解决的是什么问题"></a>元数据补充解决的是什么问题</h3><p>泛型是 HybridCLR 里最容易让人困惑的一部分。</p>
+<p>假设主工程只在打包时用过 <code>List&lt;int&gt;</code>，后来热更新代码需要调用 <code>List&lt;HotUpdateStruct&gt;</code>。如果这个调用已经有对应的 AOT 实例，或者能命中 IL2CPP 的泛型共享，当然可以直接使用已有 AOT 代码。真正的问题是两者都没有命中时：IL2CPP 可以知道 <code>List&lt;T&gt;</code> 这个类型长什么样，但它没有提前生成 <code>List&lt;HotUpdateStruct&gt;</code> 的成员函数机器码。因为在 IL2CPP 的 <code>IL -&gt; C++</code> 过程中，原始的泛型方法体 IL 已经被丢掉了，运行时也无法凭空补出来。</p>
+<p>HybridCLR 的补充元数据做的事情不是“再生成一份 C++ 代码”，而是把 AOT 程序集中丢失的原始泛型方法 IL 补回运行时。这样，缺少 AOT 实现的那部分泛型方法可以交给解释器执行。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs text">热更新代码调用 AOT 泛型方法<br>  -&gt; 先尝试已有 AOT 实例或泛型共享<br>  -&gt; 都没有命中时，补充元数据提供原始泛型方法 IL<br>  -&gt; HybridCLR 解释执行这个泛型方法<br></code></pre></td></tr></table></figure>
+
+<p>运行时通过 <code>HybridCLR.RuntimeApi.LoadMetadataForAOTAssembly</code> 加载补充元数据。要补的是泛型方法定义所在的 AOT DLL，例如 <code>List&lt;T&gt;.Add</code> 的问题通常应补 <code>mscorlib.dll</code> 或对应基础库的元数据，不是去补 <code>HotUpdateStruct</code> 所在的 DLL。</p>
+<p>补充元数据需要和当前主包、目标平台匹配，并且应在执行会用到 AOT 泛型的热更新逻辑之前加载。它会带来额外内存占用，所以性能敏感或常用的泛型实例，仍然值得提前让 AOT 主工程显式引用。<code>AOTGenericReference</code> 生成工具可以扫描并提示这些引用；它生成的是建议清单，仍需要把选定的引用显式放进 AOT 代码，才能让 IL2CPP 在打包时实例化。</p>
+<p>官方对这个问题的完整说明在这里：<a target="_blank" rel="noopener" href="https://www.hybridclr.cn/docs/basic/aotgeneric">AOT 泛型与补充元数据</a>。</p>
+<h3 id="Reverse-P-Invoke-又是做什么的"><a href="#Reverse-P-Invoke-又是做什么的" class="headerlink" title="Reverse P&#x2F;Invoke 又是做什么的"></a>Reverse P&#x2F;Invoke 又是做什么的</h3><p>它和普通的 MethodBridge 不是一件事。</p>
+<p>MethodBridge 主要解决解释器和 AOT 代码之间的互相调用。Reverse P&#x2F;Invoke 解决的是：原生 C&#x2F;C++、Lua 等外部代码拿到一个函数指针后，怎样反过来调用热更新 C# 静态方法。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs text">原生代码 / Lua<br>  -&gt; 预先编译好的 Wrapper 函数<br>  -&gt; HybridCLR<br>  -&gt; 热更新 C# 静态方法<br></code></pre></td></tr></table></figure>
+
+<p>这类方法通常使用 <code>[MonoPInvokeCallback]</code> 标记。因为 iOS 不能在运行时生成新的 Wrapper，HybridCLR 需要在打包时预留足够数量、且签名匹配的 Reverse P&#x2F;Invoke Wrapper。为未来可能新增的热更新回调预留数量时，要使用 <code>[ReversePInvokeWrapperGeneration(n)]</code>。普通的热更新代码调用 <code>Debug.Log</code> 并不需要走这条路。</p>
+<p>还要注意，这条热更新回调路径目前不会自动封送 <code>string</code> 等复杂参数。参数涉及字符串时，通常要改用 <code>IntPtr</code> 后自行转换，或者把原生回调先放在 AOT 代码中处理。</p>
+<p>官方说明：<a target="_blank" rel="noopener" href="https://www.hybridclr.cn/docs/basic/monopinvokecallback">MonoPInvokeCallback 支持</a>。</p>
+<h3 id="CLRMethod-容易和-HybridCLR-混在一起"><a href="#CLRMethod-容易和-HybridCLR-混在一起" class="headerlink" title="CLRMethod 容易和 HybridCLR 混在一起"></a><code>CLRMethod</code> 容易和 HybridCLR 混在一起</h3><p>如果你在热更新文章或代码里看到 <code>CLRMethod</code>、<code>CLR 重定向</code>、<code>CLR 绑定</code>，大多数时候说的是 <strong>ILRuntime</strong> 的类型和机制，例如 <code>ILRuntime.CLR.Method.CLRMethod</code>。</p>
+<p>HybridCLR 的核心不是让开发者手写 <code>CLRMethod</code> 重定向，而是扩展 IL2CPP 运行时，让它能加载程序集、解释执行 IL，并用 MethodBridge 处理解释器和 AOT 代码之间的调用。因此在学习 HybridCLR 时，先抓住下面四件事就够了：</p>
+<ul>
+<li>在本文讨论的常规路径里，热更新 DLL 中新增或改动的 IL 由解释器执行。</li>
+<li>热更新代码调用 Unity API 或主工程代码时，使用 MethodBridge。</li>
+<li>AOT 泛型缺少方法实现时，使用补充元数据把原始 IL 交给解释器。</li>
+<li>原生代码要通过函数指针回调热更新静态方法时，才需要 Reverse P&#x2F;Invoke Wrapper。</li>
+</ul>
+<h3 id="串起来看整个流程"><a href="#串起来看整个流程" class="headerlink" title="串起来看整个流程"></a>串起来看整个流程</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs text">构建阶段<br>  AOT 程序集 --IL2CPP--&gt; C++ / 机器码<br>  热更新程序集 ------------&gt; HotUpdate.dll<br>  HybridCLR 工具 ----------&gt; MethodBridge、AOT 泛型引用、必要的 Wrapper<br><br>运行阶段<br>  加载补充元数据（如有 AOT 泛型）<br>  -&gt; Assembly.Load(HotUpdate.dll)<br>  -&gt; 启动热更新入口方法<br>  -&gt; IL 转为寄存器指令并由 Interpreter 执行<br>  -&gt; 调 Unity / 主工程时经过 MethodBridge<br></code></pre></td></tr></table></figure>
+
+<p>总结：HybridCLR 没有在 iOS 上偷偷做 JIT。它把解释器和一批提前编译好的桥接函数放进 IL2CPP Player 中，让新增 DLL 的 IL 可以被解释执行，同时又能和已经 AOT 的 Unity API、主工程代码正常互相调用。</p>
+<div class="post-tags"><a href="/tags/C/"># C#</a><a href="/tags/Unity/"># Unity</a><a href="/tags/%E7%83%AD%E6%9B%B4%E6%96%B0/"># 热更新</a><a href="/tags/HybridCLR/"># HybridCLR</a></div><nav class="post-pagination" aria-label="相邻文章"><a href="/2026/07/20/Why_JIT_Cannot_Be_Used_for_Hot_Update_on_iOS/"><small>← 上一篇</small>热更新系列-08-为什么无法使用JIT在iOS上实现热更新</a><a href="/2026/07/20/Hot_Update_Overview/"><small>下一篇 →</small>热更新系列-00-热更新简介</a></nav></article><aside class="post-toc"><div class="panel-top">本篇导航 <span>↙</span></div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%83%AD%E6%9B%B4%E6%96%B0"><span class="toc-text">什么是热更新</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Mono-%E6%9C%AC%E8%BA%AB%E5%B0%B1%E5%8F%AF%E4%BB%A5%E7%83%AD%E6%9B%B4%E6%96%B0"><span class="toc-text">Mono 本身就可以热更新</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-text">虚拟机解决方案</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HybridCLR-%E5%AE%98%E6%96%B9%E8%AF%B4"><span class="toc-text">HybridCLR 官方说</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3%E5%AE%98%E6%96%B9%E6%89%80%E8%AF%B4"><span class="toc-text">如何理解官方所说</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%88%E7%9C%8B%E5%8E%9F%E6%9D%A5%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-text">先看原来的问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HybridCLR-%E5%8A%A0%E4%BA%86%E4%B8%80%E5%8F%B0%E8%83%BD%E8%B7%91-IL-%E7%9A%84%E2%80%9C%E8%99%9A%E6%8B%9F%E6%9C%BA%E2%80%9D"><span class="toc-text">HybridCLR 加了一台能跑 IL 的“虚拟机”</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IL-%E5%88%B0%E5%BA%95%E6%98%AF%E6%80%8E%E6%A0%B7%E8%A2%AB%E6%89%A7%E8%A1%8C%E7%9A%84"><span class="toc-text">IL 到底是怎样被执行的</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%83%AD%E6%9B%B4%E6%96%B0%E4%BB%A3%E7%A0%81%E8%B0%83%E7%94%A8-Unity-API-%E4%B8%BA%E4%BB%80%E4%B9%88%E8%83%BD%E5%B7%A5%E4%BD%9C"><span class="toc-text">热更新代码调用 Unity API 为什么能工作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AOT-%E4%BB%A3%E7%A0%81%E6%9C%80%E5%BC%80%E5%A7%8B%E5%A6%82%E4%BD%95%E8%BF%9B%E5%85%A5%E7%83%AD%E6%9B%B4%E6%96%B0%E4%BB%A3%E7%A0%81"><span class="toc-text">AOT 代码最开始如何进入热更新代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%83%E6%95%B0%E6%8D%AE%E8%A1%A5%E5%85%85%E8%A7%A3%E5%86%B3%E7%9A%84%E6%98%AF%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98"><span class="toc-text">元数据补充解决的是什么问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reverse-P-Invoke-%E5%8F%88%E6%98%AF%E5%81%9A%E4%BB%80%E4%B9%88%E7%9A%84"><span class="toc-text">Reverse P&#x2F;Invoke 又是做什么的</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CLRMethod-%E5%AE%B9%E6%98%93%E5%92%8C-HybridCLR-%E6%B7%B7%E5%9C%A8%E4%B8%80%E8%B5%B7"><span class="toc-text">CLRMethod 容易和 HybridCLR 混在一起</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%B2%E8%B5%B7%E6%9D%A5%E7%9C%8B%E6%95%B4%E4%B8%AA%E6%B5%81%E7%A8%8B"><span class="toc-text">串起来看整个流程</span></a></li></ol></li></ol><a href="#main" class="back-top">返回顶部 ↑</a></aside></div>
+</main>
+  <footer class="footer"><div class="footer-red"><div class="shell"><a class="footer-brand" href="/">苏杭小站</a><span>每一份热爱，都值得存档。</span><a href="#main" class="footer-top" aria-label="返回页面顶部">↑</a></div></div><div class="footer-links shell"><div><a href="/archives/">文章归档</a><a href="/categories/">分类索引</a><a href="/tags/">全部标签</a><a href="/about/">关于与联系</a></div><span>© 2026 SuHang · 用 Hexo 记录日常</span></div></footer>
+  <dialog id="search-dialog" aria-labelledby="search-title" data-index="/journal-search.json" data-root="/">
+    <div class="search-head"><label id="search-title" for="search-input">发现一篇好文章</label><button class="search-close" aria-label="关闭搜索">×</button></div>
+    <input id="search-input" type="search" placeholder="搜索 Unity、热更新、C#…" autocomplete="off">
+    <p id="search-status" role="status">输入关键词，探索所有文章。</p><div id="search-results"></div>
+  </dialog>
+  <dialog id="image-dialog" aria-label="查看文章配图"><button class="image-close" aria-label="关闭配图">×</button><img alt=""><p></p></dialog>
+  <button class="floating-top" aria-label="回到顶部" title="回到顶部">↑</button><div class="toast" role="status"></div>
+  <script src="/assets/journal.js" defer></script>
+</body></html>

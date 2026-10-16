@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>优化GPU使用 · 苏杭小站</title>
+  <meta name="description" content="管理 PC 和主机游戏的 GPU 使用 | Unity — Managing GPU usage for PC and console games | Unity查案渲染统计信息点击 Game 视图右上角的 stats 按钮。此拆干口会在播放模式下实时显示应用程序的渲染信息。利用这些来帮助优化...">
+  <meta name="theme-color" content="#e60012"><meta name="color-scheme" content="only light">
+  <link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/journal.css">
+  <link rel="canonical" href="https://lshgame.com/2026/08/19/Optimizing_GPU_Usage/">
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+  <div class="reading-progress" aria-hidden="true"></div>
+  <a class="skip" href="#main">跳转到内容</a>
+  <header class="header"><div class="header-inner">
+    <a class="brand" href="/" aria-label="苏杭小站首页"><span class="brand-word">苏杭小站</span><small>SUHANG'S JOURNAL</small></a>
+    <nav id="main-nav" aria-label="主导航">
+      <a class=""  href="/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10h-6v-7H9v7H3Z"/></svg>首页</a>
+      <a class="active" href="/archives/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h5"/></svg>文章手记</a>
+      <a class="" href="/categories/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/></svg>探索分类</a>
+      <a class="" href="/about/"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21v-3a8 8 0 0 1 16 0v3"/></svg>关于我</a>
+    </nav>
+    <div class="header-actions"><button class="search-open" aria-label="搜索文章"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 6 6"/></svg><span>搜索</span></button><button class="menu-toggle" aria-label="打开导航" aria-controls="main-nav" aria-expanded="false"><span></span><span></span><span></span></button></div>
+  </div></header>
+  <main id="main" class="shell inner-main"><div class="post-breadcrumb"><a href="/">首页</a><span>/</span><a href="/archives/">文章</a><span>/</span> 开发与生活</div>
+<header class="post-header"><div class="eyebrow"><a href="/categories/Unity/">Unity</a><span>2026.08.19</span><span>14 分钟阅读</span></div><h1>优化GPU使用</h1><div class="post-author"><span class="mini-avatar">S</span> SuHang <span>·</span> 游戏开发手记</div></header>
+<div class="post-layout"><article class="prose"><p><a target="_blank" rel="noopener" href="https://unity.com/how-to/gpu-optimization?utm_source=chatgpt.com#use-draw-call-batching">管理 PC 和主机游戏的 GPU 使用 | Unity — Managing GPU usage for PC and console games | Unity</a><br><strong>查案渲染统计信息</strong><br>点击 Game 视图右上角的 <strong>stats</strong> 按钮。此拆干口会在播放模式下实时显示应用程序的渲染信息。利用这些来帮助优化性能：</p>
+<ul>
+<li>Fps: 每秒帧数</li>
+<li>CPU mian: 处理一帧（并更新所有窗口的编辑器）所需要的总时间</li>
+<li>CPU Render: 渲染游戏视图一帧所需要的总时间</li>
+<li>Batches: 一起绘制的调用组</li>
+<li>Tris and Verts: 网格数和顶点数</li>
+<li>SetPass calls: Unity 在屏幕上渲染对象时必须切换着色器通道的次数；每个通道都可能引入额外的 CPU 开销。</li>
+</ul>
+<h3 id="使用-Draw-Call-Batching"><a href="#使用-Draw-Call-Batching" class="headerlink" title="使用 Draw Call Batching"></a>使用 Draw Call Batching</h3><p>为了绘制一个 GameObject, Unity 需要向图形 API (OPENGL,Vulkan or Direct3D) 发出一次 draw call。每一次 draw call 都会消耗大量资源。在两次 draw call 中间出现状态的变更，如切换材质，可能会在 CPU 端造成性能开销。</p>
+<p>高性能硬件可以大量 drall call, 但每一次调用的开销仍然很高，所以减少他们是一个非常值得尝试的选项。在移动设备上，drall call 的控制更是极为重要，可以通过 <strong>drawl call batching</strong> 优化</p>
+<p>Draw call batching 可以最大限度的减少 draw call 间的状态变更，以降低调用渲染对象的 CPU 成本。Unity 有多个方案将多个对象合并为更少的批次。</p>
+<ul>
+<li>SRP Batching: 如果项目使用 HDRP or URP，在 Pipeline Asset 中启用 SRP Batcher。当使用兼容的 Shader 时，SRP 批处理会减少 draw call 间的 GPU 步骤，并让材质数据在 GPU 内存中持久化。可以显著加快 CPU 的渲染时间。使用更少的 Shader 变体和更少的工作来改善 <a href="">SRP Batcher</a>。</li>
+<li>GPU instancing: 如果场景中有大量相同对象（如，相同网格和材质的建筑物，草地，树木等）,可以使用 GPU instancing. 此技术通过图形硬件对他们进行批处理。选择 Meterial 在 Inspector 窗口中开启 GPU instancing </li>
+<li>Static batching: 对于不会移动的几何体，Unity 可以减少使用相同材质的网格 draw call。它比动态批处理更加高效。但是会占用更多的内存。可以在 Inspector 中将不移动的几何体网格标记为 Batching Static。Unity 会在构建的时将所有静态网格合并为一个大网格。StaticBatchingUtility 也允许在运行时自行创建这些静态批次（如，在生成程序化关卡的非移动部分后）。</li>
+<li>Dynamic batching: 对于多而小的网格，Unity 可以在 CPU 上分组并变换顶点，然后一次性绘制它们。注意：除非有足够的低多边形网格，否则不要使用此功能，否则，启用它会浪费 CPU 时间来寻找可批处理的小网格。</li>
+</ul>
+<p>可以使用几个简单的规则来最大化批处理效果：</p>
+<ul>
+<li>在场景中使用尽量少的 textures。较少的 texteure 需要较少的 materials。从而更容易的进行批处理。尽量使用图集</li>
+<li>始终以最大的图集尺寸烘焙光照贴图，减少光照贴图也会减少材质状态变更，但要注意内存占用</li>
+<li>注意不要无意中 instance materials。 在脚本中访问 Renderer.material 会复制材质并返回对新副本的引用。这会破坏已包含该材质的现有批次。</li>
+<li>在优化过程中，使用 Profiler ， 密切关注 static 和 dynamic batch 数量和总 draw call 调用次数对比</li>
+</ul>
+<p><img src="/images/Pasted%20image%2020260819100226.png"></p>
+<h3 id="使用-Frame-Debugger-调试"><a href="#使用-Frame-Debugger-调试" class="headerlink" title="使用 Frame Debugger 调试"></a>使用 Frame Debugger 调试</h3><p>Frame Debugger 允许你在单帧上冻结播放，并逐步查看 Unity 如何构建场景，以识别优化机会。查找哪些不必要渲染的 GameObject, 并禁用它们减少每帧的 draw call。也可以查看该 draw call 为什么和需要独立出来。</p>
+<p>注意： Frame Dubugger 不会显示单独的 Draw Call 或 状态更改，只有原生的 GPU 分析器才能提供详细的 Draw Call 和 计时信息。</p>
+<p>Unity 帧调试器的一个优势是，你可以将绘制调用与场景中的特定 GameObject 关联起来。这使得调查某些在外部帧调试器中可能无法处理的问题变得更加容易。</p>
+<h3 id="优化-Fill-rate-和-减少-overdraw"><a href="#优化-Fill-rate-和-减少-overdraw" class="headerlink" title="优化 Fill rate 和 减少 overdraw"></a>优化 Fill rate 和 减少 overdraw</h3><p>Fill rate(填充率) 指的是 GPU 每秒能够渲染到屏幕的像素数量</p>
+<p>如果你的游戏受限于 fill rate， 这意味着它每帧视图绘制的像素超出就了 GPU 的处理能力</p>
+<p>在同一个像素中进行多次绘制被称为 overdraw。 Overdraw 会降低 fill rate 和 内存带宽。导致 overdraw 的常见原因：</p>
+<ul>
+<li>重叠的不透明或透明几何体</li>
+<li>复杂的 shader，通常包含多个 render passes</li>
+<li>未优化的粒子效果</li>
+<li>重叠的 UI 元素</li>
+</ul>
+<p>尽管你希望减少他们的影响，但是解决 over draw 没有一刀切的方案。尝试上面的方案，降低它们的影响</p>
+<h3 id="减少-batch-count"><a href="#减少-batch-count" class="headerlink" title="减少 batch count"></a>减少 batch count</h3><p>优化通常意味着减少 draw call batches 次数，有几个技术可能会有所帮助：</p>
+<ul>
+<li>使用 <a href="">Occlusion culling(遮挡剔除)</a> 来移除被前景物体遮挡的物体，从而减少过度绘制。请注意，这需要额外的 CPU 处理，请使用 Profiler 确保将工作从 GPU 转移到 CPU 是有益的。</li>
+<li><a href="">GUP Instancing(GPU 实例化)</a> 也可以减少批次，如果你有许多共享网格和材质的对象。 限制场景中的模型的数量可以提升性能。如果处理得当，可以在不显得重复的情况下构建出复杂的场景</li>
+<li>SRP Batcher 可以在通过批处理 <a href="">Bing and Draw CPU Commands</a> 命令来减少 CrawCall 之间的 GPU 设置。想要使用此特性，需要尽可能让更多的 Materials 限制在少量的 Shader 中。</li>
+</ul>
+<h3 id="注意剔除"><a href="#注意剔除" class="headerlink" title="注意剔除"></a>注意剔除</h3><p>遮挡剔除会禁用被其他对象完全遮挡的游戏对象，这可以防止 CPU 和 GPU 浪费时间渲染摄像机永远看不到的对象。</p>
+<p>剔除是按摄像机进行的。它可能对性能产生重大影响，尤其是在多个摄像机同时启动时。Unity 使用两种类型的剔除：<strong>视锥体剔除</strong> 和 <strong>遮挡剔除</strong>。</p>
+<p><strong>视锥体剔除（Frustum culling）</strong> 会在每个摄像机上执行，它可以防止位于视锥体外的游戏对象被渲染，从而有助于优化性能。你可以通过 Camera.layerCullDistances 手动设置每个 Layer 的剔除距离。这样就比默认裁剪中以更短的距离剔除小型对象。</p>
+<p>Unity 首先按 Layer 进行剔除，只保留摄像机使用的 Layer 层的 GmaeObject，之后视锥体剔除会移除摄像机外的所有游戏对象。每一层的 Layer 剔除测试都非常快速（本质上时位掩码操作）。然而如果游戏对象数量非常庞大的时，这个成本仍然可能累积起来。如果你的项目有这个困扰。 你可能需要实现某种系统，将世界划分为“区块”，并禁用视锥体意外的沮渠，来降低 Unity 视锥剔除系统 剔除 Layer 承受的压力。</p>
+<p><strong>遮挡剔除（Occlusion culling）</strong> 会在摄像机无法看到任何游戏对象时，将它从游戏视图中移除。使用此功能可以防止渲染已经被其他对象遮挡的对象，因为这些对象仍然会被渲染并消耗资源。例如：门已经关闭无法看到的房间内部。</p>
+<p>启用遮挡剔除可以显著提升性能，但同时也可能占用更多的磁盘空间、CPU 处理时间和内存。Unity 在构建时会烘焙遮挡数据，并在加载场景时从磁盘中加载到内存中。</p>
+<p>虽然相机的视锥体是自动进行的，当遮挡剔除时一个烘焙过程。只需要将对象标记为 Occluders or Occludees ，然后在 Windows &gt; Rendering &gt; Occlusion Culling 中进行烘焙即可</p>
+<h3 id="利用动态分辨率"><a href="#利用动态分辨率" class="headerlink" title="利用动态分辨率"></a>利用动态分辨率</h3><p>允许 Dynamic Resolution 是一个摄像机设置，允许你动态缩放各个渲染目标，以减轻 GPU 的工作负担。在游戏帧率下降的时候，你可以逐步降低分辨率，以保持帧率稳定。</p>
+<p>如果性能数据表明帧率即将因 GPU 受限而下降，Unity 会出发此缩放。也可以通过脚本手动预先触发缩放。这个方案在 GPU 密集型部分时非常有用。如果逐步缩放，动态分辨率几乎不可察觉。</p>
+<h3 id="检查多个摄像机视图"><a href="#检查多个摄像机视图" class="headerlink" title="检查多个摄像机视图"></a>检查多个摄像机视图</h3><p>有时在游戏中，你可能需要从多个视角进行渲染，如，在 FPS 游戏中，通常会用不同的 FOV 分别绘制玩家的武器和环境，这样可以避免前景物体在背景和广角视野下显得过于扭曲。</p>
+<p>你可以在 URP 中使用 [Camera Stacking (摄像机堆叠)] 来渲染多个摄像机视图。然而，每个摄像机仍然会进行大量的剔除和渲染工作。无论是否执行有意义的任务，每一个摄像机都会带来一定的开销。仅使用渲染所需的摄像机组建。在移动平台中，即使不渲染任何内容，每个互动摄像机也可能占用高达 1 ms 的 CPU 时间。</p>
+<p><img src="/images/Pasted%20image%2020260819193126.png"></p>
+<h3 id="使用-Render-Object-Renderer-Feature"><a href="#使用-Render-Object-Renderer-Feature" class="headerlink" title="使用 Render Object Renderer Feature"></a>使用 Render Object Renderer Feature</h3><p>在 URP 项目中，与其使用多个摄像机，不如尝试 <a href="">Render Object Renderer Feature</a> 功能。在 Adderderer Data 中添加 Renderer Feature 。 并选择渲染对象。<br>在覆盖每个渲染对象时，你可以：</p>
+<ul>
+<li>将它与时间管理，并注意如到渲染循环的特定时机</li>
+<li>按渲染队列（透明 or 不透明）和图层遮罩进行筛选</li>
+<li>影响深度和模板设置</li>
+<li>修改摄像机设置 FOV and Offset</li>
+</ul>
+<h3 id="使用-LOD-Level-of-Detail"><a href="#使用-LOD-Level-of-Detail" class="headerlink" title="使用 LOD(Level of Detail)"></a>使用 LOD(Level of Detail)</h3><p>随着物体相向远处移动，LOD 可以调整或切换它们，让它使用更简单的材质和着色器和低分辨率网格。这将增加 GPU 的性能</p>
+<h3 id="后处理效果"><a href="#后处理效果" class="headerlink" title="后处理效果"></a>后处理效果</h3><p>对后处理效果进行性能分析，以了解它们在 GPU 上的性能开销。某些全屏效果，如 Bloom 和 deept of field，可能代价较高，请不断试验，在效果和性能间找到理想的平衡点</p>
+<h3 id="避免使用曲面细分着色器"><a href="#避免使用曲面细分着色器" class="headerlink" title="避免使用曲面细分着色器"></a>避免使用曲面细分着色器</h3><p>曲面细分会将形状细分为该形状的较小版本，通过增加几何体数量来增加细节。虽然在某些情况下曲面细分确实有意义，例如用于逼真的树皮效果，但一般来说因该避免使用曲面细分。它们可能在 GPU 上造成较高的开销</p>
+<h3 id="用计算着色器替代几何着色器"><a href="#用计算着色器替代几何着色器" class="headerlink" title="用计算着色器替代几何着色器"></a>用计算着色器替代几何着色器</h3><p>与曲面细分着色器类似，集合着色器和顶点着色器在 GPU 上每帧可能进行两次–一次在深度预渲染阶段，领一次在阴影渲染阶段。</p>
+<p>如果你希望在 GPU 上生成或修改顶点数据，计算着色器通常比几何着色器更加合适。在计算着色器中完成这些工作，以为着实际渲染几何体的顶点着色器可以相对快速且简单</p>
+<h3 id="追求良好的波前占用率"><a href="#追求良好的波前占用率" class="headerlink" title="追求良好的波前占用率"></a>追求良好的波前占用率</h3><p>波前占用率：当你向 GPU 发送绘制调用时，该工作会分成许多的 wavefronts（波前），Unity 会将这些波前分配到 GPU 内可用的 SIMD 中。</p>
+<p>每个 SIMD 在同一时间能运行的波前数量由上限。波前占用率是指当前正在使用的波前数量相对于最大数量的比率。这衡量了你对 GPU 潜力的利用程度。主机专用的性能分析工具会详细显示波前占用率。</p>
+<p>在下面的示例中，顶点着色器用绿色显示，像素着色器用蓝色显示。在底部图标中，许多顶点着色器波前出现，但像素着色器活动较少。这表明 GPU 的潜力未被充分利用。</p>
+<p>如果你做了大量顶点着色器工作却没有产生像素，这可能表明存在效率低下的问题。虽然较低的波动占用率不一定糟糕，但这是一个开始优化着色器并检查其他瓶颈的指标。例如，如果因内存或计算器操作而出现停顿，提高占用率可能有助于提升性能。另一方面，过多的在途波前可能导致缓存抖动，反而降低性能。</p>
+<p><img src="/images/Pasted%20image%2020260819210837.png"></p>
+<h3 id="利用异步计算"><a href="#利用异步计算" class="headerlink" title="利用异步计算"></a>利用异步计算</h3><p>如果你有 GPU 利用率不足的时间段，异步计算允许你将有用的计算着色器工作与图形队列并行执行。这样可以更好地利用这些 GPU 资源。</p>
+<p>例如，在生成阴影贴图时，GPU 会执行仅深度渲染。此时像素着色器的工作量非常少，许多波前仍然处于空闲阶段。</p>
+<p>如果你能将某些 compoute shader 和 depth-only rendering 同步进行，就能更好的利用 GPU 的整体性能。这些空闲的波前可以用于屏幕空间环境观遮蔽或者任何与当前工作互补的任务。</p>
+<h3 id="实时-GPU-Resident-Drawer"><a href="#实时-GPU-Resident-Drawer" class="headerlink" title="实时 GPU Resident Drawer"></a>实时 GPU Resident Drawer</h3><p>GPU Resident Drawer(GPU 常驻绘制器) 是一种 GPU 驱动的渲染系统，旨在优化 CPU 时间，带来显著的性能提升。它支持跨平台渲染，并设计为可直接用于现有项目，无需额外的配置。</p>
+<p>系统可以在 Pipeline Asset 中设置 GPUResident Drawer 中选择 Instanced Drawing 开启。你还可以选择仅在播放模式下启用，还是在编辑器模式下也启用。</p>
+<p>启用 GPU 常驻绘制器后，因绘制调用数量过大而受 GPU 显示的游戏可以提升游戏性能，因为绘制调用的数量会减少。你看到的改进效果取决于场景的规模以及你使用的实例化程度。你渲染的可实例化对象越多，收益越大。</p>
+<p>使用“Instanced Dring” 选项后，界面中可能会显示一条警告消息，提示您“BatchRenderGroup Variants setting must be ‘Keep All’. 在图形设置中调整此选项既可以完成 GPU 常驻绘制器的设置。</p>
+<h3 id="使用-GPU-遮挡剔除"><a href="#使用-GPU-遮挡剔除" class="headerlink" title="使用 GPU 遮挡剔除"></a>使用 GPU 遮挡剔除</h3><p>GPU 遮挡剔除功能适用于 URP 和 HDRP，他与 GPU Resident Drawer  协同工作，通过减少每帧的过度绘制量，它显著提升了性能，这意味着渲染器不会浪费资源去绘制那些不可见的物体。</p>
+<p>要启用 GPU occlusion culling，在 pipeline asset 中勾选 CPU Occlusion Culling</p>
+<p>在 Unity 6 的调试模式下启动 GPU Occlusion Culling ，可以在 Window &gt; Rendering &gt; Occlusion Culling。在这里，你可以通过切换各种可视化选项来查看对象是如何被剔除的。<br><img src="/images/Pasted%20image%2020260819213950.png"></p>
+<div class="post-tags"><a href="/tags/Unity/"># Unity</a><a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"># 性能优化</a><a href="/tags/GPU/"># GPU</a></div><nav class="post-pagination" aria-label="相邻文章"><a href="/2026/08/20/Introduction_to_Mesh_Batching/"><small>← 上一篇</small>网格批处理简介</a><a href="/2026/08/18/How_to_Fail_at_Learning_Game_Engines/"><small>下一篇 →</small>如何才学不好引擎</a></nav></article><aside class="post-toc"><div class="panel-top">本篇导航 <span>↙</span></div><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-Draw-Call-Batching"><span class="toc-text">使用 Draw Call Batching</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-Frame-Debugger-%E8%B0%83%E8%AF%95"><span class="toc-text">使用 Frame Debugger 调试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E5%8C%96-Fill-rate-%E5%92%8C-%E5%87%8F%E5%B0%91-overdraw"><span class="toc-text">优化 Fill rate 和 减少 overdraw</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%8F%E5%B0%91-batch-count"><span class="toc-text">减少 batch count</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E5%89%94%E9%99%A4"><span class="toc-text">注意剔除</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E5%8A%A8%E6%80%81%E5%88%86%E8%BE%A8%E7%8E%87"><span class="toc-text">利用动态分辨率</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A3%80%E6%9F%A5%E5%A4%9A%E4%B8%AA%E6%91%84%E5%83%8F%E6%9C%BA%E8%A7%86%E5%9B%BE"><span class="toc-text">检查多个摄像机视图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-Render-Object-Renderer-Feature"><span class="toc-text">使用 Render Object Renderer Feature</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-LOD-Level-of-Detail"><span class="toc-text">使用 LOD(Level of Detail)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%8E%E5%A4%84%E7%90%86%E6%95%88%E6%9E%9C"><span class="toc-text">后处理效果</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%81%BF%E5%85%8D%E4%BD%BF%E7%94%A8%E6%9B%B2%E9%9D%A2%E7%BB%86%E5%88%86%E7%9D%80%E8%89%B2%E5%99%A8"><span class="toc-text">避免使用曲面细分着色器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%A8%E8%AE%A1%E7%AE%97%E7%9D%80%E8%89%B2%E5%99%A8%E6%9B%BF%E4%BB%A3%E5%87%A0%E4%BD%95%E7%9D%80%E8%89%B2%E5%99%A8"><span class="toc-text">用计算着色器替代几何着色器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%BD%E6%B1%82%E8%89%AF%E5%A5%BD%E7%9A%84%E6%B3%A2%E5%89%8D%E5%8D%A0%E7%94%A8%E7%8E%87"><span class="toc-text">追求良好的波前占用率</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E5%BC%82%E6%AD%A5%E8%AE%A1%E7%AE%97"><span class="toc-text">利用异步计算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E6%97%B6-GPU-Resident-Drawer"><span class="toc-text">实时 GPU Resident Drawer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-GPU-%E9%81%AE%E6%8C%A1%E5%89%94%E9%99%A4"><span class="toc-text">使用 GPU 遮挡剔除</span></a></li></ol><a href="#main" class="back-top">返回顶部 ↑</a></aside></div>
+</main>
+  <footer class="footer"><div class="footer-red"><div class="shell"><a class="footer-brand" href="/">苏杭小站</a><span>每一份热爱，都值得存档。</span><a href="#main" class="footer-top" aria-label="返回页面顶部">↑</a></div></div><div class="footer-links shell"><div><a href="/archives/">文章归档</a><a href="/categories/">分类索引</a><a href="/tags/">全部标签</a><a href="/about/">关于与联系</a></div><span>© 2026 SuHang · 用 Hexo 记录日常</span></div></footer>
+  <dialog id="search-dialog" aria-labelledby="search-title" data-index="/journal-search.json" data-root="/">
+    <div class="search-head"><label id="search-title" for="search-input">发现一篇好文章</label><button class="search-close" aria-label="关闭搜索">×</button></div>
+    <input id="search-input" type="search" placeholder="搜索 Unity、热更新、C#…" autocomplete="off">
+    <p id="search-status" role="status">输入关键词，探索所有文章。</p><div id="search-results"></div>
+  </dialog>
+  <dialog id="image-dialog" aria-label="查看文章配图"><button class="image-close" aria-label="关闭配图">×</button><img alt=""><p></p></dialog>
+  <button class="floating-top" aria-label="回到顶部" title="回到顶部">↑</button><div class="toast" role="status"></div>
+  <script src="/assets/journal.js" defer></script>
+</body></html>

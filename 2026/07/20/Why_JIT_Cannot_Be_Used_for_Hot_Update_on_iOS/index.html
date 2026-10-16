@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>热更新系列-08-为什么无法使用JIT在iOS上实现热更新 · 苏杭小站</title>
+  <meta name="description" content="先说结论这里说的 iOS，指的是正常上架的第三方 App。
+这类 App 不能把运行时下载的新 IL，再临时编译成新的机器码执行。所以 JIT 可以在某些平台上作为 C# 热更新方案，但不能作为 iOS 游戏的上架方案。
+这不是 Unity 单独做出的限制，而是 iOS 的代码签名、安全机制和...">
+  <meta name="theme-color" content="#e60012"><meta name="color-scheme" content="only light">
+  <link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/journal.css">
+  <link rel="canonical" href="https://lshgame.com/2026/07/20/Why_JIT_Cannot_Be_Used_for_Hot_Update_on_iOS/">
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+  <div class="reading-progress" aria-hidden="true"></div>
+  <a class="skip" href="#main">跳转到内容</a>
+  <header class="header"><div class="header-inner">
+    <a class="brand" href="/" aria-label="苏杭小站首页"><span class="brand-word">苏杭小站</span><small>SUHANG'S JOURNAL</small></a>
+    <nav id="main-nav" aria-label="主导航">
+      <a class=""  href="/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10h-6v-7H9v7H3Z"/></svg>首页</a>
+      <a class="active" href="/archives/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h5"/></svg>文章手记</a>
+      <a class="" href="/categories/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/></svg>探索分类</a>
+      <a class="" href="/about/"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21v-3a8 8 0 0 1 16 0v3"/></svg>关于我</a>
+    </nav>
+    <div class="header-actions"><button class="search-open" aria-label="搜索文章"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 6 6"/></svg><span>搜索</span></button><button class="menu-toggle" aria-label="打开导航" aria-controls="main-nav" aria-expanded="false"><span></span><span></span><span></span></button></div>
+  </div></header>
+  <main id="main" class="shell inner-main"><div class="post-breadcrumb"><a href="/">首页</a><span>/</span><a href="/archives/">文章</a><span>/</span> 开发与生活</div>
+<header class="post-header"><div class="eyebrow"><a href="/categories/%E7%BC%96%E7%A8%8B/">编程</a><span>2026.07.20</span><span>5 分钟阅读</span></div><h1>热更新系列-08-为什么无法使用JIT在iOS上实现热更新</h1><div class="post-author"><span class="mini-avatar">S</span> SuHang <span>·</span> 游戏开发手记</div></header>
+<div class="post-layout"><article class="prose"><h2 id="先说结论"><a href="#先说结论" class="headerlink" title="先说结论"></a>先说结论</h2><p>这里说的 iOS，指的是正常上架的第三方 App。</p>
+<p>这类 App 不能把运行时下载的新 IL，再临时编译成新的机器码执行。所以 JIT 可以在某些平台上作为 C# 热更新方案，但不能作为 iOS 游戏的上架方案。</p>
+<p>这不是 Unity 单独做出的限制，而是 iOS 的代码签名、安全机制和 App Store 审核规则共同决定的。</p>
+<h2 id="JIT-到底要做什么"><a href="#JIT-到底要做什么" class="headerlink" title="JIT 到底要做什么"></a>JIT 到底要做什么</h2><p>JIT 的工作是：代码运行到某个方法时，才把 IL 编译成当前 CPU 能执行的机器码。</p>
+<p>例如热更新下载了一个 <code>HotUpdate.dll</code>：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs text">HotUpdate.dll<br>  -&gt; IL<br>  -&gt; JIT 编译<br>  -&gt; arm64 机器码<br>  -&gt; CPU 执行<br></code></pre></td></tr></table></figure>
+
+<p>假设 DLL 里有一段代码：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span> <span class="hljs-title">Attack</span>(<span class="hljs-params"><span class="hljs-built_in">int</span> hp</span>)</span><br>&#123;<br>    <span class="hljs-keyword">return</span> hp - <span class="hljs-number">1</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>JIT 要在游戏运行时，把 <code>Attack</code> 变成一段新的 arm64 指令，再跳过去执行。</p>
+<p>关键点不在于“下载了一个 DLL”，而在于 <strong>运行时产生了一段新的可执行机器码</strong>。</p>
+<h2 id="iOS-卡住在哪里"><a href="#iOS-卡住在哪里" class="headerlink" title="iOS 卡住在哪里"></a>iOS 卡住在哪里</h2><p>iOS 要求可执行代码经过签名校验。App 安装后，系统会在可执行内存页被加载时检查代码签名，确保代码没有在安装或更新后被篡改。</p>
+<p>JIT 生成的机器码不是打包时就存在的，也没有随 App 一起签名。它需要在运行时写入内存，然后把这块内存当作代码执行。这正好触碰了 iOS 最严格的一层安全限制。</p>
+<p>可以简单理解成：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs text">打包时的代码<br>  -&gt; 签名<br>  -&gt; 可以执行<br><br>运行时新生成的机器码<br>  -&gt; 没有对应签名<br>  -&gt; 普通第三方 App 不能把它当作任意新代码执行<br></code></pre></td></tr></table></figure>
+
+<p>Apple 的安全文档明确说明，iOS 对可执行代码实行强制签名，并限制第三方 App 加载未签名代码或使用自修改代码。可写又可执行的内存页只在严格条件下允许，普通 App 不能把它当作通用的 JIT 能力来使用。</p>
+<h2 id="App-Store-规则又加了一层限制"><a href="#App-Store-规则又加了一层限制" class="headerlink" title="App Store 规则又加了一层限制"></a>App Store 规则又加了一层限制</h2><p>就算先不讨论技术限制，App Store 审核规则本身也不允许 App 下载、安装或执行会新增或改变 App 功能的代码。</p>
+<p>如果游戏启动后下载一个 DLL，再把它 JIT 成机器码运行，实际上就是在审核完成后给 App 增加或修改程序逻辑。对于游戏热更新来说，这正是规则要限制的场景。</p>
+<p>所以问题有两层：</p>
+<ul>
+<li>系统层面：普通第三方 App 不能依赖运行时生成并执行任意机器码。</li>
+<li>审核层面：不能通过下载可执行代码绕过 App Store 对功能变更的审核。</li>
+</ul>
+<p>这也是为什么热更新资源、配置表、图片、AssetBundle 一般没有“运行时生成原生机器码”这个问题。它们通常是数据或资源，不会被 CPU 当成新的原生指令执行。</p>
+<h2 id="下载-DLL-和反射为什么也不能解决"><a href="#下载-DLL-和反射为什么也不能解决" class="headerlink" title="下载 DLL 和反射为什么也不能解决"></a>下载 DLL 和反射为什么也不能解决</h2><p>下载 <code>HotUpdate.dll</code> 后，里面通常是 .NET IL，不是 iPhone CPU 可以直接执行的 arm64 指令：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs text">HotUpdate.dll<br>  -&gt; IL<br>  -&gt; CPU 看不懂<br></code></pre></td></tr></table></figure>
+
+<p><code>Assembly.Load</code> 只能把程序集交给运行时，反射只能找到类型和方法。它们都不会自动把 IL 变成机器码。</p>
+<p>在支持 JIT 的环境里，下一步可以由 JIT 完成；在 iOS 的 IL2CPP 环境里，这条路不能依赖，于是需要解释器或提前编译的 AOT 代码。</p>
+<h2 id="那-iOS-热更新怎么做"><a href="#那-iOS-热更新怎么做" class="headerlink" title="那 iOS 热更新怎么做"></a>那 iOS 热更新怎么做</h2><p>常见选择有三类：</p>
+<ul>
+<li>更新数据和资源：配置、文本、图片、AssetBundle 等。</li>
+<li>使用脚本解释器：例如 Lua、xLua、ToLua。新脚本由已经打包进 App 的虚拟机解释执行。</li>
+<li>使用 C# IL 解释器：<a href="/2026/07/20/How_HybridCLR_Implements_Hot_Update/">HybridCLR 如何实现热更新</a>。主工程保持 AOT，新增的热更新 IL 由解释器执行。</li>
+</ul>
+<p>它们的共同点是：把“执行新逻辑”的能力提前放进安装包。运行时下载的是数据、脚本或 IL，由已有的解释器处理，而不是临时生成新的原生机器码。</p>
+<p>这里要分清一件事：解释执行解决的是 JIT 的技术限制，不等于“下载什么代码都一定符合审核规则”。具体更新内容是否会引入或改变 App 功能，仍要按 App Store Guideline 2.5.2 和实际审核要求评估，不能把解释器当成绕过审核的手段。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs text">运行时下载 IL<br>  -&gt; App 内已经存在的 Interpreter<br>  -&gt; 执行逻辑<br><br>而不是<br><br>运行时下载 IL<br>  -&gt; JIT 生成新的机器码<br>  -&gt; 执行新机器码<br></code></pre></td></tr></table></figure>
+
+<p>一句话总结：iOS 热更新不是不能更新逻辑，而是不能依赖 JIT 在运行时生成新的原生代码。HybridCLR 也不是在 iOS 上偷偷做 JIT，而是把解释器和桥接能力提前编进 IL2CPP Player。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://support.apple.com/guide/security/app-code-signing-process-sec7c917bf14/web">Apple Platform Security：App code signing process</a></li>
+<li><a target="_blank" rel="noopener" href="https://support.apple.com/guide/security/security-of-runtime-process-sec15bfe098e/web">Apple Platform Security：Security of runtime process</a></li>
+<li><a target="_blank" rel="noopener" href="https://developer.apple.com/app-store/review/guidelines/">App Review Guidelines 2.5.2</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.unity3d.com/cn/2022.2/Manual/ScriptingRestrictions.html">Unity 脚本限制</a></li>
+</ul>
+<div class="post-tags"><a href="/tags/C/"># C#</a><a href="/tags/Unity/"># Unity</a><a href="/tags/%E7%83%AD%E6%9B%B4%E6%96%B0/"># 热更新</a><a href="/tags/iOS/"># iOS</a></div><nav class="post-pagination" aria-label="相邻文章"><a href="/2026/08/18/How_to_Fail_at_Learning_Game_Engines/"><small>← 上一篇</small>如何才学不好引擎</a><a href="/2026/07/20/How_HybridCLR_Implements_Hot_Update/"><small>下一篇 →</small>热更新系列-09-HybridCLR如何实现热更新</a></nav></article><aside class="post-toc"><div class="panel-top">本篇导航 <span>↙</span></div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%88%E8%AF%B4%E7%BB%93%E8%AE%BA"><span class="toc-text">先说结论</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JIT-%E5%88%B0%E5%BA%95%E8%A6%81%E5%81%9A%E4%BB%80%E4%B9%88"><span class="toc-text">JIT 到底要做什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#iOS-%E5%8D%A1%E4%BD%8F%E5%9C%A8%E5%93%AA%E9%87%8C"><span class="toc-text">iOS 卡住在哪里</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#App-Store-%E8%A7%84%E5%88%99%E5%8F%88%E5%8A%A0%E4%BA%86%E4%B8%80%E5%B1%82%E9%99%90%E5%88%B6"><span class="toc-text">App Store 规则又加了一层限制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD-DLL-%E5%92%8C%E5%8F%8D%E5%B0%84%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B9%9F%E4%B8%8D%E8%83%BD%E8%A7%A3%E5%86%B3"><span class="toc-text">下载 DLL 和反射为什么也不能解决</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%82%A3-iOS-%E7%83%AD%E6%9B%B4%E6%96%B0%E6%80%8E%E4%B9%88%E5%81%9A"><span class="toc-text">那 iOS 热更新怎么做</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-text">参考</span></a></li></ol><a href="#main" class="back-top">返回顶部 ↑</a></aside></div>
+</main>
+  <footer class="footer"><div class="footer-red"><div class="shell"><a class="footer-brand" href="/">苏杭小站</a><span>每一份热爱，都值得存档。</span><a href="#main" class="footer-top" aria-label="返回页面顶部">↑</a></div></div><div class="footer-links shell"><div><a href="/archives/">文章归档</a><a href="/categories/">分类索引</a><a href="/tags/">全部标签</a><a href="/about/">关于与联系</a></div><span>© 2026 SuHang · 用 Hexo 记录日常</span></div></footer>
+  <dialog id="search-dialog" aria-labelledby="search-title" data-index="/journal-search.json" data-root="/">
+    <div class="search-head"><label id="search-title" for="search-input">发现一篇好文章</label><button class="search-close" aria-label="关闭搜索">×</button></div>
+    <input id="search-input" type="search" placeholder="搜索 Unity、热更新、C#…" autocomplete="off">
+    <p id="search-status" role="status">输入关键词，探索所有文章。</p><div id="search-results"></div>
+  </dialog>
+  <dialog id="image-dialog" aria-label="查看文章配图"><button class="image-close" aria-label="关闭配图">×</button><img alt=""><p></p></dialog>
+  <button class="floating-top" aria-label="回到顶部" title="回到顶部">↑</button><div class="toast" role="status"></div>
+  <script src="/assets/journal.js" defer></script>
+</body></html>

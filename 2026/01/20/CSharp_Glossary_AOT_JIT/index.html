@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>C#术语表 · 苏杭小站</title>
+  <meta name="description" content="AOTAOT 编译器也将 IL 代码翻译成机器代码。但与 JIT 编译不同的是，AOT 编译发生在应用程序执行之前，通常在不同的机器上进行。由于 AOT 工具链不在运行时进行编译，因此无需最小化编译时间，可以投入更多时间进行优化。由于 AOT 的上下文是整个应用程序，AOT 编译器还会执行跨模...">
+  <meta name="theme-color" content="#e60012"><meta name="color-scheme" content="only light">
+  <link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/journal.css">
+  <link rel="canonical" href="https://lshgame.com/2026/01/20/CSharp_Glossary_AOT_JIT/">
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+  <div class="reading-progress" aria-hidden="true"></div>
+  <a class="skip" href="#main">跳转到内容</a>
+  <header class="header"><div class="header-inner">
+    <a class="brand" href="/" aria-label="苏杭小站首页"><span class="brand-word">苏杭小站</span><small>SUHANG'S JOURNAL</small></a>
+    <nav id="main-nav" aria-label="主导航">
+      <a class=""  href="/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10h-6v-7H9v7H3Z"/></svg>首页</a>
+      <a class="active" href="/archives/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h5"/></svg>文章手记</a>
+      <a class="" href="/categories/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/></svg>探索分类</a>
+      <a class="" href="/about/"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21v-3a8 8 0 0 1 16 0v3"/></svg>关于我</a>
+    </nav>
+    <div class="header-actions"><button class="search-open" aria-label="搜索文章"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 6 6"/></svg><span>搜索</span></button><button class="menu-toggle" aria-label="打开导航" aria-controls="main-nav" aria-expanded="false"><span></span><span></span><span></span></button></div>
+  </div></header>
+  <main id="main" class="shell inner-main"><div class="post-breadcrumb"><a href="/">首页</a><span>/</span><a href="/archives/">文章</a><span>/</span> 开发与生活</div>
+<header class="post-header"><div class="eyebrow"><a href="/categories/%E7%BC%96%E7%A8%8B/">编程</a><span>2026.01.20</span><span>5 分钟阅读</span></div><h1>C#术语表</h1><div class="post-author"><span class="mini-avatar">S</span> SuHang <span>·</span> 游戏开发手记</div></header>
+<div class="post-layout"><article class="prose"><h2 id="AOT"><a href="#AOT" class="headerlink" title="AOT"></a>AOT</h2><p>AOT 编译器也将 <a href="#IL">IL 代码</a>翻译成机器代码。但与 <a href="#JIT">JIT</a> 编译不同的是，AOT 编译发生在应用程序执行之前，通常在不同的机器上进行。由于 AOT 工具链不在运行时进行编译，因此<br>无需最小化编译时间，可以投入更多时间进行优化。由于 AOT 的上下文是整个应用程序，AOT 编译器还会执行跨模块链接和全程序分析，这意味着它会跟踪所有引用并生成单个可执行文件。</p>
+<h2 id="JIT"><a href="#JIT" class="headerlink" title="JIT"></a>JIT</h2><p>与 <a href="#aot">AOT</a> 类似，JIT 编译器将<a href="#IL">IL 代码</a>翻译成处理器能够理解的机器代码。但与 AOT 不同的是，JIT 编译是按需进行的，并且在代码运行的同一台机器上执行。由于 JIT 编译发生在应用程序执行期间，因此编译时间也包含在运行时时间中。所以，JIT 编译器必须权衡代码优化所花费的时间与最终代码带来的性能提升。但 JIT 编译器了解实际的硬件情况，可以让开发人员免于发布不同的实现版本。</p>
+<h2 id="IL"><a href="#IL" class="headerlink" title="IL"></a>IL</h2><p>什么是 “中间语言（IL）”? 它是用高级 .NET 语言编写的代码编译的产物。编写其中一种语言编写的代码后，将会收到一个由 IL 编写的二进制文件。  </p>
+<p>值得注意的是，IL 独立于运行在运行时（Runtime）之上的任何特定语言；它甚至拥有一套独立的规范。 </p>
+<p>从高级代码生成 IL 后，如果要运行它，CLR 会接管工作，启动实时编译（JIT）编译过程，或者将代码从 IL 实时编译成真正可以在 CPU 上运行的机器码。这样，CLR 就能确切知道代码的作用，并有效管理代码。</p>
+<h2 id="CLR"><a href="#CLR" class="headerlink" title="CLR"></a>CLR</h2><h3 id="是什么"><a href="#是什么" class="headerlink" title="是什么"></a>是什么</h3><p>.Net 的运行时环境，类似于 Java 的 JVM</p>
+<h3 id="做什么"><a href="#做什么" class="headerlink" title="做什么"></a>做什么</h3><ul>
+<li>JIT 编译</li>
+<li>内存管理</li>
+<li>类型系统</li>
+<li>异常处理</li>
+<li>安全校验</li>
+<li></li>
+</ul>
+<h3 id="CLR-有哪些实现"><a href="#CLR-有哪些实现" class="headerlink" title="CLR 有哪些实现"></a>CLR 有哪些实现</h3><ol>
+<li>CoreClr<ul>
+<li>微软官方的 CLR 实现</li>
+<li>.Net 6&#x2F;7&#x2F;8&#x2F;9 的核心运行时</li>
+</ul>
+</li>
+<li>Mono<ul>
+<li>早期第三方 CLR 实现</li>
+<li>后被微软收购</li>
+<li>现在是 .Net 官方运行时之一</li>
+</ul>
+</li>
+<li>.Net Framework CLR<ul>
+<li>仅支持 Windows 平台</li>
+<li>仅维护</li>
+</ul>
+</li>
+</ol>
+<h2 id="Mono"><a href="#Mono" class="headerlink" title="Mono"></a>Mono</h2><p>Mono是一个由Xamarin公司（先前是Novell，最早为Ximian）所主持的自由开放源码项目。该项目的目标是创建一系列符合ECMA标准（Ecma-334[1]和Ecma-335[2]）的.NET工具，包括C #编译器和通用语言架构 。与微软的.NET Framework（共通语言执行平台）不同，Mono项目不仅可以运行于Windows系统上，还可以运行于Linux、FreeBSD、Unix、OS X和Solaris，甚至一些游戏平台  </p>
+<p>Mono 由几个组件组成：</p>
+<p><strong><a target="_blank" rel="noopener" href="https://www.mono-project.com/docs/about-mono/languages/csharp/">C#编译器</a></strong> - Mono 的 C#编译器支持 C#1.0、2.0、3.0、4.0、5.0 和 6.0（ECMA）。各种版本的 C#编译器的特性描述可以在<a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/C_Sharp_%28programming_language%29#Versions">维基百科</a>上找到。</p>
+<p><strong><a target="_blank" rel="noopener" href="https://www.mono-project.com/docs/advanced/runtime/">Mono Runtime</a></strong> - 运行时实现了 ECMA 共同语言基础结构 (CLI)。运行时提供即时编译器、提前编译器 (AOT)、库装载器、垃圾收集器、线程系统和互操作性功能。</p>
+<p><strong>.NET Framework 类库</strong> - Mono 平台提供了一系列全面的类，为构建应用程序提供坚实的基础。这些类与 Microsoft 的 .NET Framework 类相容。</p>
+<p><strong>Mono Class Library</strong> - Mono 还提供了许多类，这些类超越了 Microsoft 提供的基类库。这些类提供了额外的有用功能，尤其是在构建 Linux 应用程序时。一些示例包括 Gtk+、Zip 文件、LDAP、OpenGL、Cairo、POSIX 等类。</p>
+<h3 id="跨平台-ios"><a href="#跨平台-ios" class="headerlink" title="跨平台 ios"></a>跨平台 ios</h3><p><a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/dotnet/maui/macios/interpreter?view=net-maui-10.0">iOS 和 Mac Catalyst 上的 Mono 解释器 - .NET MAUI | Microsoft Learn</a></p>
+<h2 id="Il2cpp"><a href="#Il2cpp" class="headerlink" title="Il2cpp"></a>Il2cpp</h2><p>严格意义上来说，IL2CPCPP 是 Unity 引擎中的一个脚本后端选项，而不是 C# 本身的一个术语, 它已经脱离了 .Net 生态。</p>
+<p>IL2CPP（中间语言到 C++）是 Unity 的自定义、提前编译（AOT）脚本后端，最初是为 iOS 等不支持 即时编译（JIT）的平台开发的。 <strong>IL2CPP</strong> 将 IL（ <a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/dotnet/standard/managed-code#intermediate-language--execution">中间语言</a> ）转换为 C++，并将其编译成特定于平台的原生代码，然后以目标平台的标准格式打包到应用程序中，例如 <strong>APK</strong> &#x2F;AAB、iOS 应用程序包或 Windows 可执行文件和 DLL。</p>
+<p>IL2CPP 支持所有平台，并且可以提供比 Mono 脚本后端的几个好处，包括性能提升和启动时间缩短。</p>
+<div class="post-tags"><a href="/tags/C/"># C#</a></div><nav class="post-pagination" aria-label="相邻文章"><a href="/2026/03/14/OpenClaw_Short_Note_1/"><small>← 上一篇</small>OpenClaw踩坑分享</a><a href="/2026/01/13/Some_Recent_Things/"><small>下一篇 →</small>最近的一些事</a></nav></article><aside class="post-toc"><div class="panel-top">本篇导航 <span>↙</span></div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#AOT"><span class="toc-text">AOT</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JIT"><span class="toc-text">JIT</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IL"><span class="toc-text">IL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CLR"><span class="toc-text">CLR</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-text">是什么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%81%9A%E4%BB%80%E4%B9%88"><span class="toc-text">做什么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CLR-%E6%9C%89%E5%93%AA%E4%BA%9B%E5%AE%9E%E7%8E%B0"><span class="toc-text">CLR 有哪些实现</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Mono"><span class="toc-text">Mono</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B7%A8%E5%B9%B3%E5%8F%B0-ios"><span class="toc-text">跨平台 ios</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Il2cpp"><span class="toc-text">Il2cpp</span></a></li></ol><a href="#main" class="back-top">返回顶部 ↑</a></aside></div>
+</main>
+  <footer class="footer"><div class="footer-red"><div class="shell"><a class="footer-brand" href="/">苏杭小站</a><span>每一份热爱，都值得存档。</span><a href="#main" class="footer-top" aria-label="返回页面顶部">↑</a></div></div><div class="footer-links shell"><div><a href="/archives/">文章归档</a><a href="/categories/">分类索引</a><a href="/tags/">全部标签</a><a href="/about/">关于与联系</a></div><span>© 2026 SuHang · 用 Hexo 记录日常</span></div></footer>
+  <dialog id="search-dialog" aria-labelledby="search-title" data-index="/journal-search.json" data-root="/">
+    <div class="search-head"><label id="search-title" for="search-input">发现一篇好文章</label><button class="search-close" aria-label="关闭搜索">×</button></div>
+    <input id="search-input" type="search" placeholder="搜索 Unity、热更新、C#…" autocomplete="off">
+    <p id="search-status" role="status">输入关键词，探索所有文章。</p><div id="search-results"></div>
+  </dialog>
+  <dialog id="image-dialog" aria-label="查看文章配图"><button class="image-close" aria-label="关闭配图">×</button><img alt=""><p></p></dialog>
+  <button class="floating-top" aria-label="回到顶部" title="回到顶部">↑</button><div class="toast" role="status"></div>
+  <script src="/assets/journal.js" defer></script>
+</body></html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>优化 draw calls 简介 · 苏杭小站</title>
+  <meta name="description" content="Unity - 手册：优化绘制调用简介 — Unity - Manual: Introduction to optimizing draw calls优化 Draw Calls 是通过减少 CPU 向 GPU 发送信息的频率来加速渲染。
+默认情况下，每个 mesh  都需要自己调用 draw ...">
+  <meta name="theme-color" content="#e60012"><meta name="color-scheme" content="only light">
+  <link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/journal.css">
+  <link rel="canonical" href="https://lshgame.com/2026/08/20/Introduction_to_Optimizing_Draw_Calls/">
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+  <div class="reading-progress" aria-hidden="true"></div>
+  <a class="skip" href="#main">跳转到内容</a>
+  <header class="header"><div class="header-inner">
+    <a class="brand" href="/" aria-label="苏杭小站首页"><span class="brand-word">苏杭小站</span><small>SUHANG'S JOURNAL</small></a>
+    <nav id="main-nav" aria-label="主导航">
+      <a class=""  href="/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10h-6v-7H9v7H3Z"/></svg>首页</a>
+      <a class="active" href="/archives/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h5"/></svg>文章手记</a>
+      <a class="" href="/categories/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/></svg>探索分类</a>
+      <a class="" href="/about/"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21v-3a8 8 0 0 1 16 0v3"/></svg>关于我</a>
+    </nav>
+    <div class="header-actions"><button class="search-open" aria-label="搜索文章"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 6 6"/></svg><span>搜索</span></button><button class="menu-toggle" aria-label="打开导航" aria-controls="main-nav" aria-expanded="false"><span></span><span></span><span></span></button></div>
+  </div></header>
+  <main id="main" class="shell inner-main"><div class="post-breadcrumb"><a href="/">首页</a><span>/</span><a href="/archives/">文章</a><span>/</span> 开发与生活</div>
+<header class="post-header"><div class="eyebrow"><a href="/categories/Unity/">Unity</a><span>2026.08.20</span><span>3 分钟阅读</span></div><h1>优化 draw calls 简介</h1><div class="post-author"><span class="mini-avatar">S</span> SuHang <span>·</span> 游戏开发手记</div></header>
+<div class="post-layout"><article class="prose"><p><a target="_blank" rel="noopener" href="https://docs.unity3d.com/6000.0/Documentation/Manual/optimizing-draw-calls.html">Unity - 手册：优化绘制调用简介 — Unity - Manual: Introduction to optimizing draw calls</a><br>优化 Draw Calls 是通过减少 CPU 向 GPU 发送信息的频率来加速渲染。</p>
+<p>默认情况下，每个 mesh  都需要自己调用 draw call。 一次 draw call 包含以下步骤：</p>
+<ul>
+<li>更新渲染状态。CPU 使用图形 API 准备并发送 GPU 绘制网格所需的一切内容，如：Shader 代码、Texture、buffers 。 这部分是 CPU 最密集的步骤</li>
+<li>提交 draw call。 CPU 使用图形 API 告诉 GPU 要绘制什么。</li>
+</ul>
+<p>使用 draw calls 优化系统，Unity 会把使用相同渲染状态的数据和网格分组。因此，Unity 更新渲染状态的频率降低，并在单个 draw call 中提交多个对象。</p>
+<p>使用 optimizing draw calls 有以下好处：</p>
+<ul>
+<li>改善帧时间，或增加每一帧可渲染的 GameObject 数量</li>
+<li>减少应用所需的电量，可以降低需要电池供电设备的耗电速度</li>
+</ul>
+<h3 id="优化-draw-call-类型"><a href="#优化-draw-call-类型" class="headerlink" title="优化 draw call 类型"></a>优化 draw call 类型</h3><h2 id="Unity-中-draw-call-optimization-方法通过以下方式之一工作：-利用-GPU-的硬件能力，在一次-draw-call-调用多个副本。这就是-GPU-instancing-使用其他技术减少渲染状态更新，例如大的-GPU-缓冲区。这就是-SRP-Batcher-的工作原理-合并使用相同渲染状态的网格并一起绘制。这就是-batching"><a href="#Unity-中-draw-call-optimization-方法通过以下方式之一工作：-利用-GPU-的硬件能力，在一次-draw-call-调用多个副本。这就是-GPU-instancing-使用其他技术减少渲染状态更新，例如大的-GPU-缓冲区。这就是-SRP-Batcher-的工作原理-合并使用相同渲染状态的网格并一起绘制。这就是-batching" class="headerlink" title="Unity 中 draw call optimization  方法通过以下方式之一工作：- 利用 GPU 的硬件能力，在一次 draw call 调用多个副本。这就是 GPU instancing- 使用其他技术减少渲染状态更新，例如大的 GPU 缓冲区。这就是 SRP Batcher 的工作原理- 合并使用相同渲染状态的网格并一起绘制。这就是 batching"></a>Unity 中 draw call optimization  方法通过以下方式之一工作：<br>- 利用 GPU 的硬件能力，在一次 draw call 调用多个副本。这就是 GPU instancing<br>- 使用其他技术减少渲染状态更新，例如大的 GPU 缓冲区。这就是 SRP Batcher 的工作原理<br>- 合并使用相同渲染状态的网格并一起绘制。这就是 batching</h2><h3 id="选择优化方法"><a href="#选择优化方法" class="headerlink" title="选择优化方法"></a>选择优化方法</h3><table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>可编程渲染管线（SRP）批处理器</strong></td>
+<td>减少渲染状态更新</td>
+<td>仅限 DX12、Vulkan 及兼容的主机 API，前提是你启用了图形作业。</td>
+<td>启用。请参阅 URP 中的 SRP Batcher。</td>
+<td>启用。请参阅 HDRP 中的 SRP Batcher。</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td><strong>GPU Resident Drawer</strong></td>
+<td>使用 GPU 硬件实例化</td>
+<td>是</td>
+<td>启用。请参阅 URP 中的 GPU 常驻绘制器。</td>
+<td>启用。请参阅 HDRP 中的 GPU 常驻绘制器。</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://docs.unity3d.com/6000.0/Documentation/Manual/batch-renderer-group.html"><strong><code>BatchRendererGroup</code> (BRG) API</strong></a></td>
+<td>使用 GPU 硬件实例化</td>
+<td>是</td>
+<td>改用 GPU 常驻绘制器，除非是高级用例。</td>
+<td>改用 GPU 常驻绘制器，除非是高级用例。</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td><strong>材质中的 GPU 实例化复选框</strong></td>
+<td>GPU 硬件实例化</td>
+<td>无</td>
+<td>禁用，以避免额外的着色器变体。</td>
+<td>禁用，以避免额外的着色器变体。</td>
+<td>如果实例或灯光较多，请启用此选项。请参阅 GPU 实例化。</td>
+</tr>
+<tr>
+<td><strong>批处理</strong></td>
+<td>合并网格</td>
+<td>无</td>
+<td>禁用。静态批处理与 BRG API 或 GPU Resident Drawer 不兼容。</td>
+<td>禁用。静态批处理与 BRG API 或 GPU Resident Drawer 不兼容。</td>
+<td>启用静态批处理。不再推荐使用动态批处理。请参阅批处理。</td>
+</tr>
+</tbody></table>
+<div class="post-tags"><a href="/tags/Unity/"># Unity</a><a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"># 性能优化</a><a href="/tags/Draw-Call/"># Draw Call</a></div><nav class="post-pagination" aria-label="相邻文章"><a href="/2026/10/09/post-mv0jwbet/"><small>← 上一篇</small>关于英语长句</a><a href="/2026/08/20/Introduction_to_Mesh_Batching/"><small>下一篇 →</small>网格批处理简介</a></nav></article><aside class="post-toc"><div class="panel-top">本篇导航 <span>↙</span></div><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E5%8C%96-draw-call-%E7%B1%BB%E5%9E%8B"><span class="toc-text">优化 draw call 类型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Unity-%E4%B8%AD-draw-call-optimization-%E6%96%B9%E6%B3%95%E9%80%9A%E8%BF%87%E4%BB%A5%E4%B8%8B%E6%96%B9%E5%BC%8F%E4%B9%8B%E4%B8%80%E5%B7%A5%E4%BD%9C%EF%BC%9A-%E5%88%A9%E7%94%A8-GPU-%E7%9A%84%E7%A1%AC%E4%BB%B6%E8%83%BD%E5%8A%9B%EF%BC%8C%E5%9C%A8%E4%B8%80%E6%AC%A1-draw-call-%E8%B0%83%E7%94%A8%E5%A4%9A%E4%B8%AA%E5%89%AF%E6%9C%AC%E3%80%82%E8%BF%99%E5%B0%B1%E6%98%AF-GPU-instancing-%E4%BD%BF%E7%94%A8%E5%85%B6%E4%BB%96%E6%8A%80%E6%9C%AF%E5%87%8F%E5%B0%91%E6%B8%B2%E6%9F%93%E7%8A%B6%E6%80%81%E6%9B%B4%E6%96%B0%EF%BC%8C%E4%BE%8B%E5%A6%82%E5%A4%A7%E7%9A%84-GPU-%E7%BC%93%E5%86%B2%E5%8C%BA%E3%80%82%E8%BF%99%E5%B0%B1%E6%98%AF-SRP-Batcher-%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86-%E5%90%88%E5%B9%B6%E4%BD%BF%E7%94%A8%E7%9B%B8%E5%90%8C%E6%B8%B2%E6%9F%93%E7%8A%B6%E6%80%81%E7%9A%84%E7%BD%91%E6%A0%BC%E5%B9%B6%E4%B8%80%E8%B5%B7%E7%BB%98%E5%88%B6%E3%80%82%E8%BF%99%E5%B0%B1%E6%98%AF-batching"><span class="toc-text">Unity 中 draw call optimization  方法通过以下方式之一工作：- 利用 GPU 的硬件能力，在一次 draw call 调用多个副本。这就是 GPU instancing- 使用其他技术减少渲染状态更新，例如大的 GPU 缓冲区。这就是 SRP Batcher 的工作原理- 合并使用相同渲染状态的网格并一起绘制。这就是 batching</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%89%E6%8B%A9%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95"><span class="toc-text">选择优化方法</span></a></li></ol><a href="#main" class="back-top">返回顶部 ↑</a></aside></div>
+</main>
+  <footer class="footer"><div class="footer-red"><div class="shell"><a class="footer-brand" href="/">苏杭小站</a><span>每一份热爱，都值得存档。</span><a href="#main" class="footer-top" aria-label="返回页面顶部">↑</a></div></div><div class="footer-links shell"><div><a href="/archives/">文章归档</a><a href="/categories/">分类索引</a><a href="/tags/">全部标签</a><a href="/about/">关于与联系</a></div><span>© 2026 SuHang · 用 Hexo 记录日常</span></div></footer>
+  <dialog id="search-dialog" aria-labelledby="search-title" data-index="/journal-search.json" data-root="/">
+    <div class="search-head"><label id="search-title" for="search-input">发现一篇好文章</label><button class="search-close" aria-label="关闭搜索">×</button></div>
+    <input id="search-input" type="search" placeholder="搜索 Unity、热更新、C#…" autocomplete="off">
+    <p id="search-status" role="status">输入关键词，探索所有文章。</p><div id="search-results"></div>
+  </dialog>
+  <dialog id="image-dialog" aria-label="查看文章配图"><button class="image-close" aria-label="关闭配图">×</button><img alt=""><p></p></dialog>
+  <button class="floating-top" aria-label="回到顶部" title="回到顶部">↑</button><div class="toast" role="status"></div>
+  <script src="/assets/journal.js" defer></script>
+</body></html>

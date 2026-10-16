@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Unity UGUI 优化 · 苏杭小站</title>
+  <meta name="description" content="本文主要记录Unity UGUI 常用的优化项
+Canvas.SendWillRenderCanvases此函数的耗时代表的是 UI 元素自身变化带来的更新耗时，可以理解为 UI 更新的耗时。
+触发条件
+替换图片
+文本变化
+颜色变化UI 元素位移、旋转、缩放操作并不会引起此函数
+
+优化方案
+降...">
+  <meta name="theme-color" content="#e60012"><meta name="color-scheme" content="only light">
+  <link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/journal.css">
+  <link rel="canonical" href="https://lshgame.com/2026/01/09/Unity_UI_Optimization_Items/">
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+  <div class="reading-progress" aria-hidden="true"></div>
+  <a class="skip" href="#main">跳转到内容</a>
+  <header class="header"><div class="header-inner">
+    <a class="brand" href="/" aria-label="苏杭小站首页"><span class="brand-word">苏杭小站</span><small>SUHANG'S JOURNAL</small></a>
+    <nav id="main-nav" aria-label="主导航">
+      <a class=""  href="/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10h-6v-7H9v7H3Z"/></svg>首页</a>
+      <a class="active" href="/archives/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h5"/></svg>文章手记</a>
+      <a class="" href="/categories/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/></svg>探索分类</a>
+      <a class="" href="/about/"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21v-3a8 8 0 0 1 16 0v3"/></svg>关于我</a>
+    </nav>
+    <div class="header-actions"><button class="search-open" aria-label="搜索文章"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 6 6"/></svg><span>搜索</span></button><button class="menu-toggle" aria-label="打开导航" aria-controls="main-nav" aria-expanded="false"><span></span><span></span><span></span></button></div>
+  </div></header>
+  <main id="main" class="shell inner-main"><div class="post-breadcrumb"><a href="/">首页</a><span>/</span><a href="/archives/">文章</a><span>/</span> 开发与生活</div>
+<header class="post-header"><div class="eyebrow"><a href="/categories/Unity/">Unity</a><span>2026.01.09</span><span>4 分钟阅读</span></div><h1>Unity UGUI 优化</h1><div class="post-author"><span class="mini-avatar">S</span> SuHang <span>·</span> 游戏开发手记</div></header>
+<div class="post-layout"><article class="prose"><p>本文主要记录Unity UGUI 常用的优化项</p>
+<h2 id="Canvas-SendWillRenderCanvases"><a href="#Canvas-SendWillRenderCanvases" class="headerlink" title="Canvas.SendWillRenderCanvases"></a>Canvas.SendWillRenderCanvases</h2><p>此函数的耗时代表的是 UI 元素自身变化带来的更新耗时，可以理解为 UI 更新的耗时。</p>
+<h3 id="触发条件"><a href="#触发条件" class="headerlink" title="触发条件"></a>触发条件</h3><ol>
+<li>替换图片</li>
+<li>文本变化</li>
+<li>颜色变化<br>UI 元素位移、旋转、缩放操作并不会引起此函数</li>
+</ol>
+<h3 id="优化方案"><a href="#优化方案" class="headerlink" title="优化方案"></a>优化方案</h3><ol>
+<li>降低频繁更新的 UI 元素的频率</li>
+<li>尽量让复杂的 UI 不要发生变动</li>
+<li>控制动态元素 Canvas 网格数量</li>
+</ol>
+<h2 id="Canvas-BuildBatch-Rendering-EmitWorldScreenspaceCameraGeometry"><a href="#Canvas-BuildBatch-Rendering-EmitWorldScreenspaceCameraGeometry" class="headerlink" title="Canvas.BuildBatch &amp; Rendering.EmitWorldScreenspaceCameraGeometry"></a>Canvas.BuildBatch &amp; Rendering.EmitWorldScreenspaceCameraGeometry</h2><p>Canvas.BuildBatch是在主线程发起UI网格合并，具体的合并过程是在子线程中处理的，当子线程压力过大，或者合并的UI网格过于复杂的时候，会在主线程产生等待，等待的耗时会被统计到EmitWorldScreenspaceCameraGeometry中。</p>
+<h3 id="触发条件-1"><a href="#触发条件-1" class="headerlink" title="触发条件"></a>触发条件</h3><p>Canvas.BuildBatch为UI元素合并的Mesh需要改变时所产生的调用。</p>
+<ul>
+<li>Canvas.SendWillRenderCanvases()的调用都会引起Canvas.BuildBatch的调用。</li>
+<li>Canvas中的UI元素发生移动也会引起Canvas.BuildBatch的调用。</li>
+</ul>
+<h3 id="优化方案-1"><a href="#优化方案-1" class="headerlink" title="优化方案"></a>优化方案</h3><p>这两个函数高耗时，说明重建的 Canvas 非常复杂。</p>
+<ul>
+<li>Canvas 动静分离</li>
+<li>降低网格复杂度</li>
+</ul>
+<h2 id="CanvasRenderer-SyncTransform"><a href="#CanvasRenderer-SyncTransform" class="headerlink" title="CanvasRenderer.SyncTransform"></a>CanvasRenderer.SyncTransform</h2><h3 id="触发条件-2"><a href="#触发条件-2" class="headerlink" title="触发条件"></a>触发条件</h3><ol>
+<li>Transform 信息变化<br>例如：画在屏幕空间的 Hub，会跟随 Player 的视角 or 移动产生位移；此时一次触发 Transform 信息变化的 UI 元素量较大，如果有文本这类网格数多的对象时对性能影响还会进一步增大</li>
+<li>调用 Instantiate 实例化对象<br>实例化 UI 对象时，会使得自己本身，<strong>同 Canvas</strong> 下的 UI 元素，<strong>父 Canvas</strong> 下的元素，都触发一次 SyncTransform</li>
+<li>调用 Destroy 销毁对象<br>再销毁对象时，只会影响自己<strong>同 Canvas</strong> 下的 UI 元素触发一次 SyncTransform</li>
+<li>调用 SetActivity (true) 激活 UI 元素<br> SetActivity(true) 激活 UI 元素，会使得自己本身，<strong>同 Canvas</strong> 下的 UI 元素，<strong>父 Canvas</strong> 下的元素，都触发一次 SyncTransform<br> SetActivity (false) 不会触发</li>
+</ol>
+<h3 id="优化方案-2"><a href="#优化方案-2" class="headerlink" title="优化方案"></a>优化方案</h3><ul>
+<li>动静分离</li>
+<li>将需要频繁进行上述操作的 UI 和其他的 UI 元素分离到不同的同级 Canvas 下</li>
+<li>设计合理的 Canvas 的嵌套结构</li>
+<li>中间节点的 Canvas 不要有复杂的 UI 元素，实例化和激活都会影响到父 Canvas</li>
+</ul>
+<h2 id="EventSystem-Update"><a href="#EventSystem-Update" class="headerlink" title="EventSystem.Update"></a>EventSystem.Update</h2><ul>
+<li>触发调用耗时<br>函数为触摸释放时候触发，该函数本身有较高的 CPU 开销时，通常是因为调用了其他耗时函数引起的。定位耗时函数优化即可。可以使用 Profiler. BeginSample&#x2F;EndSample, Profiler 开启 Deep Profiler 定位</li>
+<li>轮询耗时<br>尽量关闭 UI 元素的 Raycast</li>
+</ul>
+<h2 id="UI-DrawCall"><a href="#UI-DrawCall" class="headerlink" title="UI DrawCall"></a>UI DrawCall</h2><ul>
+<li>同一 Canvas 下的 UI 元素才能合批</li>
+<li>使用图集，让不同 UI 元素的的材质图集一致</li>
+<li>尽量避免 UI 层级穿插导致 UI 合批失败（可以使用 Unity -&gt; Analysis -&gt; Frame Debugger 查看合批情况）</li>
+</ul>
+<div class="post-tags"><a href="/tags/%E4%BC%98%E5%8C%96%EF%BC%8CUGUI/"># 优化，UGUI</a></div><nav class="post-pagination" aria-label="相邻文章"><a href="/2026/01/13/Some_Recent_Things/"><small>← 上一篇</small>最近的一些事</a><a href="/2025/11/02/A_Simple_Reflection_on_the_Development_Direction_of_Game_Programming/"><small>下一篇 →</small>关于游戏程序发展方向的浅浅思考</a></nav></article><aside class="post-toc"><div class="panel-top">本篇导航 <span>↙</span></div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Canvas-SendWillRenderCanvases"><span class="toc-text">Canvas.SendWillRenderCanvases</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A6%E5%8F%91%E6%9D%A1%E4%BB%B6"><span class="toc-text">触发条件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E5%8C%96%E6%96%B9%E6%A1%88"><span class="toc-text">优化方案</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Canvas-BuildBatch-Rendering-EmitWorldScreenspaceCameraGeometry"><span class="toc-text">Canvas.BuildBatch &amp; Rendering.EmitWorldScreenspaceCameraGeometry</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A6%E5%8F%91%E6%9D%A1%E4%BB%B6-1"><span class="toc-text">触发条件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E5%8C%96%E6%96%B9%E6%A1%88-1"><span class="toc-text">优化方案</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CanvasRenderer-SyncTransform"><span class="toc-text">CanvasRenderer.SyncTransform</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A6%E5%8F%91%E6%9D%A1%E4%BB%B6-2"><span class="toc-text">触发条件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E5%8C%96%E6%96%B9%E6%A1%88-2"><span class="toc-text">优化方案</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#EventSystem-Update"><span class="toc-text">EventSystem.Update</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#UI-DrawCall"><span class="toc-text">UI DrawCall</span></a></li></ol><a href="#main" class="back-top">返回顶部 ↑</a></aside></div>
+</main>
+  <footer class="footer"><div class="footer-red"><div class="shell"><a class="footer-brand" href="/">苏杭小站</a><span>每一份热爱，都值得存档。</span><a href="#main" class="footer-top" aria-label="返回页面顶部">↑</a></div></div><div class="footer-links shell"><div><a href="/archives/">文章归档</a><a href="/categories/">分类索引</a><a href="/tags/">全部标签</a><a href="/about/">关于与联系</a></div><span>© 2026 SuHang · 用 Hexo 记录日常</span></div></footer>
+  <dialog id="search-dialog" aria-labelledby="search-title" data-index="/journal-search.json" data-root="/">
+    <div class="search-head"><label id="search-title" for="search-input">发现一篇好文章</label><button class="search-close" aria-label="关闭搜索">×</button></div>
+    <input id="search-input" type="search" placeholder="搜索 Unity、热更新、C#…" autocomplete="off">
+    <p id="search-status" role="status">输入关键词，探索所有文章。</p><div id="search-results"></div>
+  </dialog>
+  <dialog id="image-dialog" aria-label="查看文章配图"><button class="image-close" aria-label="关闭配图">×</button><img alt=""><p></p></dialog>
+  <button class="floating-top" aria-label="回到顶部" title="回到顶部">↑</button><div class="toast" role="status"></div>
+  <script src="/assets/journal.js" defer></script>
+</body></html>

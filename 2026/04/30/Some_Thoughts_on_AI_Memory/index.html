@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>关于 AI Memory 的一些思考：记忆应该如何在工作中形成 · 苏杭小站</title>
+  <meta name="description" content="自从 AI 工具开始进入实际开发和创作流程以来，如何让 AI 获得有效上下文，一直是一个核心问题。围绕 AI Memory 的文章、项目和仓库已经非常多，都是极具想象力和技术深度的实现方案。看过这些探索之后，本文主要是笔者在 AI Memory 上的一些浅思。
+当前 AI Memory 的主要...">
+  <meta name="theme-color" content="#e60012"><meta name="color-scheme" content="only light">
+  <link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/journal.css">
+  <link rel="canonical" href="https://lshgame.com/2026/04/30/Some_Thoughts_on_AI_Memory/">
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+  <div class="reading-progress" aria-hidden="true"></div>
+  <a class="skip" href="#main">跳转到内容</a>
+  <header class="header"><div class="header-inner">
+    <a class="brand" href="/" aria-label="苏杭小站首页"><span class="brand-word">苏杭小站</span><small>SUHANG'S JOURNAL</small></a>
+    <nav id="main-nav" aria-label="主导航">
+      <a class=""  href="/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10h-6v-7H9v7H3Z"/></svg>首页</a>
+      <a class="active" href="/archives/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h5"/></svg>文章手记</a>
+      <a class="" href="/categories/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/></svg>探索分类</a>
+      <a class="" href="/about/"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21v-3a8 8 0 0 1 16 0v3"/></svg>关于我</a>
+    </nav>
+    <div class="header-actions"><button class="search-open" aria-label="搜索文章"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 6 6"/></svg><span>搜索</span></button><button class="menu-toggle" aria-label="打开导航" aria-controls="main-nav" aria-expanded="false"><span></span><span></span><span></span></button></div>
+  </div></header>
+  <main id="main" class="shell inner-main"><div class="post-breadcrumb"><a href="/">首页</a><span>/</span><a href="/archives/">文章</a><span>/</span> 开发与生活</div>
+<header class="post-header"><div class="eyebrow"><a href="/categories/AI/">AI</a><span>2026.04.30</span><span>7 分钟阅读</span></div><h1>关于 AI Memory 的一些思考：记忆应该如何在工作中形成</h1><div class="post-author"><span class="mini-avatar">S</span> SuHang <span>·</span> 游戏开发手记</div></header>
+<div class="post-layout"><article class="prose"><p>自从 AI 工具开始进入实际开发和创作流程以来，如何让 AI 获得有效上下文，一直是一个核心问题。围绕 AI Memory 的文章、项目和仓库已经非常多，都是极具想象力和技术深度的实现方案。看过这些探索之后，本文主要是笔者在 AI Memory 上的一些浅思。</p>
+<h2 id="当前-AI-Memory-的主要问题"><a href="#当前-AI-Memory-的主要问题" class="headerlink" title="当前 AI Memory 的主要问题"></a>当前 AI Memory 的主要问题</h2><p>现在很多 AI Memory 系统已经在查询、联想、摘要、长期保存和生命周期管理方面做得比较完善。它们能够把已有记忆组织起来，也能够在需要时检索相关内容。</p>
+<p>但这类系统仍然面临一个更基础的问题：AI 应该在什么时候记住某个信息？</p>
+<p>目前常见的触发方式主要有三类：</p>
+<ol>
+<li>关键词触发。</li>
+<li>任务完成后触发。</li>
+<li>用户手动触发。</li>
+</ol>
+<p>这些方式都有价值，但也都存在局限。关键词触发依赖预设规则，容易遗漏隐含但重要的信息；任务完成后触发往往粒度较粗，可能丢失过程中的关键判断；用户手动触发则过度依赖用户意识，无法真正成为 AI 自主工作的基础能力。</p>
+<p>如果记忆摄入不足，后续无论检索、联想和生命周期管理做得多好，整个 Memory 系统都很难发挥作用。一个没有足够有效输入的记忆系统，本质上只是一个空的索引结构。</p>
+<h2 id="从人类工作过程理解记忆"><a href="#从人类工作过程理解记忆" class="headerlink" title="从人类工作过程理解记忆"></a>从人类工作过程理解记忆</h2><p>要解决这个问题，可以先观察人类在项目中的记忆是如何形成的。</p>
+<p>当一个人接受需求时，通常不会直接开始编码或产出结果，而是会经历几个连续步骤：</p>
+<ol>
+<li>理解并整理需求。</li>
+<li>查找相关上下文。</li>
+<li>形成实现方案。</li>
+<li>执行具体修改或创作。</li>
+</ol>
+<p>在这个过程中，记忆并不是只在任务结束时才形成的。相反，每一个步骤都会留下某种程度的”印象”。这些印象可能并不完整，也未必能直接构成正式文档，但它们会在后续工作中发挥作用。</p>
+<p>例如，当我们之后再次修改某个功能时，通常不会从零开始查找所有材料。我们会先有一个模糊印象：这个功能大概在哪里、涉及哪些模块、当时为什么这样设计、有哪些约束需要注意。然后再根据这个印象定位上下文，通过上下文唤起更多细节，最终完成新的修改。</p>
+<p>这种过程很重要。人类的记忆并不是一次性、完整地写入大脑，而是在持续工作中不断形成轻量印象，再通过印象逐步召回更多上下文。</p>
+<h2 id="AI-Memory-应该模仿这种”印象”机制"><a href="#AI-Memory-应该模仿这种”印象”机制" class="headerlink" title="AI Memory 应该模仿这种”印象”机制"></a>AI Memory 应该模仿这种”印象”机制</h2><p>如果希望 AI 在长期工作中拥有更接近人类的记忆能力，那么 Memory 系统不应该只关注最终结果，而应该关注工作过程本身。</p>
+<p>AI 在处理任务时，也会经历需求理解、上下文检索、方案整理和具体执行。每一个阶段都可能产生值得记录的信息。例如：</p>
+<ol>
+<li>用户真实关心的目标是什么。</li>
+<li>当前项目有哪些隐含约束。</li>
+<li>某个模块为什么不能随意修改。</li>
+<li>某个接口、文件或数据结构在任务中扮演什么角色。</li>
+<li>某次实现中做出了哪些取舍。</li>
+</ol>
+<p>这些信息未必都适合写入长期记忆，但它们非常适合作为”印象”被短暂记录。之后，当 AI 再次遇到相关任务时，可以先通过这些印象快速定位上下文，再进一步决定是否需要读取文件、查询历史、检索文档或恢复更完整的记忆。</p>
+<p>因此，AI Memory 的一个关键方向，是让 AI 在工作中持续产生微粒度的印象，而不是只在任务结束时生成一段总结。</p>
+<h2 id="关键挑战一：如何触发记忆"><a href="#关键挑战一：如何触发记忆" class="headerlink" title="关键挑战一：如何触发记忆"></a>关键挑战一：如何触发记忆</h2><p>如果采用印象机制，首先要解决的是触发问题。</p>
+<p>触发粒度应该足够小。因为真正有价值的记忆往往并不只出现在任务完成时，而是出现在中间判断中。例如，AI 发现某个文件是核心入口、确认某个测试失败的真实原因、理解某个模块的边界，这些瞬间都可能值得记录。</p>
+<p>但触发过于频繁也会带来成本和噪声。因此，比较理想的方式不是简单地”每一步都记”，而是识别工作过程中的语义节点。比如：</p>
+<ol>
+<li>明确用户意图时。</li>
+<li>找到关键上下文时。</li>
+<li>做出重要技术判断时。</li>
+<li>遇到项目中特有约束时。</li>
+<li>完成一段可复用经验总结时。</li>
+</ol>
+<p>这些节点比普通日志更有意义，也比任务结束总结更细致。它们更接近人类在工作中自然形成的”我大概知道这里发生了什么”的印象。</p>
+<h2 id="关键挑战二：如何快速存储"><a href="#关键挑战二：如何快速存储" class="headerlink" title="关键挑战二：如何快速存储"></a>关键挑战二：如何快速存储</h2><p>如果记忆触发变得频繁，存储系统必须足够轻量和快速。</p>
+<p>微粒度记忆不能依赖复杂、昂贵、阻塞主流程的写入过程。否则，AI 每完成一个小判断都要等待一次沉重的存储操作，整个工作流会变得不可接受。</p>
+<p>因此，印象层的存储应该和正式长期记忆区分开。它可以先采用更轻量的结构，记录时间、任务、对象、判断和相关上下文指针。之后再通过异步整理、压缩、合并或淘汰，把少量真正有长期价值的内容沉淀下来。</p>
+<p>换句话说，Memory 系统可能需要分层：</p>
+<ol>
+<li>工作印象层：记录高频、轻量、临时的过程信息。</li>
+<li>上下文索引层：保存印象与文件、任务、模块、接口之间的关联。</li>
+<li>长期记忆层：保存经过筛选、压缩和验证的稳定知识。</li>
+</ol>
+<p>这样的结构可以避免把所有过程信息都直接塞进长期记忆，同时又不会错过工作中产生的重要线索。</p>
+<h2 id="关键挑战三：如何从印象召回上下文"><a href="#关键挑战三：如何从印象召回上下文" class="headerlink" title="关键挑战三：如何从印象召回上下文"></a>关键挑战三：如何从印象召回上下文</h2><p>印象本身通常是不完整的。它的价值不在于直接回答问题，而在于帮助 AI 找到下一步应该看的东西。</p>
+<p>因此，Memory 的召回过程不应该只是一次向量检索，而应该更像一个逐步展开的过程：</p>
+<ol>
+<li>先根据当前任务找到相关印象。</li>
+<li>再根据印象定位文件、模块、对话、提交或文档。</li>
+<li>读取局部上下文后，判断是否需要继续扩展。</li>
+<li>在信息足够时停止。</li>
+</ol>
+<p>这里的”停止”非常关键。上下文越多，并不一定越好。过多无关信息会增加推理负担，甚至干扰输出质量。一个好的 Memory 系统不仅要知道如何召回，也要知道什么时候停止召回。</p>
+<p>理想情况下，AI 应该能够判断当前任务需要的是哪种记忆：有时只需要一个模糊方向，有时需要具体接口定义，有时则需要完整的历史决策链。不同任务应该对应不同深度的召回策略。</p>
+<h2 id="关键挑战四：如何防止记忆爆炸"><a href="#关键挑战四：如何防止记忆爆炸" class="headerlink" title="关键挑战四：如何防止记忆爆炸"></a>关键挑战四：如何防止记忆爆炸</h2><p>当记忆触发足够频繁时，即使每次记录的数据都很小，累计起来也会非常庞大。更现实的问题是，大部分过程记忆最终都没有长期价值。</p>
+<p>因此，Memory 系统必须具备遗忘能力。</p>
+<p>遗忘不应该只是按时间删除，也不应该只依赖固定规则。更合理的方式是根据使用情况、重复程度、任务价值和可替代性来判断某条记忆是否值得保留。</p>
+<p>例如：</p>
+<ol>
+<li>长时间没有被召回的印象，可以降低权重。</li>
+<li>被多次召回且持续有效的信息，可以提升为长期记忆。</li>
+<li>多条相似记忆可以被合并为一条更抽象的经验。</li>
+<li>已经过时或被新信息覆盖的记忆，应该被标记或淘汰。</li>
+<li>只对单次任务有效的临时判断，任务结束后可以直接清理。</li>
+</ol>
+<p>真正有效的 Memory 系统不能只会记住，还必须会整理、压缩和遗忘。否则，记忆会从资产变成负担。</p>
+<h2 id="结语：输入和输出一样重要"><a href="#结语：输入和输出一样重要" class="headerlink" title="结语：输入和输出一样重要"></a>结语：输入和输出一样重要</h2><p>AI Memory 的核心价值，不是让 AI 拥有一个无限扩张的资料库，而是让 AI 能够在工作中形成可用的经验。</p>
+<p>现有很多方案已经很好地解决了”如何检索已有记忆”的问题，但”如何让记忆自然产生”仍然值得继续探索。相比单纯依赖关键词、任务完成总结或用户手动触发，基于工作过程的微粒度印象可能是一条更接近人类经验形成方式的路径。</p>
+<p>如果 AI 能够在理解需求、查找上下文、形成方案和执行任务的过程中不断积累印象，再根据这些印象逐步召回上下文，并在适当的时候整理和遗忘，那么 AI Memory 才可能真正成为长期协作中的基础能力。</p>
+<div class="post-tags"><a href="/tags/AI-Memory/"># AI Memory</a></div><nav class="post-pagination" aria-label="相邻文章"><a href="/2026/05/11/Unity%20Performance%20Optimization%20-%20Code%20-%20Memory%20Leaks/"><small>← 上一篇</small>性能优化-代码篇-内存泄漏</a><a href="/2026/04/22/What_is_Managed_Code/"><small>下一篇 →</small>热更新系列-01-什么是托管代码(Managed Code)</a></nav></article><aside class="post-toc"><div class="panel-top">本篇导航 <span>↙</span></div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BD%93%E5%89%8D-AI-Memory-%E7%9A%84%E4%B8%BB%E8%A6%81%E9%97%AE%E9%A2%98"><span class="toc-text">当前 AI Memory 的主要问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8E%E4%BA%BA%E7%B1%BB%E5%B7%A5%E4%BD%9C%E8%BF%87%E7%A8%8B%E7%90%86%E8%A7%A3%E8%AE%B0%E5%BF%86"><span class="toc-text">从人类工作过程理解记忆</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AI-Memory-%E5%BA%94%E8%AF%A5%E6%A8%A1%E4%BB%BF%E8%BF%99%E7%A7%8D%E2%80%9D%E5%8D%B0%E8%B1%A1%E2%80%9D%E6%9C%BA%E5%88%B6"><span class="toc-text">AI Memory 应该模仿这种”印象”机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E6%8C%91%E6%88%98%E4%B8%80%EF%BC%9A%E5%A6%82%E4%BD%95%E8%A7%A6%E5%8F%91%E8%AE%B0%E5%BF%86"><span class="toc-text">关键挑战一：如何触发记忆</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E6%8C%91%E6%88%98%E4%BA%8C%EF%BC%9A%E5%A6%82%E4%BD%95%E5%BF%AB%E9%80%9F%E5%AD%98%E5%82%A8"><span class="toc-text">关键挑战二：如何快速存储</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E6%8C%91%E6%88%98%E4%B8%89%EF%BC%9A%E5%A6%82%E4%BD%95%E4%BB%8E%E5%8D%B0%E8%B1%A1%E5%8F%AC%E5%9B%9E%E4%B8%8A%E4%B8%8B%E6%96%87"><span class="toc-text">关键挑战三：如何从印象召回上下文</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E6%8C%91%E6%88%98%E5%9B%9B%EF%BC%9A%E5%A6%82%E4%BD%95%E9%98%B2%E6%AD%A2%E8%AE%B0%E5%BF%86%E7%88%86%E7%82%B8"><span class="toc-text">关键挑战四：如何防止记忆爆炸</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E8%AF%AD%EF%BC%9A%E8%BE%93%E5%85%A5%E5%92%8C%E8%BE%93%E5%87%BA%E4%B8%80%E6%A0%B7%E9%87%8D%E8%A6%81"><span class="toc-text">结语：输入和输出一样重要</span></a></li></ol><a href="#main" class="back-top">返回顶部 ↑</a></aside></div>
+</main>
+  <footer class="footer"><div class="footer-red"><div class="shell"><a class="footer-brand" href="/">苏杭小站</a><span>每一份热爱，都值得存档。</span><a href="#main" class="footer-top" aria-label="返回页面顶部">↑</a></div></div><div class="footer-links shell"><div><a href="/archives/">文章归档</a><a href="/categories/">分类索引</a><a href="/tags/">全部标签</a><a href="/about/">关于与联系</a></div><span>© 2026 SuHang · 用 Hexo 记录日常</span></div></footer>
+  <dialog id="search-dialog" aria-labelledby="search-title" data-index="/journal-search.json" data-root="/">
+    <div class="search-head"><label id="search-title" for="search-input">发现一篇好文章</label><button class="search-close" aria-label="关闭搜索">×</button></div>
+    <input id="search-input" type="search" placeholder="搜索 Unity、热更新、C#…" autocomplete="off">
+    <p id="search-status" role="status">输入关键词，探索所有文章。</p><div id="search-results"></div>
+  </dialog>
+  <dialog id="image-dialog" aria-label="查看文章配图"><button class="image-close" aria-label="关闭配图">×</button><img alt=""><p></p></dialog>
+  <button class="floating-top" aria-label="回到顶部" title="回到顶部">↑</button><div class="toast" role="status"></div>
+  <script src="/assets/journal.js" defer></script>
+</body></html>

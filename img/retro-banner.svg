@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#63cfff"/>
+      <stop offset=".58" stop-color="#b9ecff"/>
+      <stop offset=".59" stop-color="#fff0ba"/>
+      <stop offset="1" stop-color="#ffd36f"/>
+    </linearGradient>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0v48" fill="none" stroke="#ffffff" stroke-opacity=".18" stroke-width="4"/>
+    </pattern>
+    <pattern id="brick" width="64" height="64" patternUnits="userSpaceOnUse">
+      <rect width="64" height="64" fill="#c56a32"/>
+      <path d="M0 0h64v64H0zM0 32h64M32 0v32M0 32v32M64 32v32" fill="none" stroke="#171717" stroke-width="5"/>
+      <path d="M8 10h18M42 42h14" stroke="#f7b05b" stroke-width="5"/>
+    </pattern>
+  </defs>
+  <rect width="1600" height="900" fill="url(#sky)"/>
+  <rect width="1600" height="900" fill="url(#grid)"/>
+
+  <circle cx="226" cy="162" r="84" fill="#ffd84f" stroke="#171717" stroke-width="8"/>
+  <rect x="206" y="48" width="40" height="56" fill="#ffd84f" stroke="#171717" stroke-width="8"/>
+  <rect x="206" y="220" width="40" height="56" fill="#ffd84f" stroke="#171717" stroke-width="8"/>
+  <rect x="112" y="142" width="56" height="40" fill="#ffd84f" stroke="#171717" stroke-width="8"/>
+  <rect x="284" y="142" width="56" height="40" fill="#ffd84f" stroke="#171717" stroke-width="8"/>
+
+  <g fill="#ffffff" stroke="#171717" stroke-width="8">
+    <rect x="1000" y="128" width="120" height="58" rx="28"/>
+    <rect x="1082" y="104" width="150" height="82" rx="40"/>
+    <rect x="1210" y="136" width="112" height="50" rx="24"/>
+    <rect x="405" y="235" width="105" height="48" rx="24"/>
+    <rect x="475" y="211" width="132" height="72" rx="36"/>
+    <rect x="590" y="238" width="96" height="45" rx="22"/>
+  </g>
+
+  <path d="M0 610C120 540 245 560 355 610c150-100 300-112 480 0 150-92 315-98 460 0 110-58 210-55 305-6v296H0z" fill="#24a35a" stroke="#171717" stroke-width="8"/>
+  <path d="M0 690c110-78 228-77 348 0 128-86 290-86 448 0 140-94 314-92 470 0 112-64 224-66 334-6v216H0z" fill="#167a44" stroke="#171717" stroke-width="8"/>
+
+  <g stroke="#171717" stroke-width="8">
+    <rect x="170" y="472" width="70" height="70" fill="#ffd84f"/>
+    <rect x="260" y="472" width="70" height="70" fill="#ffd84f"/>
+    <rect x="350" y="472" width="70" height="70" fill="#ffd84f"/>
+    <path d="M194 488h22v18h-22zM282 488h22v18h-22zM372 488h22v18h-22z" fill="#171717"/>
+  </g>
+
+  <g fill="#ffd84f" stroke="#171717" stroke-width="8">
+    <circle cx="875" cy="330" r="32"/>
+    <path d="M875 304v52"/>
+    <circle cx="965" cy="285" r="32"/>
+    <path d="M965 259v52"/>
+    <circle cx="1055" cy="330" r="32"/>
+    <path d="M1055 304v52"/>
+  </g>
+
+  <g stroke="#171717" stroke-width="8">
+    <rect x="1170" y="515" width="116" height="142" fill="#20a85a"/>
+    <rect x="1146" y="475" width="164" height="56" fill="#35c86e"/>
+    <path d="M1212 485v164" stroke="#11753c"/>
+  </g>
+
+  <g fill="#ff6b5f" stroke="#171717" stroke-width="8">
+    <path d="M740 502l28 20 34-36 36 34 28-22-16 62h-94z"/>
+    <rect x="758" y="560" width="94" height="62"/>
+  </g>
+
+  <rect y="722" width="1600" height="178" fill="url(#brick)"/>
+  <rect y="708" width="1600" height="28" fill="#35c86e" stroke="#171717" stroke-width="8"/>
+  <path d="M0 764h1600" stroke="#171717" stroke-width="8"/>
+  <path d="M0 828h1600" stroke="#171717" stroke-width="8"/>
+
+  <g fill="#ffffff" opacity=".5">
+    <rect x="76" y="55" width="10" height="10"/>
+    <rect x="790" y="132" width="12" height="12"/>
+    <rect x="1398" y="235" width="12" height="12"/>
+    <rect x="1320" y="72" width="10" height="10"/>
+    <rect x="650" y="88" width="10" height="10"/>
+  </g>
+</svg>

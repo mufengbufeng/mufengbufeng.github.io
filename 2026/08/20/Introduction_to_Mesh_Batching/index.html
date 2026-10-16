@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>网格批处理简介 · 苏杭小站</title>
+  <meta name="description" content="Batching（批处理）是一种优化 draw calls 的方式，它将相同 Material 的 Mesh 合并在一起，以便 Unity 可以使用更少的渲染状态来渲染它们。批处理可以提高性能、内存效率、并减少 CPu 开销，从而带来更流程的帧率和更好的玩家体验
+批处理有以下限制：
+
+批处理仅...">
+  <meta name="theme-color" content="#e60012"><meta name="color-scheme" content="only light">
+  <link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/journal.css">
+  <link rel="canonical" href="https://lshgame.com/2026/08/20/Introduction_to_Mesh_Batching/">
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+  <div class="reading-progress" aria-hidden="true"></div>
+  <a class="skip" href="#main">跳转到内容</a>
+  <header class="header"><div class="header-inner">
+    <a class="brand" href="/" aria-label="苏杭小站首页"><span class="brand-word">苏杭小站</span><small>SUHANG'S JOURNAL</small></a>
+    <nav id="main-nav" aria-label="主导航">
+      <a class=""  href="/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10h-6v-7H9v7H3Z"/></svg>首页</a>
+      <a class="active" href="/archives/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h5"/></svg>文章手记</a>
+      <a class="" href="/categories/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/></svg>探索分类</a>
+      <a class="" href="/about/"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21v-3a8 8 0 0 1 16 0v3"/></svg>关于我</a>
+    </nav>
+    <div class="header-actions"><button class="search-open" aria-label="搜索文章"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 6 6"/></svg><span>搜索</span></button><button class="menu-toggle" aria-label="打开导航" aria-controls="main-nav" aria-expanded="false"><span></span><span></span><span></span></button></div>
+  </div></header>
+  <main id="main" class="shell inner-main"><div class="post-breadcrumb"><a href="/">首页</a><span>/</span><a href="/archives/">文章</a><span>/</span> 开发与生活</div>
+<header class="post-header"><div class="eyebrow"><a href="/categories/Unity/">Unity</a><span>2026.08.20</span><span>2 分钟阅读</span></div><h1>网格批处理简介</h1><div class="post-author"><span class="mini-avatar">S</span> SuHang <span>·</span> 游戏开发手记</div></header>
+<div class="post-layout"><article class="prose"><p>Batching（批处理）是一种优化 draw calls 的方式，它将相同 Material 的 Mesh 合并在一起，以便 Unity 可以使用更少的渲染状态来渲染它们。批处理可以提高性能、内存效率、并减少 CPu 开销，从而带来更流程的帧率和更好的玩家体验</p>
+<p>批处理有以下限制：</p>
+<ul>
+<li>批处理仅支持 Mesh Renderers。 不支持 Skinned Mesh Renderers</li>
+<li>透明对象批处理可能会受到限制，因为 Unity 在批处理之前会将所有网格从后到前排序</li>
+<li>Unity 无法使用 dynamic batching（动态批处理）将 Transform 组件中使用负缩放的 GameObject 和使用正缩放的 GameObject 进行批处理</li>
+</ul>
+<h3 id="Batch-static-GameObjects"><a href="#Batch-static-GameObjects" class="headerlink" title="Batch static GameObjects"></a>Batch static GameObjects</h3><p>静态批处理会将多个静态网格合并为一个顶点缓冲区和一个索引缓冲区，并使用世界空间坐标。每个缓冲区最多可包含 64,000 个顶点，但 Unity 可以创建多个批次。</p>
+<h4 id="在构建时批量处理静态网格"><a href="#在构建时批量处理静态网格" class="headerlink" title="在构建时批量处理静态网格"></a>在构建时批量处理静态网格</h4><p>要在构建时批处理游戏对象，需要启用 static batching。</p>
+<ol>
+<li><p>Editor &gt; Project Settings &gt; Player 并启用 Statatic Batching.<br><img src="/images/Pasted%20image%2020260820214136.png"></p>
+</li>
+<li><p>在场景视图或层级视图中，选择需要批处理的对象，在 Inspector 窗口中启用 Batching Static。</p>
+<p><img src="/images/Pasted%20image%2020260820214428.png"></p>
+</li>
+</ol>
+<h3 id="Batch-moving-GameObjects"><a href="#Batch-moving-GameObjects" class="headerlink" title="Batch moving GameObjects"></a>Batch moving GameObjects</h3><p>警告：对于大多数用途，不再推荐使用动态批处理，因为 CPU 开销可能大于绘制调用的开销。有关更多信息，请参阅选择绘制调用优化方法。<br>动态批处理仅建议在低端设备上使用。它在运行时执行以下操作：</p>
+<ul>
+<li>在 CPU 而非 GPU 上将网格顶点变换到世界空间，并将它们分组到一次绘制调用中</li>
+<li>对于运行时生成的几何体，如粒子、线条和轨迹，Unity 会将所有网格合并到一个顶点缓冲区中，然后为每个网格提交一次绘制调用。这与静态批处理类似。</li>
+</ul>
+<div class="post-tags"><a href="/tags/Unity/"># Unity</a><a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"># 性能优化</a><a href="/tags/Batching/"># Batching</a></div><nav class="post-pagination" aria-label="相邻文章"><a href="/2026/08/20/Introduction_to_Optimizing_Draw_Calls/"><small>← 上一篇</small>优化 draw calls 简介</a><a href="/2026/08/19/Optimizing_GPU_Usage/"><small>下一篇 →</small>优化GPU使用</a></nav></article><aside class="post-toc"><div class="panel-top">本篇导航 <span>↙</span></div><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Batch-static-GameObjects"><span class="toc-text">Batch static GameObjects</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9C%A8%E6%9E%84%E5%BB%BA%E6%97%B6%E6%89%B9%E9%87%8F%E5%A4%84%E7%90%86%E9%9D%99%E6%80%81%E7%BD%91%E6%A0%BC"><span class="toc-text">在构建时批量处理静态网格</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Batch-moving-GameObjects"><span class="toc-text">Batch moving GameObjects</span></a></li></ol><a href="#main" class="back-top">返回顶部 ↑</a></aside></div>
+</main>
+  <footer class="footer"><div class="footer-red"><div class="shell"><a class="footer-brand" href="/">苏杭小站</a><span>每一份热爱，都值得存档。</span><a href="#main" class="footer-top" aria-label="返回页面顶部">↑</a></div></div><div class="footer-links shell"><div><a href="/archives/">文章归档</a><a href="/categories/">分类索引</a><a href="/tags/">全部标签</a><a href="/about/">关于与联系</a></div><span>© 2026 SuHang · 用 Hexo 记录日常</span></div></footer>
+  <dialog id="search-dialog" aria-labelledby="search-title" data-index="/journal-search.json" data-root="/">
+    <div class="search-head"><label id="search-title" for="search-input">发现一篇好文章</label><button class="search-close" aria-label="关闭搜索">×</button></div>
+    <input id="search-input" type="search" placeholder="搜索 Unity、热更新、C#…" autocomplete="off">
+    <p id="search-status" role="status">输入关键词，探索所有文章。</p><div id="search-results"></div>
+  </dialog>
+  <dialog id="image-dialog" aria-label="查看文章配图"><button class="image-close" aria-label="关闭配图">×</button><img alt=""><p></p></dialog>
+  <button class="floating-top" aria-label="回到顶部" title="回到顶部">↑</button><div class="toast" role="status"></div>
+  <script src="/assets/journal.js" defer></script>
+</body></html>
