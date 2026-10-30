@@ -1,142 +1,141 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>苏杭小站</title>
-  <meta name="description" content="苏杭的游戏开发手记，记录 Unity、C#、技术探索与生活。">
-  <meta name="theme-color" content="#e60012"><meta name="color-scheme" content="only light">
-  <link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="/assets/journal.css">
-  <link rel="canonical" href="https://lshgame.com/page/6/index.html">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#F6F7F5">
+<script>
+(function () {
+  var KEY = 'lumen-theme', root = document.documentElement, mode = null;
+  root.classList.add('js');
+  try { mode = localStorage.getItem(KEY); } catch (e) {}
+  if (mode !== 'light' && mode !== 'dark') {
+    mode = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+  root.setAttribute('data-theme', mode);
+  var meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.setAttribute('content', mode === 'dark' ? '#131922' : '#F6F7F5');
+})();
+</script>
+
+<title>第 6 页 - 苏杭小站</title>
+<meta name="description" content="苏杭的游戏开发手记，记录 Unity、C#、技术探索与生活。">
+<link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/lumen.css">
+<link rel="canonical" href="https://lshgame.com/page/6/index.html">
 <meta name="generator" content="Hexo 7.3.0"></head>
-<body>
-  
-  <a class="skip" href="#main">跳转到内容</a>
-  <header class="header"><div class="header-inner">
-    <a class="brand" href="/" aria-label="苏杭小站首页"><span class="brand-word">苏杭小站</span><small>SUHANG'S JOURNAL</small></a>
-    <nav id="main-nav" aria-label="主导航">
-      <a class="active" aria-current="page" href="/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10h-6v-7H9v7H3Z"/></svg>首页</a>
-      <a class="" href="/archives/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h5"/></svg>文章手记</a>
-      <a class="" href="/categories/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/></svg>探索分类</a>
-      <a class="" href="/about/"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21v-3a8 8 0 0 1 16 0v3"/></svg>关于我</a>
-    </nav>
-    <div class="header-actions"><button class="search-open" aria-label="搜索文章"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 6 6"/></svg><span>搜索</span></button><button class="menu-toggle" aria-label="打开导航" aria-controls="main-nav" aria-expanded="false"><span></span><span></span><span></span></button></div>
-  </div></header>
-  <main id="main" class="home-main">
-<div class="welcome-strip shell"><span>你好，欢迎来到我的小小世界。</span><span>GAME DEV <i>·</i> CODE <i>·</i> LIFE</span></div>
-<section class="hero" aria-label="精选探索" aria-roledescription="轮播">
-  <div class="hero-slides">
-    <article id="hero-0" class="hero-slide hero-adventure" aria-label="1 / 3：创造自己的世界">
-      <img class="hero-image" src="/assets/art/world-day.webp" width="1448" height="1086" alt="漂浮在云间的森林岛屿，小小探险者走向发光的传送门" fetchpriority="high">
-      <div class="hero-content shell"><div class="hero-copy"><span class="hero-label">每一段探索，都有新的可能</span><p class="hero-english">LET'S MAKE SOMETHING FUN.</p><h1>保持热爱，<br>创造自己的<span>世界。</span></h1><p class="hero-description">我是苏杭，一名游戏开发者。<br>在代码里创造乐趣，在生活里收集灵感。</p><a class="button primary" href="#latest">开启探索之旅 <span>→</span></a><span class="hero-footnote">GAME DEVELOPMENT & A LITTLE BIT OF LIFE</span></div></div>
-      <div class="hero-stamp" aria-hidden="true"><span>好奇心</span><b>永不下线</b><small>KEEP EXPLORING</small></div>
-    </article>
-    <article id="hero-1" class="hero-slide hero-code" aria-label="2 / 3：代码背后的想象力" hidden>
-      <img class="hero-image" src="/assets/art/cover-code.webp" width="1200" height="800" alt="充满想象力的开发者工作空间" loading="lazy">
-      <div class="hero-content shell"><div class="hero-copy"><span class="hero-label">把遇到的问题，写成成长的记录</span><p class="hero-english">BEHIND EVERY LITTLE WORLD.</p><h2>不止是代码，<br>更是<span>想象力。</span></h2><p class="hero-description">从 Unity 到 C#，从原理到实践。<br>拆解每一个问题，积累每一次进步。</p><a class="button primary" href="/categories/">探索技术手记 <span>→</span></a><span class="hero-footnote">LEARN · BUILD · PLAY · REPEAT</span></div></div>
-    </article>
-    <article id="hero-2" class="hero-slide hero-life" aria-label="3 / 3：收藏生活里的小美好" hidden>
-      <img class="hero-image" src="/assets/art/cover-life.webp" width="1200" height="800" alt="温暖安静的日常生活场景" loading="lazy">
-      <div class="hero-content shell"><div class="hero-copy"><span class="hero-label">游戏之外，也有值得记录的风景</span><p class="hero-english">LIFE IS AN OPEN WORLD.</p><h2>给日常，<br>留一个<span>存档点。</span></h2><p class="hero-description">一些思考，一点灵感，还有平凡的快乐。<br>时间匆匆流逝，希望留下点什么。</p><a class="button primary" href="/about/">认识一下我 <span>→</span></a><span class="hero-footnote">SMALL MOMENTS, GOOD MEMORIES.</span></div></div>
-    </article>
-  </div>
-  <div class="hero-controls"><button class="hero-prev" aria-label="上一张精选">‹</button><span class="hero-counter" aria-live="polite"><b>01</b> / 03</span><button class="hero-next" aria-label="下一张精选">›</button></div>
+<body data-mermaid="/assets/mermaid.min.js">
+
+<a class="skip-link" href="#main">跳到正文</a>
+<header class="site-header" id="site-header"><div class="container header-inner">
+<a class="brand" href="/" aria-label="苏杭小站 首页"><svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="2" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 3v26M3 16h26" stroke="var(--c-grid)" stroke-width="1.5" stroke-dasharray="2 2"/><rect x="6" y="6" width="8" height="8" fill="var(--c-accent)"/></svg><span class="brand-name">苏杭小站</span></a>
+<nav class="site-nav" id="site-nav" aria-label="主导航"><ul>
+
+<li><a href="/" aria-current="page">首页</a></li>
+
+<li><a href="/archives/">文章手记</a></li>
+
+<li><a href="/categories/">探索分类</a></li>
+
+<li><a href="/about/">关于我</a></li>
+
+</ul></nav>
+<div class="header-actions">
+<button class="icon-btn search-btn" type="button" aria-label="搜索文章" aria-haspopup="dialog" aria-controls="search-dialog" aria-keyshortcuts="/ Control+K Meta+K"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg><span class="label">搜索</span><kbd aria-hidden="true">/</kbd></button>
+<button class="icon-btn theme-toggle" type="button" aria-pressed="false" aria-label="夜间模式" title="切换到夜间模式"><svg class="icon-moon-line" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg><svg class="icon-moon-fill" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/><circle cx="18" cy="5" r="1.2"/><circle cx="21" cy="9" r=".8"/></svg></button>
+<button class="icon-btn menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="导航菜单"><svg class="icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+</div></div></header>
+
+<main id="main" tabindex="-1">
+<div class="container">
+
+<div class="home-layout is-paged"><section class="recent-posts" aria-labelledby="recent-title"><div class="section-head"><h1 id="recent-title">最近写下</h1><span>第 6 页，共 8 页</span></div><ol class="post-list">
+<li class="post-item"><div class="post-date"><time datetime="2025-07-14"><span class="md">7月14日</span></time><span class="y">2025</span></div>
+<div class="post-info"><h3 class="post-title"><a href="/2025/07/14/Unity_Preload_System_Design_and_Implementation/">Unity 预加载系统设计与实现</a></h3>
+<p class="post-excerpt">概述最近在开发一个微信小游戏，因为是 3D + 关卡制的，并且希望保证一个流畅的游戏体验，希望在关卡切换的时候没有 loading 过程，因此设计了一个预加载系统。 系统架构设计核心组件预加载系统主要由三个核心组件构成： PreloadC…</p>
+<div class="post-meta"><a class="meta-cat" href="/categories/Unity/">Unity</a>
+<span class="meta-tags"><a href="/tags/%E4%BC%98%E5%8C%96/">#优化</a><a href="/tags/Unity/">#Unity</a></span>
+<span>约 46 分钟读完</span></div></div></li>
+
+<li class="post-item"><div class="post-date"><time datetime="2025-06-17"><span class="md">6月17日</span></time><span class="y">2025</span></div>
+<div class="post-info"><h3 class="post-title"><a href="/2025/06/17/Configuring_ClaudeCode_MCP/">ClaudeCode配置MCP</a></h3>
+<p class="post-excerpt">配置方法方法一：使用命令行（推荐）Claude 提供了专门的命令行工具来管理 MCP 服务器： 12345678# 查看帮助claude mcp --help# 列出所有配置的服务器claude mcp list# 获取特定服务器详情cl…</p>
+<div class="post-meta"><a class="meta-cat" href="/categories/AI-Code/">AI Code</a>
+<span class="meta-tags"><a href="/tags/ClaudeCode/">#ClaudeCode</a></span>
+<span>约 10 分钟读完</span></div></div></li>
+
+<li class="post-item"><div class="post-date"><time datetime="2025-06-17"><span class="md">6月17日</span></time><span class="y">2025</span></div>
+<div class="post-info"><h3 class="post-title"><a href="/2025/06/17/Configuring_Clash_Proxy_in_WSL/">wsl中配置clash代理</a></h3>
+<p class="post-excerpt">概述最近在本地部署 Claude Code，因为要下载需要代理，所以本教程详细介绍如何在 WSL (Windows Subsystem for Linux) 中配置 Clash for Windows 代理，实现 WSL 环境下的网络代理…</p>
+<div class="post-meta"><a class="meta-cat" href="/categories/AI-Code/">AI Code</a>
+<span class="meta-tags"><a href="/tags/WSL/">#WSL</a></span>
+<span>约 7 分钟读完</span></div></div></li>
+
+<li class="post-item"><div class="post-date"><time datetime="2025-05-25"><span class="md">5月25日</span></time><span class="y">2025</span></div>
+<div class="post-info"><h3 class="post-title"><a href="/2025/05/25/Soft_Skills_Beyond_Code_Chapter_3/">软技能-代码之外的生存指南_其三</a></h3>
+<p class="post-excerpt">学会如何与人打交道作为一名软件开发者，你的工作就是与人打交道 每个人都希望自己很重要每个人都希望自己很重要，一旦你贬低他人，削弱他们的成就感，在某种程度上就如同切断了他们的氧气补给，获得的回馈就是愤怒和敌意。 我们常常容易犯的一项错误就是…</p>
+<div class="post-meta"><a class="meta-cat" href="/categories/%E8%AF%BB%E4%B9%A6/">读书</a>
+<span class="meta-tags"><a href="/tags/%E8%BD%AF%E6%8A%80%E8%83%BD%E4%BB%A3%E7%A0%81%E4%B9%8B%E5%A4%96%E7%9A%84%E7%94%9F%E5%AD%98%E6%8C%87%E5%8D%97/">#软技能代码之外的生存指南</a></span>
+<span>约 3 分钟读完</span></div></div></li>
+
+<li class="post-item"><div class="post-date"><time datetime="2025-05-24"><span class="md">5月24日</span></time><span class="y">2025</span></div>
+<div class="post-info"><h3 class="post-title"><a href="/2025/05/24/GameFramework_Lifecycle/">GameFramework生命周期</a></h3>
+<p class="post-excerpt">最近又在写一些游戏项目，想要看一些有什么方便开发的框架，来来回回发现 GameFramework 依然是绕不过去的一个框架。本章主要是分析一下 GameFramework 的生命周期。 Unity 生命周期先看一下常见的 Unity 的生…</p>
+<div class="post-meta"><a class="meta-cat" href="/categories/Unity/">Unity</a>
+<span class="meta-tags"><a href="/tags/GameFramework/">#GameFramework</a></span>
+<span>约 16 分钟读完</span></div></div></li>
+
+<li class="post-item"><div class="post-date"><time datetime="2025-05-18"><span class="md">5月18日</span></time><span class="y">2025</span></div>
+<div class="post-info"><h3 class="post-title"><a href="/2025/05/18/Soft_Skills_Beyond_Code_Chapter_2/">软技能-代码之外的生存指南-其二</a></h3>
+<p class="post-excerpt">像经营企业一样，经营自己的职业生涯拥有商业心态 大多数软件开发人员并不能把自己的软件开发事业当作一桩生意来看待 为了谋生的写代码和开一个小铺子的老板，没有本质差别，都是将自己的服务推销出去 我们为公司工作，但是技能和生意都还是自己的，我们…</p>
+<div class="post-meta"><a class="meta-cat" href="/categories/%E8%AF%BB%E4%B9%A6/">读书</a>
+<span class="meta-tags"><a href="/tags/%E8%BD%AF%E6%8A%80%E8%83%BD%E4%BB%A3%E7%A0%81%E4%B9%8B%E5%A4%96%E7%9A%84%E7%94%9F%E5%AD%98%E6%8C%87%E5%8D%97/">#软技能代码之外的生存指南</a></span>
+<span>约 6 分钟读完</span></div></div></li>
+
+<li class="post-item"><div class="post-date"><time datetime="2025-05-13"><span class="md">5月13日</span></time><span class="y">2025</span></div>
+<div class="post-info"><h3 class="post-title"><a href="/2025/05/13/Unity%20Component%20Canvas_CanvasScaler%20Parameter%20Explanation/">Unity组件Canvas_CanvasScaler参数详解</a></h3>
+<p class="post-excerpt">CanvasRender Mode: 画布中渲染模式 Screen Space - Overlay: 这种渲染模式将 UI 元素放在最上级渲染，不需要相机也可以渲染 Screen Space - Camera: 这种渲染模式下，Canva…</p>
+<div class="post-meta"><a class="meta-cat" href="/categories/Unity/">Unity</a>
+<span class="meta-tags"><a href="/tags/%E4%BC%98%E5%8C%96%EF%BC%8CUGUI/">#优化，UGUI</a></span>
+<span>约 2 分钟读完</span></div></div></li>
+
+<li class="post-item"><div class="post-date"><time datetime="2025-05-12"><span class="md">5月12日</span></time><span class="y">2025</span></div>
+<div class="post-info"><h3 class="post-title"><a href="/2025/05/12/Performance%20Optimization%20-%20Static%20Resource%20Optimization%20-%20Music%20and%20Sound%20Effect%20Resources/">性能优化-静态资源优化-音乐音效资源</a></h3>
+<p class="post-excerpt">音频声道如果音频为双声道音频且左右声道音频完全相同，可以启用 Force To Mono 强行将音频改为单声道音频 音频采样率移动平台建议 22050 Hz 加载方式Decompress On Load：建议压缩后大小低于 200 kb …</p>
+<div class="post-meta"><a class="meta-cat" href="/categories/Unity/">Unity</a>
+<span class="meta-tags"><a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">#性能优化</a></span>
+<span>约 3 分钟读完</span></div></div></li>
+</ol>
+<nav class="pagination" aria-label="文章分页">
+<a class="page-step" rel="prev" href="/page/5/"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m14 6-6 6 6 6"/></svg>上一页</a>
+<ol class="page-cells"><li><a href="/" aria-label="第 1 页">1</a></li><li><span aria-hidden="true">…</span></li><li><a href="/page/5/" aria-label="第 5 页">5</a></li><li><a href="/page/6/" aria-current="page" aria-label="第 6 页，当前页">6</a></li><li><a href="/page/7/" aria-label="第 7 页">7</a></li><li><a href="/page/8/" aria-label="第 8 页">8</a></li></ol>
+<span class="page-count">6 / 8</span>
+<a class="page-step" rel="next" href="/page/7/">下一页<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m10 6 6 6-6 6"/></svg></a>
+</nav>
 </section>
-<div class="feature-nav shell" role="group" aria-label="选择精选内容">
-  
-  <button class="feature-tab selected" data-slide="0" aria-controls="hero-0" aria-pressed="true"><img src="/assets/art/world-day.webp" width="120" height="76" alt=""><span><strong>创造自己的世界</strong><small>游戏开发 · 无限可能</small></span><b aria-hidden="true">›</b></button>
-  
-  <button class="feature-tab " data-slide="1" aria-controls="hero-1" aria-pressed="false"><img src="/assets/art/cover-code.webp" width="120" height="76" alt=""><span><strong>代码背后的想象力</strong><small>技术探索 · 持续升级</small></span><b aria-hidden="true">›</b></button>
-  
-  <button class="feature-tab " data-slide="2" aria-controls="hero-2" aria-pressed="false"><img src="/assets/art/cover-life.webp" width="120" height="76" alt=""><span><strong>生活的每一个存档点</strong><small>日常随笔 · 保持好奇</small></span><b aria-hidden="true">›</b></button>
-  
-</div>
-<div class="news-strip shell"><span class="news-label">小站动态 <b>NEWS</b></span><time datetime="2026-10-16">2026.10.16</time><a href="/2026/10/16/post-mvae8joc/">新手记已送达：与智能体的协作<span>›</span></a></div>
-<section class="latest-section shell" id="latest">
-  <div class="section-heading"><div><span class="section-kicker">LATEST JOURNAL</span><h2>新鲜出炉的手记<span class="heading-dot">.</span></h2></div><a class="section-more" href="/archives/">全部文章 <span>→</span></a></div>
-  <div class="category-tabs"><a class="selected" aria-current="page" href="/#latest">全部手记</a><a href="/categories/Unity/">Unity</a><a href="/categories/%E7%BC%96%E7%A8%8B/">编程</a><a href="/categories/AI-Code/">AI Code</a><a href="/categories/AI/">AI</a><a href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a><a class="all-topics" href="/tags/">更多标签 +</a></div>
-  <div class="article-grid">
-
-  <article class="article-card">
-    <a class="card-art" href="/2025/07/14/Unity_Preload_System_Design_and_Implementation/" aria-label="阅读：Unity 预加载系统设计与实现"><img src="/assets/art/cover-world.webp" width="1200" height="800" alt="" loading="lazy" decoding="async"><span class="art-label">Unity</span><span class="art-arrow" aria-hidden="true">↗</span></a>
-    <div class="card-body"><div class="eyebrow"><time datetime="2025-07-14">2025.07.14</time><span>60 分钟阅读</span></div>
-    <h3><a href="/2025/07/14/Unity_Preload_System_Design_and_Implementation/">Unity 预加载系统设计与实现</a></h3>
-    <p>概述最近在开发一个微信小游戏，因为是 3D + 关卡制的，并且希望保证一个流畅的游戏体验，希望在关卡切换的时候没有 loading 过程，因此设计了一个预...</p>
-    <a class="card-read" href="/2025/07/14/Unity_Preload_System_Design_and_Implementation/" aria-label="继续阅读：Unity 预加载系统设计与实现">继续阅读 <span>→</span></a></div>
-  </article>
-
-  <article class="article-card">
-    <a class="card-art" href="/2025/06/17/Configuring_ClaudeCode_MCP/" aria-label="阅读：ClaudeCode配置MCP"><img src="/assets/art/cover-orbit.webp" width="1200" height="800" alt="" loading="lazy" decoding="async"><span class="art-label">AI Code</span><span class="art-arrow" aria-hidden="true">↗</span></a>
-    <div class="card-body"><div class="eyebrow"><time datetime="2025-06-17">2025.06.17</time><span>10 分钟阅读</span></div>
-    <h3><a href="/2025/06/17/Configuring_ClaudeCode_MCP/">ClaudeCode配置MCP</a></h3>
-    <p>配置方法方法一：使用命令行（推荐）Claude 提供了专门的命令行工具来管理 MCP 服务器： 12345678# 查看帮助claude mcp --he...</p>
-    <a class="card-read" href="/2025/06/17/Configuring_ClaudeCode_MCP/" aria-label="继续阅读：ClaudeCode配置MCP">继续阅读 <span>→</span></a></div>
-  </article>
-
-  <article class="article-card">
-    <a class="card-art" href="/2025/06/17/Configuring_Clash_Proxy_in_WSL/" aria-label="阅读：wsl中配置clash代理"><img src="/assets/art/cover-orbit.webp" width="1200" height="800" alt="" loading="lazy" decoding="async"><span class="art-label">AI Code</span><span class="art-arrow" aria-hidden="true">↗</span></a>
-    <div class="card-body"><div class="eyebrow"><time datetime="2025-06-17">2025.06.17</time><span>7 分钟阅读</span></div>
-    <h3><a href="/2025/06/17/Configuring_Clash_Proxy_in_WSL/">wsl中配置clash代理</a></h3>
-    <p>概述最近在本地部署 Claude Code，因为要下载需要代理，所以本教程详细介绍如何在 WSL (Windows Subsystem for Linux...</p>
-    <a class="card-read" href="/2025/06/17/Configuring_Clash_Proxy_in_WSL/" aria-label="继续阅读：wsl中配置clash代理">继续阅读 <span>→</span></a></div>
-  </article>
-
-  <article class="article-card">
-    <a class="card-art" href="/2025/05/25/Soft_Skills_Beyond_Code_Chapter_3/" aria-label="阅读：软技能-代码之外的生存指南_其三"><img src="/assets/art/cover-life.webp" width="1200" height="800" alt="" loading="lazy" decoding="async"><span class="art-label">读书</span><span class="art-arrow" aria-hidden="true">↗</span></a>
-    <div class="card-body"><div class="eyebrow"><time datetime="2025-05-25">2025.05.25</time><span>3 分钟阅读</span></div>
-    <h3><a href="/2025/05/25/Soft_Skills_Beyond_Code_Chapter_3/">软技能-代码之外的生存指南_其三</a></h3>
-    <p>学会如何与人打交道作为一名软件开发者，你的工作就是与人打交道 每个人都希望自己很重要每个人都希望自己很重要，一旦你贬低他人，削弱他们的成就感，在某种程度上...</p>
-    <a class="card-read" href="/2025/05/25/Soft_Skills_Beyond_Code_Chapter_3/" aria-label="继续阅读：软技能-代码之外的生存指南_其三">继续阅读 <span>→</span></a></div>
-  </article>
-
-  <article class="article-card">
-    <a class="card-art" href="/2025/05/24/GameFramework_Lifecycle/" aria-label="阅读：GameFramework生命周期"><img src="/assets/art/cover-world.webp" width="1200" height="800" alt="" loading="lazy" decoding="async"><span class="art-label">Unity</span><span class="art-arrow" aria-hidden="true">↗</span></a>
-    <div class="card-body"><div class="eyebrow"><time datetime="2025-05-24">2025.05.24</time><span>17 分钟阅读</span></div>
-    <h3><a href="/2025/05/24/GameFramework_Lifecycle/">GameFramework生命周期</a></h3>
-    <p>最近又在写一些游戏项目，想要看一些有什么方便开发的框架，来来回回发现 GameFramework 依然是绕不过去的一个框架。本章主要是分析一下 GameF...</p>
-    <a class="card-read" href="/2025/05/24/GameFramework_Lifecycle/" aria-label="继续阅读：GameFramework生命周期">继续阅读 <span>→</span></a></div>
-  </article>
-
-  <article class="article-card">
-    <a class="card-art" href="/2025/05/18/Soft_Skills_Beyond_Code_Chapter_2/" aria-label="阅读：软技能-代码之外的生存指南-其二"><img src="/assets/art/cover-life.webp" width="1200" height="800" alt="" loading="lazy" decoding="async"><span class="art-label">读书</span><span class="art-arrow" aria-hidden="true">↗</span></a>
-    <div class="card-body"><div class="eyebrow"><time datetime="2025-05-18">2025.05.18</time><span>7 分钟阅读</span></div>
-    <h3><a href="/2025/05/18/Soft_Skills_Beyond_Code_Chapter_2/">软技能-代码之外的生存指南-其二</a></h3>
-    <p>像经营企业一样，经营自己的职业生涯拥有商业心态 大多数软件开发人员并不能把自己的软件开发事业当作一桩生意来看待 为了谋生的写代码和开一个小铺子的老板，没有...</p>
-    <a class="card-read" href="/2025/05/18/Soft_Skills_Beyond_Code_Chapter_2/" aria-label="继续阅读：软技能-代码之外的生存指南-其二">继续阅读 <span>→</span></a></div>
-  </article>
-
-  <article class="article-card">
-    <a class="card-art" href="/2025/05/13/Unity%20Component%20Canvas_CanvasScaler%20Parameter%20Explanation/" aria-label="阅读：Unity组件Canvas_CanvasScaler参数详解"><img src="/assets/art/cover-world.webp" width="1200" height="800" alt="" loading="lazy" decoding="async"><span class="art-label">Unity</span><span class="art-arrow" aria-hidden="true">↗</span></a>
-    <div class="card-body"><div class="eyebrow"><time datetime="2025-05-13">2025.05.13</time><span>2 分钟阅读</span></div>
-    <h3><a href="/2025/05/13/Unity%20Component%20Canvas_CanvasScaler%20Parameter%20Explanation/">Unity组件Canvas_CanvasScaler参数详解</a></h3>
-    <p> CanvasRender Mode: 画布中渲染模式 Screen Space - Overlay: 这种渲染模式将 UI 元素放在最上级渲染，不需要相...</p>
-    <a class="card-read" href="/2025/05/13/Unity%20Component%20Canvas_CanvasScaler%20Parameter%20Explanation/" aria-label="继续阅读：Unity组件Canvas_CanvasScaler参数详解">继续阅读 <span>→</span></a></div>
-  </article>
-
-  <article class="article-card">
-    <a class="card-art" href="/2025/05/12/Performance%20Optimization%20-%20Static%20Resource%20Optimization%20-%20Music%20and%20Sound%20Effect%20Resources/" aria-label="阅读：性能优化-静态资源优化-音乐音效资源"><img src="/assets/art/cover-code.webp" width="1200" height="800" alt="" loading="lazy" decoding="async"><span class="art-label">Unity</span><span class="art-arrow" aria-hidden="true">↗</span></a>
-    <div class="card-body"><div class="eyebrow"><time datetime="2025-05-12">2025.05.12</time><span>3 分钟阅读</span></div>
-    <h3><a href="/2025/05/12/Performance%20Optimization%20-%20Static%20Resource%20Optimization%20-%20Music%20and%20Sound%20Effect%20Resources/">性能优化-静态资源优化-音乐音效资源</a></h3>
-    <p>音频声道如果音频为双声道音频且左右声道音频完全相同，可以启用 Force To Mono 强行将音频改为单声道音频 音频采样率移动平台建议 22050 H...</p>
-    <a class="card-read" href="/2025/05/12/Performance%20Optimization%20-%20Static%20Resource%20Optimization%20-%20Music%20and%20Sound%20Effect%20Resources/" aria-label="继续阅读：性能优化-静态资源优化-音乐音效资源">继续阅读 <span>→</span></a></div>
-  </article>
-
-</div>
-
-  <nav class="pagination" aria-label="文章分页"><a class="extend prev" rel="prev" href="/page/5/">← 上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/7/">下一页 →</a></nav>
-</section>
-<section class="pickup-section"><div class="shell"><div class="section-heading"><div><span class="section-kicker">PICK YOUR NEXT ADVENTURE</span><h2>下一站，探索什么？<span class="heading-dot">.</span></h2></div><a class="section-more" href="/categories/">全部分类 <span>→</span></a></div>
-  <div class="topic-grid"><a class="topic-card topic-0" href="/categories/Unity/"><img src="/assets/art/cover-world.webp" width="1200" height="800" alt="" loading="lazy"><div><span>EXPLORE / 01</span><h3>Unity</h3><p>24 篇探索手记 <b>→</b></p></div></a><a class="topic-card topic-1" href="/categories/%E7%BC%96%E7%A8%8B/"><img src="/assets/art/cover-code.webp" width="1200" height="800" alt="" loading="lazy"><div><span>EXPLORE / 02</span><h3>编程</h3><p>12 篇探索手记 <b>→</b></p></div></a><a class="topic-card topic-2" href="/categories/AI-Code/"><img src="/assets/art/cover-orbit.webp" width="1200" height="800" alt="" loading="lazy"><div><span>EXPLORE / 03</span><h3>AI Code</h3><p>5 篇探索手记 <b>→</b></p></div></a></div>
-</div></section>
-<section class="about-banner shell"><div class="about-emblem" aria-hidden="true">S<span>+</span></div><div><span class="section-kicker">HELLO, FELLOW EXPLORER!</span><h2>一个开发者，也是一个永远的玩家。</h2><p>用代码构建世界，用文字存档生活。欢迎来到我的第 57 个灵感之后。</p></div><a class="button outline" href="/about/">更多关于我 <span>→</span></a></section>
+<aside class="aside" aria-label="站点索引"><section><h2>分类</h2><ul class="cat-list"><li><a href="/categories/Unity/"><span>Unity</span><span class="n">24</span></a></li><li><a href="/categories/%E7%BC%96%E7%A8%8B/"><span>编程</span><span class="n">12</span></a></li><li><a href="/categories/AI-Code/"><span>AI Code</span><span class="n">5</span></a></li><li><a href="/categories/%E8%AF%BB%E4%B9%A6/"><span>读书</span><span class="n">3</span></a></li><li><a href="/categories/%E9%9A%8F%E7%AC%94/"><span>随笔</span><span class="n">3</span></a></li><li><a href="/categories/AI/"><span>AI</span><span class="n">3</span></a></li><li><a href="/categories/%E4%BE%BF%E6%8D%B7%E5%B7%A5%E4%BD%9C/"><span>便捷工作</span><span class="n">1</span></a></li><li><a href="/categories/%E6%8A%80%E6%9C%AF/"><span>技术</span><span class="n">1</span></a></li></ul><a class="aside-more" href="/categories/">全部分类</a></section>
+<section><h2>常用标签</h2><div class="tag-cloud"><a class="w3" href="/tags/Unity/">#Unity</a><a class="w3" href="/tags/C/">#C#</a><a class="w3" href="/tags/%E7%83%AD%E6%9B%B4%E6%96%B0/">#热更新</a><a class="w2" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">#性能优化</a><a class="w2" href="/tags/%E8%BD%AF%E6%8A%80%E8%83%BD%E4%BB%A3%E7%A0%81%E4%B9%8B%E5%A4%96%E7%9A%84%E7%94%9F%E5%AD%98%E6%8C%87%E5%8D%97/">#软技能代码之外的生存指南</a><a class="w2" href="/tags/YooAssets/">#YooAssets</a><a class="w1" href="/tags/%E4%BC%98%E5%8C%96%EF%BC%8CUGUI/">#优化，UGUI</a><a class="w1" href="/tags/ClaudeCode/">#ClaudeCode</a><a class="w1" href="/tags/CSharp/">#CSharp</a><a class="w1" href="/tags/DOTS/">#DOTS</a><a class="w1" href="/tags/MCP/">#MCP</a><a class="w1" href="/tags/UGUI/">#UGUI</a></div></section>
+<section class="aside-about"><h2>关于这里</h2><p>苏杭的游戏开发手记，记录 Unity、C#、技术探索与生活。</p><a href="/about/">关于我与联系方式</a></section></aside>
+</div></div>
 </main>
-  <footer class="footer"><div class="footer-red"><div class="shell"><a class="footer-brand" href="/">苏杭小站</a><span>每一份热爱，都值得存档。</span><a href="#main" class="footer-top" aria-label="返回页面顶部">↑</a></div></div><div class="footer-links shell"><div><a href="/archives/">文章归档</a><a href="/categories/">分类索引</a><a href="/tags/">全部标签</a><a href="/about/">关于与联系</a></div><span>© 2026 SuHang · 用 Hexo 记录日常</span></div></footer>
-  <dialog id="search-dialog" aria-labelledby="search-title" data-index="/journal-search.json" data-root="/">
-    <div class="search-head"><label id="search-title" for="search-input">发现一篇好文章</label><button class="search-close" aria-label="关闭搜索">×</button></div>
-    <input id="search-input" type="search" placeholder="搜索 Unity、热更新、C#…" autocomplete="off">
-    <p id="search-status" role="status">输入关键词，探索所有文章。</p><div id="search-results"></div>
-  </dialog>
-  <dialog id="image-dialog" aria-label="查看文章配图"><button class="image-close" aria-label="关闭配图">×</button><img alt=""><p></p></dialog>
-  <button class="floating-top" aria-label="回到顶部" title="回到顶部">↑</button><div class="toast" role="status"></div>
-  <script src="/assets/journal.js" defer></script>
-</body></html>
+
+<footer class="site-footer"><div class="container footer-inner"><div><a class="footer-brand" href="/">苏杭小站</a><p class="footer-slogan">时间匆匆流逝，希望留下点什么。</p></div>
+<nav aria-label="页脚导航"><ul class="footer-links"><li><a href="/archives/">文章归档</a></li><li><a href="/categories/">分类索引</a></li><li><a href="/tags/">全部标签</a></li><li><a href="/about/">关于与联系</a></li></ul></nav>
+<div class="footer-bottom"><span>© 2024–2026 SuHang，用 Hexo 记录日常</span><a class="back-top" href="#main">回到顶部 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 20V4m-6 6 6-6 6 6"/></svg></a></div></div></footer>
+
+<dialog class="search-dialog" id="search-dialog" aria-labelledby="search-title" data-index="/journal-search.json" data-root="/">
+<h2 id="search-title" class="visually-hidden">搜索文章</h2>
+<form class="search-bar" role="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg><label for="search-input" class="visually-hidden">搜索关键词</label><input id="search-input" type="search" placeholder="搜索标题、标签或正文" autocomplete="off" spellcheck="false" aria-describedby="search-status" aria-controls="search-results"><button type="button" class="search-close" aria-label="关闭搜索">Esc</button></form>
+<p class="search-status" id="search-status" role="status" aria-live="polite"></p><ul class="search-results" id="search-results" aria-label="搜索结果"></ul>
+<div class="search-foot" aria-hidden="true"><span><kbd>↑</kbd> <kbd>↓</kbd> 选择</span><span><kbd>Enter</kbd> 打开</span><span><kbd>Esc</kbd> 关闭</span></div>
+</dialog>
+
+<dialog class="image-dialog" id="image-dialog" aria-label="查看大图">
+<button class="image-close" type="button" aria-label="关闭大图"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+<img alt=""><p hidden></p>
+</dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="/assets/lumen.js" defer></script>
+</body>
+</html>

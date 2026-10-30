@@ -1,33 +1,56 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>软技能-代码之外的生存指南_其三 · 苏杭小站</title>
-  <meta name="description" content="学会如何与人打交道作为一名软件开发者，你的工作就是与人打交道
-每个人都希望自己很重要每个人都希望自己很重要，一旦你贬低他人，削弱他们的成就感，在某种程度上就如同切断了他们的氧气补给，获得的回馈就是愤怒和敌意。
-我们常常容易犯的一项错误就是，轻率地否决同事的想法，以便于可以提出自己的想法。
-永远...">
-  <meta name="theme-color" content="#e60012"><meta name="color-scheme" content="only light">
-  <link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="/assets/journal.css">
-  <link rel="canonical" href="https://lshgame.com/2025/05/25/Soft_Skills_Beyond_Code_Chapter_3/">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#F6F7F5">
+<script>
+(function () {
+  var KEY = 'lumen-theme', root = document.documentElement, mode = null;
+  root.classList.add('js');
+  try { mode = localStorage.getItem(KEY); } catch (e) {}
+  if (mode !== 'light' && mode !== 'dark') {
+    mode = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+  root.setAttribute('data-theme', mode);
+  var meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.setAttribute('content', mode === 'dark' ? '#131922' : '#F6F7F5');
+})();
+</script>
+
+<title>软技能-代码之外的生存指南_其三 - 苏杭小站</title>
+<meta name="description" content="学会如何与人打交道作为一名软件开发者，你的工作就是与人打交道 每个人都希望自己很重要每个人都希望自己很重要，一旦你贬低他人，削弱他们的成就感，在某种程度上就如同切断了他们的氧气补给，获得的回馈就是愤怒和敌意。 我们常常容易犯的一项错误就是，轻率地否决同事的想法，以便于可以提出自己的想法。 永远不要…">
+<link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/lumen.css">
+<link rel="canonical" href="https://lshgame.com/2025/05/25/Soft_Skills_Beyond_Code_Chapter_3/">
 <meta name="generator" content="Hexo 7.3.0"></head>
-<body>
-  <div class="reading-progress" aria-hidden="true"></div>
-  <a class="skip" href="#main">跳转到内容</a>
-  <header class="header"><div class="header-inner">
-    <a class="brand" href="/" aria-label="苏杭小站首页"><span class="brand-word">苏杭小站</span><small>SUHANG'S JOURNAL</small></a>
-    <nav id="main-nav" aria-label="主导航">
-      <a class=""  href="/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10h-6v-7H9v7H3Z"/></svg>首页</a>
-      <a class="active" href="/archives/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h5"/></svg>文章手记</a>
-      <a class="" href="/categories/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/></svg>探索分类</a>
-      <a class="" href="/about/"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21v-3a8 8 0 0 1 16 0v3"/></svg>关于我</a>
-    </nav>
-    <div class="header-actions"><button class="search-open" aria-label="搜索文章"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 6 6"/></svg><span>搜索</span></button><button class="menu-toggle" aria-label="打开导航" aria-controls="main-nav" aria-expanded="false"><span></span><span></span><span></span></button></div>
-  </div></header>
-  <main id="main" class="shell inner-main"><div class="post-breadcrumb"><a href="/">首页</a><span>/</span><a href="/archives/">文章</a><span>/</span> 开发与生活</div>
-<header class="post-header"><div class="eyebrow"><a href="/categories/%E8%AF%BB%E4%B9%A6/">读书</a><span>2025.05.25</span><span>3 分钟阅读</span></div><h1>软技能-代码之外的生存指南_其三</h1><div class="post-author"><span class="mini-avatar">S</span> SuHang <span>·</span> 游戏开发手记</div></header>
-<div class="post-layout"><article class="prose"><h2 id="学会如何与人打交道"><a href="#学会如何与人打交道" class="headerlink" title="学会如何与人打交道"></a>学会如何与人打交道</h2><p><strong>作为一名软件开发者，你的工作就是与人打交道</strong></p>
+<body data-mermaid="/assets/mermaid.min.js">
+<div class="reading-progress" aria-hidden="true"></div>
+<a class="skip-link" href="#main">跳到正文</a>
+<header class="site-header" id="site-header"><div class="container header-inner">
+<a class="brand" href="/" aria-label="苏杭小站 首页"><svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="2" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 3v26M3 16h26" stroke="var(--c-grid)" stroke-width="1.5" stroke-dasharray="2 2"/><rect x="6" y="6" width="8" height="8" fill="var(--c-accent)"/></svg><span class="brand-name">苏杭小站</span></a>
+<nav class="site-nav" id="site-nav" aria-label="主导航"><ul>
+
+<li><a href="/">首页</a></li>
+
+<li><a href="/archives/" aria-current="page">文章手记</a></li>
+
+<li><a href="/categories/">探索分类</a></li>
+
+<li><a href="/about/">关于我</a></li>
+
+</ul></nav>
+<div class="header-actions">
+<button class="icon-btn search-btn" type="button" aria-label="搜索文章" aria-haspopup="dialog" aria-controls="search-dialog" aria-keyshortcuts="/ Control+K Meta+K"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg><span class="label">搜索</span><kbd aria-hidden="true">/</kbd></button>
+<button class="icon-btn theme-toggle" type="button" aria-pressed="false" aria-label="夜间模式" title="切换到夜间模式"><svg class="icon-moon-line" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg><svg class="icon-moon-fill" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/><circle cx="18" cy="5" r="1.2"/><circle cx="21" cy="9" r=".8"/></svg></button>
+<button class="icon-btn menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="导航菜单"><svg class="icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+</div></div></header>
+
+<main id="main" tabindex="-1">
+<article class="container post-shell"><header class="post-header"><ol class="crumbs" aria-label="位置"><li><a href="/archives/">文章手记</a></li><li><a href="/categories/%E8%AF%BB%E4%B9%A6/">读书</a></li></ol><h1>软技能-代码之外的生存指南_其三</h1><div class="post-meta"><time datetime="2025-05-25">2025 年 5 月 25 日</time><a class="meta-cat" href="/categories/%E8%AF%BB%E4%B9%A6/">读书</a><span class="meta-tags"><a href="/tags/%E8%BD%AF%E6%8A%80%E8%83%BD%E4%BB%A3%E7%A0%81%E4%B9%8B%E5%A4%96%E7%9A%84%E7%94%9F%E5%AD%98%E6%8C%87%E5%8D%97/">#软技能代码之外的生存指南</a></span><span>约 3 分钟读完</span></div></header>
+<nav class="post-toc" aria-labelledby="toc-title"><p class="toc-title" id="toc-title">本文目录</p><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%A6%E4%BC%9A%E5%A6%82%E4%BD%95%E4%B8%8E%E4%BA%BA%E6%89%93%E4%BA%A4%E9%81%93"><span class="toc-text">学会如何与人打交道</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AF%8F%E4%B8%AA%E4%BA%BA%E9%83%BD%E5%B8%8C%E6%9C%9B%E8%87%AA%E5%B7%B1%E5%BE%88%E9%87%8D%E8%A6%81"><span class="toc-text">每个人都希望自己很重要</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B0%B8%E8%BF%9C%E4%B8%8D%E8%A6%81%E6%89%B9%E8%AF%84"><span class="toc-text">永远不要批评</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8D%A2%E4%BD%8D%E6%80%9D%E8%80%83"><span class="toc-text">换位思考</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%81%BF%E5%85%8D%E4%BA%89%E8%AE%BA"><span class="toc-text">避免争论</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E6%8E%A7%E5%88%B6"><span class="toc-text">模式控制</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mermaid"><span class="toc-text">mermaid</span></a></li></ol></nav>
+<div class="post-body"><details class="toc-inline"><summary>本文目录</summary><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%A6%E4%BC%9A%E5%A6%82%E4%BD%95%E4%B8%8E%E4%BA%BA%E6%89%93%E4%BA%A4%E9%81%93"><span class="toc-text">学会如何与人打交道</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AF%8F%E4%B8%AA%E4%BA%BA%E9%83%BD%E5%B8%8C%E6%9C%9B%E8%87%AA%E5%B7%B1%E5%BE%88%E9%87%8D%E8%A6%81"><span class="toc-text">每个人都希望自己很重要</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B0%B8%E8%BF%9C%E4%B8%8D%E8%A6%81%E6%89%B9%E8%AF%84"><span class="toc-text">永远不要批评</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8D%A2%E4%BD%8D%E6%80%9D%E8%80%83"><span class="toc-text">换位思考</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%81%BF%E5%85%8D%E4%BA%89%E8%AE%BA"><span class="toc-text">避免争论</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E6%8E%A7%E5%88%B6"><span class="toc-text">模式控制</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mermaid"><span class="toc-text">mermaid</span></a></li></ol></details><div class="prose" id="prose"><h2 id="学会如何与人打交道"><a href="#学会如何与人打交道" class="headerlink" title="学会如何与人打交道"></a>学会如何与人打交道</h2><p><strong>作为一名软件开发者，你的工作就是与人打交道</strong></p>
 <h3 id="每个人都希望自己很重要"><a href="#每个人都希望自己很重要" class="headerlink" title="每个人都希望自己很重要"></a>每个人都希望自己很重要</h3><p>每个人都希望自己很重要，一旦你贬低他人，削弱他们的成就感，在某种程度上就如同切断了他们的氧气补给，获得的回馈就是愤怒和敌意。</p>
 <p>我们常常容易犯的一项错误就是，轻率地否决同事的想法，以便于可以提出自己的想法。</p>
 <h3 id="永远不要批评"><a href="#永远不要批评" class="headerlink" title="永远不要批评"></a>永远不要批评</h3><p>奖励积极行为要比惩罚消极行为有效得多。</p>
@@ -40,15 +63,27 @@
 <p>大多数情况下，不同人的模式是相互冲突的，其中有一种模式，即主导模式，决定了对话的主旋律</p>
 <p>在与人打交道时，要认识到模式是存在的，如果你能够时时刻刻把主导模式抓在自己手中，那你就可以说服人们相信你对现实的感知</p>
 <h2 id="mermaid"><a href="#mermaid" class="headerlink" title="mermaid"></a>mermaid</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs mermaid"><br>graph LR<br>    A[每个人都希望自己很重要] --&gt; B[永远不要批评]<br>    B --&gt; I[奖励积极行为要比惩罚消极行为有效得多]<br><br>    A --&gt; C[换位思考]<br>    C --&gt; J[停止用 &lt;我&gt; 和 &lt;我想要什么&gt; 来思考]<br>    C --&gt; K[你因该思考对他人而言什么才最重要，什么才是他们需要的。]<br>    A --&gt; D[避免争论]<br>    D --&gt; L[尽管我们自己为自己的智慧感到骄傲，但我们依然是情感动物。]<br>    D --&gt; M[如果你因为该做某事与其他人产生分歧，那么在很多情况下，你最好先确定分歧点是否值得你去拼命维护，特别是你知道他已经让他人卷入时。]<br>    D --&gt; N[你会发现，当你学会了如何避免争论时，自己的生活会变得轻松很多。]<br><br>    A --&gt; E[模式控制]<br>    E --&gt; O[每当你与另外一个人对话时，你的模式和他的模式发生激烈的交锋，其中一人会胜出。]<br>    E --&gt; P[所谓你的模式就是你如何看待世界，你相信什么是事实；所谓他的模式就是他们对现实世界的感知]<br>    E --&gt; Q[大多数情况下，不同人的模式是相互冲突的，其中有一种模式，即主导模式，决定了对话的主旋律]<br><br><br>    A --&gt; F[每个人都希望自己很重要]<br>    F --&gt; G[我们常常容易犯的一项错误就是，轻率地否决同事的想法]<br>    F --&gt; H[每个人都希望自己很重要，一旦你贬低他人，削弱他们的成就感，在某种程度上就如同切断了他们的氧气补给，获得的回馈就是愤怒和敌意。]<br><br><br><br><br>```<br></code></pre></td></tr></table></figure>
-<div class="post-tags"><a href="/tags/%E8%BD%AF%E6%8A%80%E8%83%BD%E4%BB%A3%E7%A0%81%E4%B9%8B%E5%A4%96%E7%9A%84%E7%94%9F%E5%AD%98%E6%8C%87%E5%8D%97/"># 软技能代码之外的生存指南</a></div><nav class="post-pagination" aria-label="相邻文章"><a href="/2025/06/17/Configuring_Clash_Proxy_in_WSL/"><small>← 上一篇</small>wsl中配置clash代理</a><a href="/2025/05/24/GameFramework_Lifecycle/"><small>下一篇 →</small>GameFramework生命周期</a></nav></article><aside class="post-toc"><div class="panel-top">本篇导航 <span>↙</span></div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%A6%E4%BC%9A%E5%A6%82%E4%BD%95%E4%B8%8E%E4%BA%BA%E6%89%93%E4%BA%A4%E9%81%93"><span class="toc-text">学会如何与人打交道</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AF%8F%E4%B8%AA%E4%BA%BA%E9%83%BD%E5%B8%8C%E6%9C%9B%E8%87%AA%E5%B7%B1%E5%BE%88%E9%87%8D%E8%A6%81"><span class="toc-text">每个人都希望自己很重要</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B0%B8%E8%BF%9C%E4%B8%8D%E8%A6%81%E6%89%B9%E8%AF%84"><span class="toc-text">永远不要批评</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8D%A2%E4%BD%8D%E6%80%9D%E8%80%83"><span class="toc-text">换位思考</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%81%BF%E5%85%8D%E4%BA%89%E8%AE%BA"><span class="toc-text">避免争论</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E6%8E%A7%E5%88%B6"><span class="toc-text">模式控制</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mermaid"><span class="toc-text">mermaid</span></a></li></ol><a href="#main" class="back-top">返回顶部 ↑</a></aside></div>
+</div>
+<footer class="post-foot"><div class="post-meta"><span>标签</span><span class="meta-tags"><a href="/tags/%E8%BD%AF%E6%8A%80%E8%83%BD%E4%BB%A3%E7%A0%81%E4%B9%8B%E5%A4%96%E7%9A%84%E7%94%9F%E5%AD%98%E6%8C%87%E5%8D%97/">#软技能代码之外的生存指南</a></span></div>
+<nav class="post-nav" aria-label="相邻文章"><a rel="prev" class="prev" href="/2025/05/24/GameFramework_Lifecycle/"><small>上一篇</small><span>GameFramework生命周期</span></a><a rel="next" class="next" href="/2025/06/17/Configuring_Clash_Proxy_in_WSL/"><small>下一篇</small><span>wsl中配置clash代理</span></a></nav></footer></div></article>
 </main>
-  <footer class="footer"><div class="footer-red"><div class="shell"><a class="footer-brand" href="/">苏杭小站</a><span>每一份热爱，都值得存档。</span><a href="#main" class="footer-top" aria-label="返回页面顶部">↑</a></div></div><div class="footer-links shell"><div><a href="/archives/">文章归档</a><a href="/categories/">分类索引</a><a href="/tags/">全部标签</a><a href="/about/">关于与联系</a></div><span>© 2026 SuHang · 用 Hexo 记录日常</span></div></footer>
-  <dialog id="search-dialog" aria-labelledby="search-title" data-index="/journal-search.json" data-root="/">
-    <div class="search-head"><label id="search-title" for="search-input">发现一篇好文章</label><button class="search-close" aria-label="关闭搜索">×</button></div>
-    <input id="search-input" type="search" placeholder="搜索 Unity、热更新、C#…" autocomplete="off">
-    <p id="search-status" role="status">输入关键词，探索所有文章。</p><div id="search-results"></div>
-  </dialog>
-  <dialog id="image-dialog" aria-label="查看文章配图"><button class="image-close" aria-label="关闭配图">×</button><img alt=""><p></p></dialog>
-  <button class="floating-top" aria-label="回到顶部" title="回到顶部">↑</button><div class="toast" role="status"></div>
-  <script src="/assets/journal.js" defer></script>
-</body></html>
+
+<footer class="site-footer"><div class="container footer-inner"><div><a class="footer-brand" href="/">苏杭小站</a><p class="footer-slogan">时间匆匆流逝，希望留下点什么。</p></div>
+<nav aria-label="页脚导航"><ul class="footer-links"><li><a href="/archives/">文章归档</a></li><li><a href="/categories/">分类索引</a></li><li><a href="/tags/">全部标签</a></li><li><a href="/about/">关于与联系</a></li></ul></nav>
+<div class="footer-bottom"><span>© 2024–2026 SuHang，用 Hexo 记录日常</span><a class="back-top" href="#main">回到顶部 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 20V4m-6 6 6-6 6 6"/></svg></a></div></div></footer>
+
+<dialog class="search-dialog" id="search-dialog" aria-labelledby="search-title" data-index="/journal-search.json" data-root="/">
+<h2 id="search-title" class="visually-hidden">搜索文章</h2>
+<form class="search-bar" role="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg><label for="search-input" class="visually-hidden">搜索关键词</label><input id="search-input" type="search" placeholder="搜索标题、标签或正文" autocomplete="off" spellcheck="false" aria-describedby="search-status" aria-controls="search-results"><button type="button" class="search-close" aria-label="关闭搜索">Esc</button></form>
+<p class="search-status" id="search-status" role="status" aria-live="polite"></p><ul class="search-results" id="search-results" aria-label="搜索结果"></ul>
+<div class="search-foot" aria-hidden="true"><span><kbd>↑</kbd> <kbd>↓</kbd> 选择</span><span><kbd>Enter</kbd> 打开</span><span><kbd>Esc</kbd> 关闭</span></div>
+</dialog>
+
+<dialog class="image-dialog" id="image-dialog" aria-label="查看大图">
+<button class="image-close" type="button" aria-label="关闭大图"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+<img alt=""><p hidden></p>
+</dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="/assets/lumen.js" defer></script>
+</body>
+</html>

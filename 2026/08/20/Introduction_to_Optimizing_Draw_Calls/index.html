@@ -1,31 +1,56 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>优化 draw calls 简介 · 苏杭小站</title>
-  <meta name="description" content="Unity - 手册：优化绘制调用简介 — Unity - Manual: Introduction to optimizing draw calls优化 Draw Calls 是通过减少 CPU 向 GPU 发送信息的频率来加速渲染。
-默认情况下，每个 mesh  都需要自己调用 draw ...">
-  <meta name="theme-color" content="#e60012"><meta name="color-scheme" content="only light">
-  <link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="/assets/journal.css">
-  <link rel="canonical" href="https://lshgame.com/2026/08/20/Introduction_to_Optimizing_Draw_Calls/">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#F6F7F5">
+<script>
+(function () {
+  var KEY = 'lumen-theme', root = document.documentElement, mode = null;
+  root.classList.add('js');
+  try { mode = localStorage.getItem(KEY); } catch (e) {}
+  if (mode !== 'light' && mode !== 'dark') {
+    mode = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+  root.setAttribute('data-theme', mode);
+  var meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.setAttribute('content', mode === 'dark' ? '#131922' : '#F6F7F5');
+})();
+</script>
+
+<title>优化 draw calls 简介 - 苏杭小站</title>
+<meta name="description" content="Unity - 手册：优化绘制调用简介 — Unity - Manual: Introduction to optimizing draw calls优化 Draw Calls 是通过减少 CPU 向 GPU 发送信息的频率来加速渲染。 默认情况下，每个 mesh 都需要自己调用 draw cal…">
+<link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/lumen.css">
+<link rel="canonical" href="https://lshgame.com/2026/08/20/Introduction_to_Optimizing_Draw_Calls/">
 <meta name="generator" content="Hexo 7.3.0"></head>
-<body>
-  <div class="reading-progress" aria-hidden="true"></div>
-  <a class="skip" href="#main">跳转到内容</a>
-  <header class="header"><div class="header-inner">
-    <a class="brand" href="/" aria-label="苏杭小站首页"><span class="brand-word">苏杭小站</span><small>SUHANG'S JOURNAL</small></a>
-    <nav id="main-nav" aria-label="主导航">
-      <a class=""  href="/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10h-6v-7H9v7H3Z"/></svg>首页</a>
-      <a class="active" href="/archives/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h5"/></svg>文章手记</a>
-      <a class="" href="/categories/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/></svg>探索分类</a>
-      <a class="" href="/about/"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21v-3a8 8 0 0 1 16 0v3"/></svg>关于我</a>
-    </nav>
-    <div class="header-actions"><button class="search-open" aria-label="搜索文章"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 6 6"/></svg><span>搜索</span></button><button class="menu-toggle" aria-label="打开导航" aria-controls="main-nav" aria-expanded="false"><span></span><span></span><span></span></button></div>
-  </div></header>
-  <main id="main" class="shell inner-main"><div class="post-breadcrumb"><a href="/">首页</a><span>/</span><a href="/archives/">文章</a><span>/</span> 开发与生活</div>
-<header class="post-header"><div class="eyebrow"><a href="/categories/Unity/">Unity</a><span>2026.08.20</span><span>3 分钟阅读</span></div><h1>优化 draw calls 简介</h1><div class="post-author"><span class="mini-avatar">S</span> SuHang <span>·</span> 游戏开发手记</div></header>
-<div class="post-layout"><article class="prose"><p><a target="_blank" rel="noopener" href="https://docs.unity3d.com/6000.0/Documentation/Manual/optimizing-draw-calls.html">Unity - 手册：优化绘制调用简介 — Unity - Manual: Introduction to optimizing draw calls</a><br>优化 Draw Calls 是通过减少 CPU 向 GPU 发送信息的频率来加速渲染。</p>
+<body data-mermaid="/assets/mermaid.min.js">
+<div class="reading-progress" aria-hidden="true"></div>
+<a class="skip-link" href="#main">跳到正文</a>
+<header class="site-header" id="site-header"><div class="container header-inner">
+<a class="brand" href="/" aria-label="苏杭小站 首页"><svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="2" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 3v26M3 16h26" stroke="var(--c-grid)" stroke-width="1.5" stroke-dasharray="2 2"/><rect x="6" y="6" width="8" height="8" fill="var(--c-accent)"/></svg><span class="brand-name">苏杭小站</span></a>
+<nav class="site-nav" id="site-nav" aria-label="主导航"><ul>
+
+<li><a href="/">首页</a></li>
+
+<li><a href="/archives/" aria-current="page">文章手记</a></li>
+
+<li><a href="/categories/">探索分类</a></li>
+
+<li><a href="/about/">关于我</a></li>
+
+</ul></nav>
+<div class="header-actions">
+<button class="icon-btn search-btn" type="button" aria-label="搜索文章" aria-haspopup="dialog" aria-controls="search-dialog" aria-keyshortcuts="/ Control+K Meta+K"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg><span class="label">搜索</span><kbd aria-hidden="true">/</kbd></button>
+<button class="icon-btn theme-toggle" type="button" aria-pressed="false" aria-label="夜间模式" title="切换到夜间模式"><svg class="icon-moon-line" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg><svg class="icon-moon-fill" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/><circle cx="18" cy="5" r="1.2"/><circle cx="21" cy="9" r=".8"/></svg></button>
+<button class="icon-btn menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="导航菜单"><svg class="icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+</div></div></header>
+
+<main id="main" tabindex="-1">
+<article class="container post-shell"><header class="post-header"><ol class="crumbs" aria-label="位置"><li><a href="/archives/">文章手记</a></li><li><a href="/categories/Unity/">Unity</a></li></ol><h1>优化 draw calls 简介</h1><div class="post-meta"><time datetime="2026-08-20">2026 年 8 月 20 日</time><a class="meta-cat" href="/categories/Unity/">Unity</a><span class="meta-tags"><a href="/tags/Unity/">#Unity</a><a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">#性能优化</a><a href="/tags/Draw-Call/">#Draw Call</a></span><span>更新于 2026 年 8 月 22 日</span><span>约 3 分钟读完</span></div></header>
+<nav class="post-toc" aria-labelledby="toc-title"><p class="toc-title" id="toc-title">本文目录</p><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E5%8C%96-draw-call-%E7%B1%BB%E5%9E%8B"><span class="toc-text">优化 draw call 类型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Unity-%E4%B8%AD-draw-call-optimization-%E6%96%B9%E6%B3%95%E9%80%9A%E8%BF%87%E4%BB%A5%E4%B8%8B%E6%96%B9%E5%BC%8F%E4%B9%8B%E4%B8%80%E5%B7%A5%E4%BD%9C%EF%BC%9A-%E5%88%A9%E7%94%A8-GPU-%E7%9A%84%E7%A1%AC%E4%BB%B6%E8%83%BD%E5%8A%9B%EF%BC%8C%E5%9C%A8%E4%B8%80%E6%AC%A1-draw-call-%E8%B0%83%E7%94%A8%E5%A4%9A%E4%B8%AA%E5%89%AF%E6%9C%AC%E3%80%82%E8%BF%99%E5%B0%B1%E6%98%AF-GPU-instancing-%E4%BD%BF%E7%94%A8%E5%85%B6%E4%BB%96%E6%8A%80%E6%9C%AF%E5%87%8F%E5%B0%91%E6%B8%B2%E6%9F%93%E7%8A%B6%E6%80%81%E6%9B%B4%E6%96%B0%EF%BC%8C%E4%BE%8B%E5%A6%82%E5%A4%A7%E7%9A%84-GPU-%E7%BC%93%E5%86%B2%E5%8C%BA%E3%80%82%E8%BF%99%E5%B0%B1%E6%98%AF-SRP-Batcher-%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86-%E5%90%88%E5%B9%B6%E4%BD%BF%E7%94%A8%E7%9B%B8%E5%90%8C%E6%B8%B2%E6%9F%93%E7%8A%B6%E6%80%81%E7%9A%84%E7%BD%91%E6%A0%BC%E5%B9%B6%E4%B8%80%E8%B5%B7%E7%BB%98%E5%88%B6%E3%80%82%E8%BF%99%E5%B0%B1%E6%98%AF-batching"><span class="toc-text">Unity 中 draw call optimization  方法通过以下方式之一工作：- 利用 GPU 的硬件能力，在一次 draw call 调用多个副本。这就是 GPU instancing- 使用其他技术减少渲染状态更新，例如大的 GPU 缓冲区。这就是 SRP Batcher 的工作原理- 合并使用相同渲染状态的网格并一起绘制。这就是 batching</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%89%E6%8B%A9%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95"><span class="toc-text">选择优化方法</span></a></li></ol></nav>
+<div class="post-body"><details class="toc-inline"><summary>本文目录</summary><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E5%8C%96-draw-call-%E7%B1%BB%E5%9E%8B"><span class="toc-text">优化 draw call 类型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Unity-%E4%B8%AD-draw-call-optimization-%E6%96%B9%E6%B3%95%E9%80%9A%E8%BF%87%E4%BB%A5%E4%B8%8B%E6%96%B9%E5%BC%8F%E4%B9%8B%E4%B8%80%E5%B7%A5%E4%BD%9C%EF%BC%9A-%E5%88%A9%E7%94%A8-GPU-%E7%9A%84%E7%A1%AC%E4%BB%B6%E8%83%BD%E5%8A%9B%EF%BC%8C%E5%9C%A8%E4%B8%80%E6%AC%A1-draw-call-%E8%B0%83%E7%94%A8%E5%A4%9A%E4%B8%AA%E5%89%AF%E6%9C%AC%E3%80%82%E8%BF%99%E5%B0%B1%E6%98%AF-GPU-instancing-%E4%BD%BF%E7%94%A8%E5%85%B6%E4%BB%96%E6%8A%80%E6%9C%AF%E5%87%8F%E5%B0%91%E6%B8%B2%E6%9F%93%E7%8A%B6%E6%80%81%E6%9B%B4%E6%96%B0%EF%BC%8C%E4%BE%8B%E5%A6%82%E5%A4%A7%E7%9A%84-GPU-%E7%BC%93%E5%86%B2%E5%8C%BA%E3%80%82%E8%BF%99%E5%B0%B1%E6%98%AF-SRP-Batcher-%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86-%E5%90%88%E5%B9%B6%E4%BD%BF%E7%94%A8%E7%9B%B8%E5%90%8C%E6%B8%B2%E6%9F%93%E7%8A%B6%E6%80%81%E7%9A%84%E7%BD%91%E6%A0%BC%E5%B9%B6%E4%B8%80%E8%B5%B7%E7%BB%98%E5%88%B6%E3%80%82%E8%BF%99%E5%B0%B1%E6%98%AF-batching"><span class="toc-text">Unity 中 draw call optimization  方法通过以下方式之一工作：- 利用 GPU 的硬件能力，在一次 draw call 调用多个副本。这就是 GPU instancing- 使用其他技术减少渲染状态更新，例如大的 GPU 缓冲区。这就是 SRP Batcher 的工作原理- 合并使用相同渲染状态的网格并一起绘制。这就是 batching</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%89%E6%8B%A9%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95"><span class="toc-text">选择优化方法</span></a></li></ol></details><div class="prose" id="prose"><p><a target="_blank" rel="noopener" href="https://docs.unity3d.com/6000.0/Documentation/Manual/optimizing-draw-calls.html">Unity - 手册：优化绘制调用简介 — Unity - Manual: Introduction to optimizing draw calls</a><br>优化 Draw Calls 是通过减少 CPU 向 GPU 发送信息的频率来加速渲染。</p>
 <p>默认情况下，每个 mesh  都需要自己调用 draw call。 一次 draw call 包含以下步骤：</p>
 <ul>
 <li>更新渲染状态。CPU 使用图形 API 准备并发送 GPU 绘制网格所需的一切内容，如：Shader 代码、Texture、buffers 。 这部分是 CPU 最密集的步骤</li>
@@ -89,15 +114,27 @@
 <td>启用静态批处理。不再推荐使用动态批处理。请参阅批处理。</td>
 </tr>
 </tbody></table>
-<div class="post-tags"><a href="/tags/Unity/"># Unity</a><a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"># 性能优化</a><a href="/tags/Draw-Call/"># Draw Call</a></div><nav class="post-pagination" aria-label="相邻文章"><a href="/2026/10/09/post-mv0jwbet/"><small>← 上一篇</small>关于英语长句</a><a href="/2026/08/20/Introduction_to_Mesh_Batching/"><small>下一篇 →</small>网格批处理简介</a></nav></article><aside class="post-toc"><div class="panel-top">本篇导航 <span>↙</span></div><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E5%8C%96-draw-call-%E7%B1%BB%E5%9E%8B"><span class="toc-text">优化 draw call 类型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Unity-%E4%B8%AD-draw-call-optimization-%E6%96%B9%E6%B3%95%E9%80%9A%E8%BF%87%E4%BB%A5%E4%B8%8B%E6%96%B9%E5%BC%8F%E4%B9%8B%E4%B8%80%E5%B7%A5%E4%BD%9C%EF%BC%9A-%E5%88%A9%E7%94%A8-GPU-%E7%9A%84%E7%A1%AC%E4%BB%B6%E8%83%BD%E5%8A%9B%EF%BC%8C%E5%9C%A8%E4%B8%80%E6%AC%A1-draw-call-%E8%B0%83%E7%94%A8%E5%A4%9A%E4%B8%AA%E5%89%AF%E6%9C%AC%E3%80%82%E8%BF%99%E5%B0%B1%E6%98%AF-GPU-instancing-%E4%BD%BF%E7%94%A8%E5%85%B6%E4%BB%96%E6%8A%80%E6%9C%AF%E5%87%8F%E5%B0%91%E6%B8%B2%E6%9F%93%E7%8A%B6%E6%80%81%E6%9B%B4%E6%96%B0%EF%BC%8C%E4%BE%8B%E5%A6%82%E5%A4%A7%E7%9A%84-GPU-%E7%BC%93%E5%86%B2%E5%8C%BA%E3%80%82%E8%BF%99%E5%B0%B1%E6%98%AF-SRP-Batcher-%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86-%E5%90%88%E5%B9%B6%E4%BD%BF%E7%94%A8%E7%9B%B8%E5%90%8C%E6%B8%B2%E6%9F%93%E7%8A%B6%E6%80%81%E7%9A%84%E7%BD%91%E6%A0%BC%E5%B9%B6%E4%B8%80%E8%B5%B7%E7%BB%98%E5%88%B6%E3%80%82%E8%BF%99%E5%B0%B1%E6%98%AF-batching"><span class="toc-text">Unity 中 draw call optimization  方法通过以下方式之一工作：- 利用 GPU 的硬件能力，在一次 draw call 调用多个副本。这就是 GPU instancing- 使用其他技术减少渲染状态更新，例如大的 GPU 缓冲区。这就是 SRP Batcher 的工作原理- 合并使用相同渲染状态的网格并一起绘制。这就是 batching</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%89%E6%8B%A9%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95"><span class="toc-text">选择优化方法</span></a></li></ol><a href="#main" class="back-top">返回顶部 ↑</a></aside></div>
+</div>
+<footer class="post-foot"><div class="post-meta"><span>标签</span><span class="meta-tags"><a href="/tags/Unity/">#Unity</a><a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">#性能优化</a><a href="/tags/Draw-Call/">#Draw Call</a></span></div>
+<nav class="post-nav" aria-label="相邻文章"><a rel="prev" class="prev" href="/2026/08/20/Introduction_to_Mesh_Batching/"><small>上一篇</small><span>网格批处理简介</span></a><a rel="next" class="next" href="/2026/10/09/post-mv0jwbet/"><small>下一篇</small><span>关于英语长句</span></a></nav></footer></div></article>
 </main>
-  <footer class="footer"><div class="footer-red"><div class="shell"><a class="footer-brand" href="/">苏杭小站</a><span>每一份热爱，都值得存档。</span><a href="#main" class="footer-top" aria-label="返回页面顶部">↑</a></div></div><div class="footer-links shell"><div><a href="/archives/">文章归档</a><a href="/categories/">分类索引</a><a href="/tags/">全部标签</a><a href="/about/">关于与联系</a></div><span>© 2026 SuHang · 用 Hexo 记录日常</span></div></footer>
-  <dialog id="search-dialog" aria-labelledby="search-title" data-index="/journal-search.json" data-root="/">
-    <div class="search-head"><label id="search-title" for="search-input">发现一篇好文章</label><button class="search-close" aria-label="关闭搜索">×</button></div>
-    <input id="search-input" type="search" placeholder="搜索 Unity、热更新、C#…" autocomplete="off">
-    <p id="search-status" role="status">输入关键词，探索所有文章。</p><div id="search-results"></div>
-  </dialog>
-  <dialog id="image-dialog" aria-label="查看文章配图"><button class="image-close" aria-label="关闭配图">×</button><img alt=""><p></p></dialog>
-  <button class="floating-top" aria-label="回到顶部" title="回到顶部">↑</button><div class="toast" role="status"></div>
-  <script src="/assets/journal.js" defer></script>
-</body></html>
+
+<footer class="site-footer"><div class="container footer-inner"><div><a class="footer-brand" href="/">苏杭小站</a><p class="footer-slogan">时间匆匆流逝，希望留下点什么。</p></div>
+<nav aria-label="页脚导航"><ul class="footer-links"><li><a href="/archives/">文章归档</a></li><li><a href="/categories/">分类索引</a></li><li><a href="/tags/">全部标签</a></li><li><a href="/about/">关于与联系</a></li></ul></nav>
+<div class="footer-bottom"><span>© 2024–2026 SuHang，用 Hexo 记录日常</span><a class="back-top" href="#main">回到顶部 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 20V4m-6 6 6-6 6 6"/></svg></a></div></div></footer>
+
+<dialog class="search-dialog" id="search-dialog" aria-labelledby="search-title" data-index="/journal-search.json" data-root="/">
+<h2 id="search-title" class="visually-hidden">搜索文章</h2>
+<form class="search-bar" role="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg><label for="search-input" class="visually-hidden">搜索关键词</label><input id="search-input" type="search" placeholder="搜索标题、标签或正文" autocomplete="off" spellcheck="false" aria-describedby="search-status" aria-controls="search-results"><button type="button" class="search-close" aria-label="关闭搜索">Esc</button></form>
+<p class="search-status" id="search-status" role="status" aria-live="polite"></p><ul class="search-results" id="search-results" aria-label="搜索结果"></ul>
+<div class="search-foot" aria-hidden="true"><span><kbd>↑</kbd> <kbd>↓</kbd> 选择</span><span><kbd>Enter</kbd> 打开</span><span><kbd>Esc</kbd> 关闭</span></div>
+</dialog>
+
+<dialog class="image-dialog" id="image-dialog" aria-label="查看大图">
+<button class="image-close" type="button" aria-label="关闭大图"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+<img alt=""><p hidden></p>
+</dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="/assets/lumen.js" defer></script>
+</body>
+</html>

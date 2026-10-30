@@ -1,35 +1,56 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>YooAsset源码阅读-Download · 苏杭小站</title>
-  <meta name="description" content="继续 YooAsset 的下载系统代码研究，本文将详细介绍如何创建下载器相关代码
-CreateResourceDownloaderByAll关键类
-PlayModeImpl.cs  
-ResourceDownloaderOperation.cs
-DownloaderOperation.cs
-B...">
-  <meta name="theme-color" content="#e60012"><meta name="color-scheme" content="only light">
-  <link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="/assets/journal.css">
-  <link rel="canonical" href="https://lshgame.com/2025/08/25/YooAsset_Code_Reading_Download/">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#F6F7F5">
+<script>
+(function () {
+  var KEY = 'lumen-theme', root = document.documentElement, mode = null;
+  root.classList.add('js');
+  try { mode = localStorage.getItem(KEY); } catch (e) {}
+  if (mode !== 'light' && mode !== 'dark') {
+    mode = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+  root.setAttribute('data-theme', mode);
+  var meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.setAttribute('content', mode === 'dark' ? '#131922' : '#F6F7F5');
+})();
+</script>
+
+<title>YooAsset源码阅读-Download - 苏杭小站</title>
+<meta name="description" content="继续 YooAsset 的下载系统代码研究，本文将详细介绍如何创建下载器相关代码 CreateResourceDownloaderByAll关键类 PlayModeImpl.cs ResourceDownloaderOperation.cs DownloaderOperation.cs Bundl…">
+<link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/lumen.css">
+<link rel="canonical" href="https://lshgame.com/2025/08/25/YooAsset_Code_Reading_Download/">
 <meta name="generator" content="Hexo 7.3.0"></head>
-<body>
-  <div class="reading-progress" aria-hidden="true"></div>
-  <a class="skip" href="#main">跳转到内容</a>
-  <header class="header"><div class="header-inner">
-    <a class="brand" href="/" aria-label="苏杭小站首页"><span class="brand-word">苏杭小站</span><small>SUHANG'S JOURNAL</small></a>
-    <nav id="main-nav" aria-label="主导航">
-      <a class=""  href="/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10h-6v-7H9v7H3Z"/></svg>首页</a>
-      <a class="active" href="/archives/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h5"/></svg>文章手记</a>
-      <a class="" href="/categories/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/></svg>探索分类</a>
-      <a class="" href="/about/"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21v-3a8 8 0 0 1 16 0v3"/></svg>关于我</a>
-    </nav>
-    <div class="header-actions"><button class="search-open" aria-label="搜索文章"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 6 6"/></svg><span>搜索</span></button><button class="menu-toggle" aria-label="打开导航" aria-controls="main-nav" aria-expanded="false"><span></span><span></span><span></span></button></div>
-  </div></header>
-  <main id="main" class="shell inner-main"><div class="post-breadcrumb"><a href="/">首页</a><span>/</span><a href="/archives/">文章</a><span>/</span> 开发与生活</div>
-<header class="post-header"><div class="eyebrow"><a href="/categories/Unity/">Unity</a><span>2025.08.25</span><span>49 分钟阅读</span></div><h1>YooAsset源码阅读-Download</h1><div class="post-author"><span class="mini-avatar">S</span> SuHang <span>·</span> 游戏开发手记</div></header>
-<div class="post-layout"><article class="prose"><p>继续 YooAsset 的下载系统代码研究，本文将详细介绍如何创建下载器相关代码</p>
+<body data-mermaid="/assets/mermaid.min.js">
+<div class="reading-progress" aria-hidden="true"></div>
+<a class="skip-link" href="#main">跳到正文</a>
+<header class="site-header" id="site-header"><div class="container header-inner">
+<a class="brand" href="/" aria-label="苏杭小站 首页"><svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="2" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 3v26M3 16h26" stroke="var(--c-grid)" stroke-width="1.5" stroke-dasharray="2 2"/><rect x="6" y="6" width="8" height="8" fill="var(--c-accent)"/></svg><span class="brand-name">苏杭小站</span></a>
+<nav class="site-nav" id="site-nav" aria-label="主导航"><ul>
+
+<li><a href="/">首页</a></li>
+
+<li><a href="/archives/" aria-current="page">文章手记</a></li>
+
+<li><a href="/categories/">探索分类</a></li>
+
+<li><a href="/about/">关于我</a></li>
+
+</ul></nav>
+<div class="header-actions">
+<button class="icon-btn search-btn" type="button" aria-label="搜索文章" aria-haspopup="dialog" aria-controls="search-dialog" aria-keyshortcuts="/ Control+K Meta+K"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg><span class="label">搜索</span><kbd aria-hidden="true">/</kbd></button>
+<button class="icon-btn theme-toggle" type="button" aria-pressed="false" aria-label="夜间模式" title="切换到夜间模式"><svg class="icon-moon-line" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg><svg class="icon-moon-fill" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/><circle cx="18" cy="5" r="1.2"/><circle cx="21" cy="9" r=".8"/></svg></button>
+<button class="icon-btn menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="导航菜单"><svg class="icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+</div></div></header>
+
+<main id="main" tabindex="-1">
+<article class="container post-shell"><header class="post-header"><ol class="crumbs" aria-label="位置"><li><a href="/archives/">文章手记</a></li><li><a href="/categories/Unity/">Unity</a></li></ol><h1>YooAsset源码阅读-Download</h1><div class="post-meta"><time datetime="2025-08-25">2025 年 8 月 25 日</time><a class="meta-cat" href="/categories/Unity/">Unity</a><span class="meta-tags"><a href="/tags/YooAssets/">#YooAssets</a></span><span>更新于 2025 年 12 月 26 日</span><span>约 48 分钟读完</span></div></header>
+<nav class="post-toc" aria-labelledby="toc-title"><p class="toc-title" id="toc-title">本文目录</p><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#CreateResourceDownloaderByAll"><span class="toc-text">CreateResourceDownloaderByAll</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E7%B1%BB"><span class="toc-text">关键类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%81%E7%A8%8B%E5%9B%BE"><span class="toc-text">流程图</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CreateResourceDownloaderByTags"><span class="toc-text">CreateResourceDownloaderByTags</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E7%B1%BB-1"><span class="toc-text">关键类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%81%E7%A8%8B%E5%9B%BE-1"><span class="toc-text">流程图</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CreateResourceDownloaderByPaths"><span class="toc-text">CreateResourceDownloaderByPaths</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E7%B1%BB-2"><span class="toc-text">关键类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%81%E7%A8%8B%E5%9B%BE-2"><span class="toc-text">流程图</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E5%99%A8%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6"><span class="toc-text">下载器核心机制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ResourceDownloaderOperation-%E7%BB%A7%E6%89%BF%E5%85%B3%E7%B3%BB"><span class="toc-text">ResourceDownloaderOperation 继承关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E5%99%A8%E7%8A%B6%E6%80%81%E6%9C%BA"><span class="toc-text">下载器状态机</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E5%99%A8%E6%B1%A0%E7%AE%A1%E7%90%86%E6%9C%BA%E5%88%B6"><span class="toc-text">下载器池管理机制</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8E%E7%94%A8%E6%88%B7%E8%B0%83%E7%94%A8%E5%88%B0UnityWebRequest%E7%9A%84%E5%AE%8C%E6%95%B4%E8%B0%83%E7%94%A8%E9%93%BE"><span class="toc-text">从用户调用到UnityWebRequest的完整调用链</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E7%94%A8%E9%93%BE%E6%A6%82%E8%BF%B0"><span class="toc-text">调用链概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%A6%E7%BB%86%E8%B0%83%E7%94%A8%E9%93%BE%E5%88%86%E6%9E%90"><span class="toc-text">详细调用链分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%8C%E6%95%B4%E8%B0%83%E7%94%A8%E9%93%BE%E6%B5%81%E7%A8%8B%E5%9B%BE"><span class="toc-text">完整调用链流程图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E8%B0%83%E7%94%A8%E7%82%B9%E8%A7%A3%E6%9E%90"><span class="toc-text">关键调用点解析</span></a></li></ol></li></ol></nav>
+<div class="post-body"><details class="toc-inline"><summary>本文目录</summary><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#CreateResourceDownloaderByAll"><span class="toc-text">CreateResourceDownloaderByAll</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E7%B1%BB"><span class="toc-text">关键类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%81%E7%A8%8B%E5%9B%BE"><span class="toc-text">流程图</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CreateResourceDownloaderByTags"><span class="toc-text">CreateResourceDownloaderByTags</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E7%B1%BB-1"><span class="toc-text">关键类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%81%E7%A8%8B%E5%9B%BE-1"><span class="toc-text">流程图</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CreateResourceDownloaderByPaths"><span class="toc-text">CreateResourceDownloaderByPaths</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E7%B1%BB-2"><span class="toc-text">关键类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%81%E7%A8%8B%E5%9B%BE-2"><span class="toc-text">流程图</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E5%99%A8%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6"><span class="toc-text">下载器核心机制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ResourceDownloaderOperation-%E7%BB%A7%E6%89%BF%E5%85%B3%E7%B3%BB"><span class="toc-text">ResourceDownloaderOperation 继承关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E5%99%A8%E7%8A%B6%E6%80%81%E6%9C%BA"><span class="toc-text">下载器状态机</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E5%99%A8%E6%B1%A0%E7%AE%A1%E7%90%86%E6%9C%BA%E5%88%B6"><span class="toc-text">下载器池管理机制</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8E%E7%94%A8%E6%88%B7%E8%B0%83%E7%94%A8%E5%88%B0UnityWebRequest%E7%9A%84%E5%AE%8C%E6%95%B4%E8%B0%83%E7%94%A8%E9%93%BE"><span class="toc-text">从用户调用到UnityWebRequest的完整调用链</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E7%94%A8%E9%93%BE%E6%A6%82%E8%BF%B0"><span class="toc-text">调用链概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%A6%E7%BB%86%E8%B0%83%E7%94%A8%E9%93%BE%E5%88%86%E6%9E%90"><span class="toc-text">详细调用链分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%8C%E6%95%B4%E8%B0%83%E7%94%A8%E9%93%BE%E6%B5%81%E7%A8%8B%E5%9B%BE"><span class="toc-text">完整调用链流程图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E8%B0%83%E7%94%A8%E7%82%B9%E8%A7%A3%E6%9E%90"><span class="toc-text">关键调用点解析</span></a></li></ol></li></ol></details><div class="prose" id="prose"><p>继续 YooAsset 的下载系统代码研究，本文将详细介绍如何创建下载器相关代码</p>
 <h2 id="CreateResourceDownloaderByAll"><a href="#CreateResourceDownloaderByAll" class="headerlink" title="CreateResourceDownloaderByAll"></a>CreateResourceDownloaderByAll</h2><h3 id="关键类"><a href="#关键类" class="headerlink" title="关键类"></a>关键类</h3><ul>
 <li>PlayModeImpl.cs  </li>
 <li>ResourceDownloaderOperation.cs</li>
@@ -114,15 +135,27 @@ B...">
 <li><strong>DownloadPackageBundleOperation</strong>：重试逻辑和超时处理</li>
 <li><strong>UnityWebRequest</strong>：网络层错误处理</li>
 </ul>
-<div class="post-tags"><a href="/tags/YooAssets/"># YooAssets</a></div><nav class="post-pagination" aria-label="相邻文章"><a href="/2025/08/25/YooAsset_Code_Reading_Resource_Loading_and_Unloading/"><small>← 上一篇</small>YooAsset源码阅读-资源加载与卸载</a><a href="/2025/08/01/Test_Code_Highlight_Functionality/"><small>下一篇 →</small>测试代码高亮功能</a></nav></article><aside class="post-toc"><div class="panel-top">本篇导航 <span>↙</span></div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#CreateResourceDownloaderByAll"><span class="toc-text">CreateResourceDownloaderByAll</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E7%B1%BB"><span class="toc-text">关键类</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E6%BA%90%E4%BB%A3%E7%A0%81"><span class="toc-text">关键源代码</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%81%E7%A8%8B%E5%9B%BE"><span class="toc-text">流程图</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CreateResourceDownloaderByTags"><span class="toc-text">CreateResourceDownloaderByTags</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E7%B1%BB-1"><span class="toc-text">关键类</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E6%BA%90%E4%BB%A3%E7%A0%81-1"><span class="toc-text">关键源代码</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%81%E7%A8%8B%E5%9B%BE-1"><span class="toc-text">流程图</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CreateResourceDownloaderByPaths"><span class="toc-text">CreateResourceDownloaderByPaths</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E7%B1%BB-2"><span class="toc-text">关键类</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E6%BA%90%E4%BB%A3%E7%A0%81-2"><span class="toc-text">关键源代码</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%81%E7%A8%8B%E5%9B%BE-2"><span class="toc-text">流程图</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E5%99%A8%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6"><span class="toc-text">下载器核心机制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ResourceDownloaderOperation-%E7%BB%A7%E6%89%BF%E5%85%B3%E7%B3%BB"><span class="toc-text">ResourceDownloaderOperation 继承关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E5%99%A8%E7%8A%B6%E6%80%81%E6%9C%BA"><span class="toc-text">下载器状态机</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E5%99%A8%E6%B1%A0%E7%AE%A1%E7%90%86%E6%9C%BA%E5%88%B6"><span class="toc-text">下载器池管理机制</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8E%E7%94%A8%E6%88%B7%E8%B0%83%E7%94%A8%E5%88%B0UnityWebRequest%E7%9A%84%E5%AE%8C%E6%95%B4%E8%B0%83%E7%94%A8%E9%93%BE"><span class="toc-text">从用户调用到UnityWebRequest的完整调用链</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E7%94%A8%E9%93%BE%E6%A6%82%E8%BF%B0"><span class="toc-text">调用链概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%A6%E7%BB%86%E8%B0%83%E7%94%A8%E9%93%BE%E5%88%86%E6%9E%90"><span class="toc-text">详细调用链分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E7%94%A8%E6%88%B7%E5%85%A5%E5%8F%A3%E7%82%B9"><span class="toc-text">1. 用户入口点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-BeginDownload-%E2%86%92-InternalUpdate"><span class="toc-text">2. BeginDownload → InternalUpdate</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-BundleInfo-CreateDownloader"><span class="toc-text">3. BundleInfo.CreateDownloader</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-DefaultCacheFileSystem-DownloadFileAsync"><span class="toc-text">4. DefaultCacheFileSystem.DownloadFileAsync</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-DownloadPackageBundleOperation"><span class="toc-text">5. DownloadPackageBundleOperation</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-DownloadCenter-%E2%86%92-UnityDownloadFileOperation"><span class="toc-text">6. DownloadCenter → UnityDownloadFileOperation</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-UnityDownloadFileOperation-%E2%86%92-UnityWebRequest"><span class="toc-text">7. UnityDownloadFileOperation → UnityWebRequest</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%8C%E6%95%B4%E8%B0%83%E7%94%A8%E9%93%BE%E6%B5%81%E7%A8%8B%E5%9B%BE"><span class="toc-text">完整调用链流程图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E8%B0%83%E7%94%A8%E7%82%B9%E8%A7%A3%E6%9E%90"><span class="toc-text">关键调用点解析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E8%B4%A3%E4%BB%BB%E5%88%86%E7%A6%BB%E8%AE%BE%E8%AE%A1"><span class="toc-text">1. 责任分离设计</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E5%BC%82%E6%AD%A5%E8%B0%83%E7%94%A8%E9%93%BE"><span class="toc-text">2. 异步调用链</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86%E5%92%8C%E9%87%8D%E8%AF%95"><span class="toc-text">3. 错误处理和重试</span></a></li></ol></li></ol></li></ol><a href="#main" class="back-top">返回顶部 ↑</a></aside></div>
+</div>
+<footer class="post-foot"><div class="post-meta"><span>标签</span><span class="meta-tags"><a href="/tags/YooAssets/">#YooAssets</a></span></div>
+<nav class="post-nav" aria-label="相邻文章"><a rel="prev" class="prev" href="/2025/08/01/Test_Code_Highlight_Functionality/"><small>上一篇</small><span>测试代码高亮功能</span></a><a rel="next" class="next" href="/2025/08/25/YooAsset_Code_Reading_Resource_Loading_and_Unloading/"><small>下一篇</small><span>YooAsset源码阅读-资源加载与卸载</span></a></nav></footer></div></article>
 </main>
-  <footer class="footer"><div class="footer-red"><div class="shell"><a class="footer-brand" href="/">苏杭小站</a><span>每一份热爱，都值得存档。</span><a href="#main" class="footer-top" aria-label="返回页面顶部">↑</a></div></div><div class="footer-links shell"><div><a href="/archives/">文章归档</a><a href="/categories/">分类索引</a><a href="/tags/">全部标签</a><a href="/about/">关于与联系</a></div><span>© 2026 SuHang · 用 Hexo 记录日常</span></div></footer>
-  <dialog id="search-dialog" aria-labelledby="search-title" data-index="/journal-search.json" data-root="/">
-    <div class="search-head"><label id="search-title" for="search-input">发现一篇好文章</label><button class="search-close" aria-label="关闭搜索">×</button></div>
-    <input id="search-input" type="search" placeholder="搜索 Unity、热更新、C#…" autocomplete="off">
-    <p id="search-status" role="status">输入关键词，探索所有文章。</p><div id="search-results"></div>
-  </dialog>
-  <dialog id="image-dialog" aria-label="查看文章配图"><button class="image-close" aria-label="关闭配图">×</button><img alt=""><p></p></dialog>
-  <button class="floating-top" aria-label="回到顶部" title="回到顶部">↑</button><div class="toast" role="status"></div>
-  <script src="/assets/journal.js" defer></script>
-</body></html>
+
+<footer class="site-footer"><div class="container footer-inner"><div><a class="footer-brand" href="/">苏杭小站</a><p class="footer-slogan">时间匆匆流逝，希望留下点什么。</p></div>
+<nav aria-label="页脚导航"><ul class="footer-links"><li><a href="/archives/">文章归档</a></li><li><a href="/categories/">分类索引</a></li><li><a href="/tags/">全部标签</a></li><li><a href="/about/">关于与联系</a></li></ul></nav>
+<div class="footer-bottom"><span>© 2024–2026 SuHang，用 Hexo 记录日常</span><a class="back-top" href="#main">回到顶部 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 20V4m-6 6 6-6 6 6"/></svg></a></div></div></footer>
+
+<dialog class="search-dialog" id="search-dialog" aria-labelledby="search-title" data-index="/journal-search.json" data-root="/">
+<h2 id="search-title" class="visually-hidden">搜索文章</h2>
+<form class="search-bar" role="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg><label for="search-input" class="visually-hidden">搜索关键词</label><input id="search-input" type="search" placeholder="搜索标题、标签或正文" autocomplete="off" spellcheck="false" aria-describedby="search-status" aria-controls="search-results"><button type="button" class="search-close" aria-label="关闭搜索">Esc</button></form>
+<p class="search-status" id="search-status" role="status" aria-live="polite"></p><ul class="search-results" id="search-results" aria-label="搜索结果"></ul>
+<div class="search-foot" aria-hidden="true"><span><kbd>↑</kbd> <kbd>↓</kbd> 选择</span><span><kbd>Enter</kbd> 打开</span><span><kbd>Esc</kbd> 关闭</span></div>
+</dialog>
+
+<dialog class="image-dialog" id="image-dialog" aria-label="查看大图">
+<button class="image-close" type="button" aria-label="关闭大图"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+<img alt=""><p hidden></p>
+</dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="/assets/lumen.js" defer></script>
+</body>
+</html>

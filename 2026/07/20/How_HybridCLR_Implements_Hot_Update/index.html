@@ -1,31 +1,56 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>热更新系列-09-HybridCLR如何实现热更新 · 苏杭小站</title>
-  <meta name="description" content="什么是热更新在用户没有感知或者低感知的情况下，让用户可以不用安装新的安装包实现功能增加或更新。
-Mono 本身就可以热更新Mono 可以在支持 JIT 的平台上执行运行时加载的新 IL，因此具备做 C# 热更新的基础。但是 iOS 等设备因为权限问题，不能依赖 JIT，所以大部分热更新方案都在...">
-  <meta name="theme-color" content="#e60012"><meta name="color-scheme" content="only light">
-  <link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="/assets/journal.css">
-  <link rel="canonical" href="https://lshgame.com/2026/07/20/How_HybridCLR_Implements_Hot_Update/">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#F6F7F5">
+<script>
+(function () {
+  var KEY = 'lumen-theme', root = document.documentElement, mode = null;
+  root.classList.add('js');
+  try { mode = localStorage.getItem(KEY); } catch (e) {}
+  if (mode !== 'light' && mode !== 'dark') {
+    mode = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+  root.setAttribute('data-theme', mode);
+  var meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.setAttribute('content', mode === 'dark' ? '#131922' : '#F6F7F5');
+})();
+</script>
+
+<title>热更新系列-09-HybridCLR如何实现热更新 - 苏杭小站</title>
+<meta name="description" content="什么是热更新在用户没有感知或者低感知的情况下，让用户可以不用安装新的安装包实现功能增加或更新。 Mono 本身就可以热更新Mono 可以在支持 JIT 的平台上执行运行时加载的新 IL，因此具备做 C# 热更新的基础。但是 iOS 等设备因为权限问题，不能依赖 JIT，所以大部分热更新方案都在解决…">
+<link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/lumen.css">
+<link rel="canonical" href="https://lshgame.com/2026/07/20/How_HybridCLR_Implements_Hot_Update/">
 <meta name="generator" content="Hexo 7.3.0"></head>
-<body>
-  <div class="reading-progress" aria-hidden="true"></div>
-  <a class="skip" href="#main">跳转到内容</a>
-  <header class="header"><div class="header-inner">
-    <a class="brand" href="/" aria-label="苏杭小站首页"><span class="brand-word">苏杭小站</span><small>SUHANG'S JOURNAL</small></a>
-    <nav id="main-nav" aria-label="主导航">
-      <a class=""  href="/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10h-6v-7H9v7H3Z"/></svg>首页</a>
-      <a class="active" href="/archives/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h5"/></svg>文章手记</a>
-      <a class="" href="/categories/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/></svg>探索分类</a>
-      <a class="" href="/about/"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21v-3a8 8 0 0 1 16 0v3"/></svg>关于我</a>
-    </nav>
-    <div class="header-actions"><button class="search-open" aria-label="搜索文章"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 6 6"/></svg><span>搜索</span></button><button class="menu-toggle" aria-label="打开导航" aria-controls="main-nav" aria-expanded="false"><span></span><span></span><span></span></button></div>
-  </div></header>
-  <main id="main" class="shell inner-main"><div class="post-breadcrumb"><a href="/">首页</a><span>/</span><a href="/archives/">文章</a><span>/</span> 开发与生活</div>
-<header class="post-header"><div class="eyebrow"><a href="/categories/%E7%BC%96%E7%A8%8B/">编程</a><span>2026.07.20</span><span>13 分钟阅读</span></div><h1>热更新系列-09-HybridCLR如何实现热更新</h1><div class="post-author"><span class="mini-avatar">S</span> SuHang <span>·</span> 游戏开发手记</div></header>
-<div class="post-layout"><article class="prose"><h2 id="什么是热更新"><a href="#什么是热更新" class="headerlink" title="什么是热更新"></a>什么是热更新</h2><p>在用户没有感知或者低感知的情况下，让用户可以不用安装新的安装包实现功能增加或更新。</p>
+<body data-mermaid="/assets/mermaid.min.js">
+<div class="reading-progress" aria-hidden="true"></div>
+<a class="skip-link" href="#main">跳到正文</a>
+<header class="site-header" id="site-header"><div class="container header-inner">
+<a class="brand" href="/" aria-label="苏杭小站 首页"><svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="2" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 3v26M3 16h26" stroke="var(--c-grid)" stroke-width="1.5" stroke-dasharray="2 2"/><rect x="6" y="6" width="8" height="8" fill="var(--c-accent)"/></svg><span class="brand-name">苏杭小站</span></a>
+<nav class="site-nav" id="site-nav" aria-label="主导航"><ul>
+
+<li><a href="/">首页</a></li>
+
+<li><a href="/archives/" aria-current="page">文章手记</a></li>
+
+<li><a href="/categories/">探索分类</a></li>
+
+<li><a href="/about/">关于我</a></li>
+
+</ul></nav>
+<div class="header-actions">
+<button class="icon-btn search-btn" type="button" aria-label="搜索文章" aria-haspopup="dialog" aria-controls="search-dialog" aria-keyshortcuts="/ Control+K Meta+K"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg><span class="label">搜索</span><kbd aria-hidden="true">/</kbd></button>
+<button class="icon-btn theme-toggle" type="button" aria-pressed="false" aria-label="夜间模式" title="切换到夜间模式"><svg class="icon-moon-line" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg><svg class="icon-moon-fill" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/><circle cx="18" cy="5" r="1.2"/><circle cx="21" cy="9" r=".8"/></svg></button>
+<button class="icon-btn menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="导航菜单"><svg class="icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+</div></div></header>
+
+<main id="main" tabindex="-1">
+<article class="container post-shell"><header class="post-header"><ol class="crumbs" aria-label="位置"><li><a href="/archives/">文章手记</a></li><li><a href="/categories/%E7%BC%96%E7%A8%8B/">编程</a></li></ol><h1>热更新系列-09-HybridCLR如何实现热更新</h1><div class="post-meta"><time datetime="2026-07-20">2026 年 7 月 20 日</time><a class="meta-cat" href="/categories/%E7%BC%96%E7%A8%8B/">编程</a><span class="meta-tags"><a href="/tags/C/">#C#</a><a href="/tags/Unity/">#Unity</a><a href="/tags/%E7%83%AD%E6%9B%B4%E6%96%B0/">#热更新</a><a href="/tags/HybridCLR/">#HybridCLR</a></span><span>更新于 2026 年 7 月 27 日</span><span>约 13 分钟读完</span></div></header>
+<nav class="post-toc" aria-labelledby="toc-title"><p class="toc-title" id="toc-title">本文目录</p><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%83%AD%E6%9B%B4%E6%96%B0"><span class="toc-text">什么是热更新</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Mono-%E6%9C%AC%E8%BA%AB%E5%B0%B1%E5%8F%AF%E4%BB%A5%E7%83%AD%E6%9B%B4%E6%96%B0"><span class="toc-text">Mono 本身就可以热更新</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-text">虚拟机解决方案</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HybridCLR-%E5%AE%98%E6%96%B9%E8%AF%B4"><span class="toc-text">HybridCLR 官方说</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3%E5%AE%98%E6%96%B9%E6%89%80%E8%AF%B4"><span class="toc-text">如何理解官方所说</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%88%E7%9C%8B%E5%8E%9F%E6%9D%A5%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-text">先看原来的问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HybridCLR-%E5%8A%A0%E4%BA%86%E4%B8%80%E5%8F%B0%E8%83%BD%E8%B7%91-IL-%E7%9A%84%E2%80%9C%E8%99%9A%E6%8B%9F%E6%9C%BA%E2%80%9D"><span class="toc-text">HybridCLR 加了一台能跑 IL 的“虚拟机”</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IL-%E5%88%B0%E5%BA%95%E6%98%AF%E6%80%8E%E6%A0%B7%E8%A2%AB%E6%89%A7%E8%A1%8C%E7%9A%84"><span class="toc-text">IL 到底是怎样被执行的</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%83%AD%E6%9B%B4%E6%96%B0%E4%BB%A3%E7%A0%81%E8%B0%83%E7%94%A8-Unity-API-%E4%B8%BA%E4%BB%80%E4%B9%88%E8%83%BD%E5%B7%A5%E4%BD%9C"><span class="toc-text">热更新代码调用 Unity API 为什么能工作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AOT-%E4%BB%A3%E7%A0%81%E6%9C%80%E5%BC%80%E5%A7%8B%E5%A6%82%E4%BD%95%E8%BF%9B%E5%85%A5%E7%83%AD%E6%9B%B4%E6%96%B0%E4%BB%A3%E7%A0%81"><span class="toc-text">AOT 代码最开始如何进入热更新代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%83%E6%95%B0%E6%8D%AE%E8%A1%A5%E5%85%85%E8%A7%A3%E5%86%B3%E7%9A%84%E6%98%AF%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98"><span class="toc-text">元数据补充解决的是什么问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reverse-P-Invoke-%E5%8F%88%E6%98%AF%E5%81%9A%E4%BB%80%E4%B9%88%E7%9A%84"><span class="toc-text">Reverse P&#x2F;Invoke 又是做什么的</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CLRMethod-%E5%AE%B9%E6%98%93%E5%92%8C-HybridCLR-%E6%B7%B7%E5%9C%A8%E4%B8%80%E8%B5%B7"><span class="toc-text">CLRMethod 容易和 HybridCLR 混在一起</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%B2%E8%B5%B7%E6%9D%A5%E7%9C%8B%E6%95%B4%E4%B8%AA%E6%B5%81%E7%A8%8B"><span class="toc-text">串起来看整个流程</span></a></li></ol></li></ol></nav>
+<div class="post-body"><details class="toc-inline"><summary>本文目录</summary><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%83%AD%E6%9B%B4%E6%96%B0"><span class="toc-text">什么是热更新</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Mono-%E6%9C%AC%E8%BA%AB%E5%B0%B1%E5%8F%AF%E4%BB%A5%E7%83%AD%E6%9B%B4%E6%96%B0"><span class="toc-text">Mono 本身就可以热更新</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-text">虚拟机解决方案</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HybridCLR-%E5%AE%98%E6%96%B9%E8%AF%B4"><span class="toc-text">HybridCLR 官方说</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3%E5%AE%98%E6%96%B9%E6%89%80%E8%AF%B4"><span class="toc-text">如何理解官方所说</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%88%E7%9C%8B%E5%8E%9F%E6%9D%A5%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-text">先看原来的问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HybridCLR-%E5%8A%A0%E4%BA%86%E4%B8%80%E5%8F%B0%E8%83%BD%E8%B7%91-IL-%E7%9A%84%E2%80%9C%E8%99%9A%E6%8B%9F%E6%9C%BA%E2%80%9D"><span class="toc-text">HybridCLR 加了一台能跑 IL 的“虚拟机”</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IL-%E5%88%B0%E5%BA%95%E6%98%AF%E6%80%8E%E6%A0%B7%E8%A2%AB%E6%89%A7%E8%A1%8C%E7%9A%84"><span class="toc-text">IL 到底是怎样被执行的</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%83%AD%E6%9B%B4%E6%96%B0%E4%BB%A3%E7%A0%81%E8%B0%83%E7%94%A8-Unity-API-%E4%B8%BA%E4%BB%80%E4%B9%88%E8%83%BD%E5%B7%A5%E4%BD%9C"><span class="toc-text">热更新代码调用 Unity API 为什么能工作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AOT-%E4%BB%A3%E7%A0%81%E6%9C%80%E5%BC%80%E5%A7%8B%E5%A6%82%E4%BD%95%E8%BF%9B%E5%85%A5%E7%83%AD%E6%9B%B4%E6%96%B0%E4%BB%A3%E7%A0%81"><span class="toc-text">AOT 代码最开始如何进入热更新代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%83%E6%95%B0%E6%8D%AE%E8%A1%A5%E5%85%85%E8%A7%A3%E5%86%B3%E7%9A%84%E6%98%AF%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98"><span class="toc-text">元数据补充解决的是什么问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reverse-P-Invoke-%E5%8F%88%E6%98%AF%E5%81%9A%E4%BB%80%E4%B9%88%E7%9A%84"><span class="toc-text">Reverse P&#x2F;Invoke 又是做什么的</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CLRMethod-%E5%AE%B9%E6%98%93%E5%92%8C-HybridCLR-%E6%B7%B7%E5%9C%A8%E4%B8%80%E8%B5%B7"><span class="toc-text">CLRMethod 容易和 HybridCLR 混在一起</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%B2%E8%B5%B7%E6%9D%A5%E7%9C%8B%E6%95%B4%E4%B8%AA%E6%B5%81%E7%A8%8B"><span class="toc-text">串起来看整个流程</span></a></li></ol></li></ol></details><div class="prose" id="prose"><h2 id="什么是热更新"><a href="#什么是热更新" class="headerlink" title="什么是热更新"></a>什么是热更新</h2><p>在用户没有感知或者低感知的情况下，让用户可以不用安装新的安装包实现功能增加或更新。</p>
 <h3 id="Mono-本身就可以热更新"><a href="#Mono-本身就可以热更新" class="headerlink" title="Mono 本身就可以热更新"></a>Mono 本身就可以热更新</h3><p>Mono 可以在支持 JIT 的平台上执行运行时加载的新 IL，因此具备做 C# 热更新的基础。但是 iOS 等设备因为权限问题，不能依赖 JIT，所以大部分热更新方案都在解决“如何在 iOS 上执行新代码”这个问题。详见<a href="/2026/07/20/Why_JIT_Cannot_Be_Used_for_Hot_Update_on_iOS/">为什么无法使用 JIT 在 iOS 上实现热更新</a>。</p>
 <h3 id="虚拟机解决方案"><a href="#虚拟机解决方案" class="headerlink" title="虚拟机解决方案"></a>虚拟机解决方案</h3><p>为了解决权限问题，可以在代码中添加虚拟机，以解释执行的方式实现热更新能力，例如 xLua、ToLua，以及各种 Python 热更新方案。原理是通过虚拟机在运行时执行热更新代码。</p>
 <h2 id="HybridCLR-官方说"><a href="#HybridCLR-官方说" class="headerlink" title="HybridCLR 官方说"></a>HybridCLR 官方说</h2><p>HybridCLR 从 Mono 的 <a target="_blank" rel="noopener" href="https://www.mono-project.com/news/2017/11/13/mono-interpreter/">mixed mode execution</a> 技术中得到启发，为 Unity 的 IL2CPP 这类 AOT runtime 额外提供 Interpreter 模块，将它们由纯 AOT 运行时改造为“AOT + Interpreter”混合运行方式。</p>
@@ -112,15 +137,27 @@ Mono 本身就可以热更新Mono 可以在支持 JIT 的平台上执行运行�
 <h3 id="串起来看整个流程"><a href="#串起来看整个流程" class="headerlink" title="串起来看整个流程"></a>串起来看整个流程</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs text">构建阶段<br>  AOT 程序集 --IL2CPP--&gt; C++ / 机器码<br>  热更新程序集 ------------&gt; HotUpdate.dll<br>  HybridCLR 工具 ----------&gt; MethodBridge、AOT 泛型引用、必要的 Wrapper<br><br>运行阶段<br>  加载补充元数据（如有 AOT 泛型）<br>  -&gt; Assembly.Load(HotUpdate.dll)<br>  -&gt; 启动热更新入口方法<br>  -&gt; IL 转为寄存器指令并由 Interpreter 执行<br>  -&gt; 调 Unity / 主工程时经过 MethodBridge<br></code></pre></td></tr></table></figure>
 
 <p>总结：HybridCLR 没有在 iOS 上偷偷做 JIT。它把解释器和一批提前编译好的桥接函数放进 IL2CPP Player 中，让新增 DLL 的 IL 可以被解释执行，同时又能和已经 AOT 的 Unity API、主工程代码正常互相调用。</p>
-<div class="post-tags"><a href="/tags/C/"># C#</a><a href="/tags/Unity/"># Unity</a><a href="/tags/%E7%83%AD%E6%9B%B4%E6%96%B0/"># 热更新</a><a href="/tags/HybridCLR/"># HybridCLR</a></div><nav class="post-pagination" aria-label="相邻文章"><a href="/2026/07/20/Why_JIT_Cannot_Be_Used_for_Hot_Update_on_iOS/"><small>← 上一篇</small>热更新系列-08-为什么无法使用JIT在iOS上实现热更新</a><a href="/2026/07/20/Hot_Update_Overview/"><small>下一篇 →</small>热更新系列-00-热更新简介</a></nav></article><aside class="post-toc"><div class="panel-top">本篇导航 <span>↙</span></div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%83%AD%E6%9B%B4%E6%96%B0"><span class="toc-text">什么是热更新</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Mono-%E6%9C%AC%E8%BA%AB%E5%B0%B1%E5%8F%AF%E4%BB%A5%E7%83%AD%E6%9B%B4%E6%96%B0"><span class="toc-text">Mono 本身就可以热更新</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-text">虚拟机解决方案</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HybridCLR-%E5%AE%98%E6%96%B9%E8%AF%B4"><span class="toc-text">HybridCLR 官方说</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3%E5%AE%98%E6%96%B9%E6%89%80%E8%AF%B4"><span class="toc-text">如何理解官方所说</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%88%E7%9C%8B%E5%8E%9F%E6%9D%A5%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-text">先看原来的问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HybridCLR-%E5%8A%A0%E4%BA%86%E4%B8%80%E5%8F%B0%E8%83%BD%E8%B7%91-IL-%E7%9A%84%E2%80%9C%E8%99%9A%E6%8B%9F%E6%9C%BA%E2%80%9D"><span class="toc-text">HybridCLR 加了一台能跑 IL 的“虚拟机”</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IL-%E5%88%B0%E5%BA%95%E6%98%AF%E6%80%8E%E6%A0%B7%E8%A2%AB%E6%89%A7%E8%A1%8C%E7%9A%84"><span class="toc-text">IL 到底是怎样被执行的</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%83%AD%E6%9B%B4%E6%96%B0%E4%BB%A3%E7%A0%81%E8%B0%83%E7%94%A8-Unity-API-%E4%B8%BA%E4%BB%80%E4%B9%88%E8%83%BD%E5%B7%A5%E4%BD%9C"><span class="toc-text">热更新代码调用 Unity API 为什么能工作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AOT-%E4%BB%A3%E7%A0%81%E6%9C%80%E5%BC%80%E5%A7%8B%E5%A6%82%E4%BD%95%E8%BF%9B%E5%85%A5%E7%83%AD%E6%9B%B4%E6%96%B0%E4%BB%A3%E7%A0%81"><span class="toc-text">AOT 代码最开始如何进入热更新代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%83%E6%95%B0%E6%8D%AE%E8%A1%A5%E5%85%85%E8%A7%A3%E5%86%B3%E7%9A%84%E6%98%AF%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98"><span class="toc-text">元数据补充解决的是什么问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reverse-P-Invoke-%E5%8F%88%E6%98%AF%E5%81%9A%E4%BB%80%E4%B9%88%E7%9A%84"><span class="toc-text">Reverse P&#x2F;Invoke 又是做什么的</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CLRMethod-%E5%AE%B9%E6%98%93%E5%92%8C-HybridCLR-%E6%B7%B7%E5%9C%A8%E4%B8%80%E8%B5%B7"><span class="toc-text">CLRMethod 容易和 HybridCLR 混在一起</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%B2%E8%B5%B7%E6%9D%A5%E7%9C%8B%E6%95%B4%E4%B8%AA%E6%B5%81%E7%A8%8B"><span class="toc-text">串起来看整个流程</span></a></li></ol></li></ol><a href="#main" class="back-top">返回顶部 ↑</a></aside></div>
+</div>
+<footer class="post-foot"><div class="post-meta"><span>标签</span><span class="meta-tags"><a href="/tags/C/">#C#</a><a href="/tags/Unity/">#Unity</a><a href="/tags/%E7%83%AD%E6%9B%B4%E6%96%B0/">#热更新</a><a href="/tags/HybridCLR/">#HybridCLR</a></span></div>
+<nav class="post-nav" aria-label="相邻文章"><a rel="prev" class="prev" href="/2026/07/20/Hot_Update_Overview/"><small>上一篇</small><span>热更新系列-00-热更新简介</span></a><a rel="next" class="next" href="/2026/07/20/Why_JIT_Cannot_Be_Used_for_Hot_Update_on_iOS/"><small>下一篇</small><span>热更新系列-08-为什么无法使用JIT在iOS上实现热更新</span></a></nav></footer></div></article>
 </main>
-  <footer class="footer"><div class="footer-red"><div class="shell"><a class="footer-brand" href="/">苏杭小站</a><span>每一份热爱，都值得存档。</span><a href="#main" class="footer-top" aria-label="返回页面顶部">↑</a></div></div><div class="footer-links shell"><div><a href="/archives/">文章归档</a><a href="/categories/">分类索引</a><a href="/tags/">全部标签</a><a href="/about/">关于与联系</a></div><span>© 2026 SuHang · 用 Hexo 记录日常</span></div></footer>
-  <dialog id="search-dialog" aria-labelledby="search-title" data-index="/journal-search.json" data-root="/">
-    <div class="search-head"><label id="search-title" for="search-input">发现一篇好文章</label><button class="search-close" aria-label="关闭搜索">×</button></div>
-    <input id="search-input" type="search" placeholder="搜索 Unity、热更新、C#…" autocomplete="off">
-    <p id="search-status" role="status">输入关键词，探索所有文章。</p><div id="search-results"></div>
-  </dialog>
-  <dialog id="image-dialog" aria-label="查看文章配图"><button class="image-close" aria-label="关闭配图">×</button><img alt=""><p></p></dialog>
-  <button class="floating-top" aria-label="回到顶部" title="回到顶部">↑</button><div class="toast" role="status"></div>
-  <script src="/assets/journal.js" defer></script>
-</body></html>
+
+<footer class="site-footer"><div class="container footer-inner"><div><a class="footer-brand" href="/">苏杭小站</a><p class="footer-slogan">时间匆匆流逝，希望留下点什么。</p></div>
+<nav aria-label="页脚导航"><ul class="footer-links"><li><a href="/archives/">文章归档</a></li><li><a href="/categories/">分类索引</a></li><li><a href="/tags/">全部标签</a></li><li><a href="/about/">关于与联系</a></li></ul></nav>
+<div class="footer-bottom"><span>© 2024–2026 SuHang，用 Hexo 记录日常</span><a class="back-top" href="#main">回到顶部 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 20V4m-6 6 6-6 6 6"/></svg></a></div></div></footer>
+
+<dialog class="search-dialog" id="search-dialog" aria-labelledby="search-title" data-index="/journal-search.json" data-root="/">
+<h2 id="search-title" class="visually-hidden">搜索文章</h2>
+<form class="search-bar" role="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg><label for="search-input" class="visually-hidden">搜索关键词</label><input id="search-input" type="search" placeholder="搜索标题、标签或正文" autocomplete="off" spellcheck="false" aria-describedby="search-status" aria-controls="search-results"><button type="button" class="search-close" aria-label="关闭搜索">Esc</button></form>
+<p class="search-status" id="search-status" role="status" aria-live="polite"></p><ul class="search-results" id="search-results" aria-label="搜索结果"></ul>
+<div class="search-foot" aria-hidden="true"><span><kbd>↑</kbd> <kbd>↓</kbd> 选择</span><span><kbd>Enter</kbd> 打开</span><span><kbd>Esc</kbd> 关闭</span></div>
+</dialog>
+
+<dialog class="image-dialog" id="image-dialog" aria-label="查看大图">
+<button class="image-close" type="button" aria-label="关闭大图"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+<img alt=""><p hidden></p>
+</dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="/assets/lumen.js" defer></script>
+</body>
+</html>

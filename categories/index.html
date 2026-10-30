@@ -1,39 +1,73 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>categories · 苏杭小站</title>
-  <meta name="description" content="苏杭的游戏开发手记，记录 Unity、C#、技术探索与生活。">
-  <meta name="theme-color" content="#e60012"><meta name="color-scheme" content="only light">
-  <link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="/assets/journal.css">
-  <link rel="canonical" href="https://lshgame.com/categories/index.html">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#F6F7F5">
+<script>
+(function () {
+  var KEY = 'lumen-theme', root = document.documentElement, mode = null;
+  root.classList.add('js');
+  try { mode = localStorage.getItem(KEY); } catch (e) {}
+  if (mode !== 'light' && mode !== 'dark') {
+    mode = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+  root.setAttribute('data-theme', mode);
+  var meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.setAttribute('content', mode === 'dark' ? '#131922' : '#F6F7F5');
+})();
+</script>
+
+<title>探索分类 - 苏杭小站</title>
+<meta name="description" content="苏杭的游戏开发手记，记录 Unity、C#、技术探索与生活。">
+<link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/lumen.css">
+<link rel="canonical" href="https://lshgame.com/categories/index.html">
 <meta name="generator" content="Hexo 7.3.0"></head>
-<body>
-  
-  <a class="skip" href="#main">跳转到内容</a>
-  <header class="header"><div class="header-inner">
-    <a class="brand" href="/" aria-label="苏杭小站首页"><span class="brand-word">苏杭小站</span><small>SUHANG'S JOURNAL</small></a>
-    <nav id="main-nav" aria-label="主导航">
-      <a class=""  href="/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10h-6v-7H9v7H3Z"/></svg>首页</a>
-      <a class="" href="/archives/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h5"/></svg>文章手记</a>
-      <a class="active" href="/categories/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/></svg>探索分类</a>
-      <a class="" href="/about/"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21v-3a8 8 0 0 1 16 0v3"/></svg>关于我</a>
-    </nav>
-    <div class="header-actions"><button class="search-open" aria-label="搜索文章"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 6 6"/></svg><span>搜索</span></button><button class="menu-toggle" aria-label="打开导航" aria-controls="main-nav" aria-expanded="false"><span></span><span></span><span></span></button></div>
-  </div></header>
-  <main id="main" class="shell inner-main">
-<section class="page-intro"><span class="section-kicker">CHOOSE YOUR NEXT QUEST</span><h1>探索分类<span>.</span></h1><p>从一个感兴趣的话题开始，发现下一段旅程。</p></section>
-<div class="taxonomy"><a href="/categories/Unity/"><small>TOPIC / 01</small><h2>Unity</h2><span>24 篇文章 <b>↗</b></span></a><a href="/categories/%E7%BC%96%E7%A8%8B/"><small>TOPIC / 02</small><h2>编程</h2><span>12 篇文章 <b>↗</b></span></a><a href="/categories/AI-Code/"><small>TOPIC / 03</small><h2>AI Code</h2><span>5 篇文章 <b>↗</b></span></a><a href="/categories/AI/"><small>TOPIC / 04</small><h2>AI</h2><span>3 篇文章 <b>↗</b></span></a><a href="/categories/%E9%9A%8F%E7%AC%94/"><small>TOPIC / 05</small><h2>随笔</h2><span>3 篇文章 <b>↗</b></span></a><a href="/categories/%E8%AF%BB%E4%B9%A6/"><small>TOPIC / 06</small><h2>读书</h2><span>3 篇文章 <b>↗</b></span></a><a href="/categories/Vim/"><small>TOPIC / 07</small><h2>Vim</h2><span>1 篇文章 <b>↗</b></span></a><a href="/categories/%E4%BE%BF%E6%8D%B7%E5%B7%A5%E4%BD%9C/"><small>TOPIC / 08</small><h2>便捷工作</h2><span>1 篇文章 <b>↗</b></span></a><a href="/categories/%E6%9D%82%E8%B0%88/"><small>TOPIC / 09</small><h2>杂谈</h2><span>1 篇文章 <b>↗</b></span></a><a href="/categories/Test/"><small>TOPIC / 10</small><h2>Test</h2><span>1 篇文章 <b>↗</b></span></a><a href="/categories/%E6%8A%80%E6%9C%AF/"><small>TOPIC / 11</small><h2>技术</h2><span>1 篇文章 <b>↗</b></span></a></div>
+<body data-mermaid="/assets/mermaid.min.js">
+
+<a class="skip-link" href="#main">跳到正文</a>
+<header class="site-header" id="site-header"><div class="container header-inner">
+<a class="brand" href="/" aria-label="苏杭小站 首页"><svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="2" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 3v26M3 16h26" stroke="var(--c-grid)" stroke-width="1.5" stroke-dasharray="2 2"/><rect x="6" y="6" width="8" height="8" fill="var(--c-accent)"/></svg><span class="brand-name">苏杭小站</span></a>
+<nav class="site-nav" id="site-nav" aria-label="主导航"><ul>
+
+<li><a href="/">首页</a></li>
+
+<li><a href="/archives/">文章手记</a></li>
+
+<li><a href="/categories/" aria-current="page">探索分类</a></li>
+
+<li><a href="/about/">关于我</a></li>
+
+</ul></nav>
+<div class="header-actions">
+<button class="icon-btn search-btn" type="button" aria-label="搜索文章" aria-haspopup="dialog" aria-controls="search-dialog" aria-keyshortcuts="/ Control+K Meta+K"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg><span class="label">搜索</span><kbd aria-hidden="true">/</kbd></button>
+<button class="icon-btn theme-toggle" type="button" aria-pressed="false" aria-label="夜间模式" title="切换到夜间模式"><svg class="icon-moon-line" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg><svg class="icon-moon-fill" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/><circle cx="18" cy="5" r="1.2"/><circle cx="21" cy="9" r=".8"/></svg></button>
+<button class="icon-btn menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="导航菜单"><svg class="icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+</div></div></header>
+
+<main id="main" tabindex="-1">
+<div class="container"><header class="page-head"><h1>探索分类</h1><p>11 个分类、47 个标签。也可以直接 <a href="/tags/">浏览全部标签</a>。</p></header><div class="cat-index"><section class="cat-block"><h2><a href="/categories/Unity/">Unity</a><span>24 篇</span></h2><ul><li><a href="/2026/08/20/Introduction_to_Optimizing_Draw_Calls/">优化 draw calls 简介</a></li><li><a href="/2026/08/20/Introduction_to_Mesh_Batching/">网格批处理简介</a></li><li><a href="/2026/08/19/Optimizing_GPU_Usage/">优化GPU使用</a></li></ul><a class="cat-more" href="/categories/Unity/">查看全部 24 篇</a></section><section class="cat-block"><h2><a href="/categories/%E7%BC%96%E7%A8%8B/">编程</a><span>12 篇</span></h2><ul><li><a href="/2026/07/20/Why_JIT_Cannot_Be_Used_for_Hot_Update_on_iOS/">热更新系列-08-为什么无法使用JIT在iOS上实现热更新</a></li><li><a href="/2026/07/20/How_HybridCLR_Implements_Hot_Update/">热更新系列-09-HybridCLR如何实现热更新</a></li><li><a href="/2026/07/20/Hot_Update_Overview/">热更新系列-00-热更新简介</a></li></ul><a class="cat-more" href="/categories/%E7%BC%96%E7%A8%8B/">查看全部 12 篇</a></section><section class="cat-block"><h2><a href="/categories/AI-Code/">AI Code</a><span>5 篇</span></h2><ul><li><a href="/2025/07/29/Using_RIPER-5_to_Enhance_Coding_Efficiency/">ClaudeCode使用RIPER-5提升编码效率</a></li><li><a href="/2025/06/17/Configuring_ClaudeCode_MCP/">ClaudeCode配置MCP</a></li><li><a href="/2025/06/17/Configuring_Clash_Proxy_in_WSL/">wsl中配置clash代理</a></li></ul><a class="cat-more" href="/categories/AI-Code/">查看全部 5 篇</a></section><section class="cat-block"><h2><a href="/categories/%E8%AF%BB%E4%B9%A6/">读书</a><span>3 篇</span></h2><ul><li><a href="/2025/05/25/Soft_Skills_Beyond_Code_Chapter_3/">软技能-代码之外的生存指南_其三</a></li><li><a href="/2025/05/18/Soft_Skills_Beyond_Code_Chapter_2/">软技能-代码之外的生存指南-其二</a></li><li><a href="/2025/05/07/Soft_Skills_Beyond_Code_Chapter_1/">软技能-代码之外的生存指南_其一</a></li></ul></section><section class="cat-block"><h2><a href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a><span>3 篇</span></h2><ul><li><a href="/2026/05/20/Waiting_or_Not_Waiting/">等待与不等待</a></li><li><a href="/2024/08/08/Interview/">记录一下最近面试,总结</a></li><li><a href="/2024/07/18/Low_Blood_Sugar/">记一次低血糖感受</a></li></ul></section><section class="cat-block"><h2><a href="/categories/AI/">AI</a><span>3 篇</span></h2><ul><li><a href="/2026/04/30/Some_Thoughts_on_AI_Memory/">关于 AI Memory 的一些思考：记忆应该如何在工作中形成</a></li><li><a href="/2026/03/14/OpenClaw_Short_Note_1/">OpenClaw踩坑分享</a></li><li><a href="/2025/07/21/Short%20Note%20-%20How%20to%20Use%20ClaudeCode/">短记-如何使用ClaudeCode</a></li></ul></section><section class="cat-block"><h2><a href="/categories/%E4%BE%BF%E6%8D%B7%E5%B7%A5%E4%BD%9C/">便捷工作</a><span>1 篇</span></h2><ul><li><a href="/2024/10/30/frp_remote_desktop/">内网穿透—基于frp实现远程桌面</a></li></ul></section><section class="cat-block"><h2><a href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><span>1 篇</span></h2><ul><li><a href="/2025/08/01/Test_Code_Highlight_Functionality/">测试代码高亮功能</a></li></ul></section><section class="cat-block"><h2><a href="/categories/%E6%9D%82%E8%B0%88/">杂谈</a><span>1 篇</span></h2><ul><li><a href="/2026/01/13/Some_Recent_Things/">最近的一些事</a></li></ul></section><section class="cat-block"><h2><a href="/categories/Test/">Test</a><span>1 篇</span></h2><ul><li><a href="/2025/08/01/undefined/">Test Mermaid Chart Functionality</a></li></ul></section><section class="cat-block"><h2><a href="/categories/Vim/">Vim</a><span>1 篇</span></h2><ul><li><a href="/2024/10/30/vim_E117/">vim踩坑记录-E117</a></li></ul></section></div></div>
 
 </main>
-  <footer class="footer"><div class="footer-red"><div class="shell"><a class="footer-brand" href="/">苏杭小站</a><span>每一份热爱，都值得存档。</span><a href="#main" class="footer-top" aria-label="返回页面顶部">↑</a></div></div><div class="footer-links shell"><div><a href="/archives/">文章归档</a><a href="/categories/">分类索引</a><a href="/tags/">全部标签</a><a href="/about/">关于与联系</a></div><span>© 2026 SuHang · 用 Hexo 记录日常</span></div></footer>
-  <dialog id="search-dialog" aria-labelledby="search-title" data-index="/journal-search.json" data-root="/">
-    <div class="search-head"><label id="search-title" for="search-input">发现一篇好文章</label><button class="search-close" aria-label="关闭搜索">×</button></div>
-    <input id="search-input" type="search" placeholder="搜索 Unity、热更新、C#…" autocomplete="off">
-    <p id="search-status" role="status">输入关键词，探索所有文章。</p><div id="search-results"></div>
-  </dialog>
-  <dialog id="image-dialog" aria-label="查看文章配图"><button class="image-close" aria-label="关闭配图">×</button><img alt=""><p></p></dialog>
-  <button class="floating-top" aria-label="回到顶部" title="回到顶部">↑</button><div class="toast" role="status"></div>
-  <script src="/assets/journal.js" defer></script>
-</body></html>
+
+<footer class="site-footer"><div class="container footer-inner"><div><a class="footer-brand" href="/">苏杭小站</a><p class="footer-slogan">时间匆匆流逝，希望留下点什么。</p></div>
+<nav aria-label="页脚导航"><ul class="footer-links"><li><a href="/archives/">文章归档</a></li><li><a href="/categories/">分类索引</a></li><li><a href="/tags/">全部标签</a></li><li><a href="/about/">关于与联系</a></li></ul></nav>
+<div class="footer-bottom"><span>© 2024–2026 SuHang，用 Hexo 记录日常</span><a class="back-top" href="#main">回到顶部 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 20V4m-6 6 6-6 6 6"/></svg></a></div></div></footer>
+
+<dialog class="search-dialog" id="search-dialog" aria-labelledby="search-title" data-index="/journal-search.json" data-root="/">
+<h2 id="search-title" class="visually-hidden">搜索文章</h2>
+<form class="search-bar" role="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg><label for="search-input" class="visually-hidden">搜索关键词</label><input id="search-input" type="search" placeholder="搜索标题、标签或正文" autocomplete="off" spellcheck="false" aria-describedby="search-status" aria-controls="search-results"><button type="button" class="search-close" aria-label="关闭搜索">Esc</button></form>
+<p class="search-status" id="search-status" role="status" aria-live="polite"></p><ul class="search-results" id="search-results" aria-label="搜索结果"></ul>
+<div class="search-foot" aria-hidden="true"><span><kbd>↑</kbd> <kbd>↓</kbd> 选择</span><span><kbd>Enter</kbd> 打开</span><span><kbd>Esc</kbd> 关闭</span></div>
+</dialog>
+
+<dialog class="image-dialog" id="image-dialog" aria-label="查看大图">
+<button class="image-close" type="button" aria-label="关闭大图"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+<img alt=""><p hidden></p>
+</dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="/assets/lumen.js" defer></script>
+</body>
+</html>

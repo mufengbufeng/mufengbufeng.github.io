@@ -1,122 +1,144 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>苏杭小站</title>
-  <meta name="description" content="苏杭的游戏开发手记，记录 Unity、C#、技术探索与生活。">
-  <meta name="theme-color" content="#e60012"><meta name="color-scheme" content="only light">
-  <link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="/assets/journal.css">
-  <link rel="canonical" href="https://lshgame.com/tags/%E7%83%AD%E6%9B%B4%E6%96%B0/index.html">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#F6F7F5">
+<script>
+(function () {
+  var KEY = 'lumen-theme', root = document.documentElement, mode = null;
+  root.classList.add('js');
+  try { mode = localStorage.getItem(KEY); } catch (e) {}
+  if (mode !== 'light' && mode !== 'dark') {
+    mode = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+  root.setAttribute('data-theme', mode);
+  var meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.setAttribute('content', mode === 'dark' ? '#131922' : '#F6F7F5');
+})();
+</script>
+
+<title>#热更新 - 全部标签 - 苏杭小站</title>
+<meta name="description" content="苏杭的游戏开发手记，记录 Unity、C#、技术探索与生活。">
+<link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/lumen.css">
+<link rel="canonical" href="https://lshgame.com/tags/%E7%83%AD%E6%9B%B4%E6%96%B0/index.html">
 <meta name="generator" content="Hexo 7.3.0"></head>
-<body>
-  
-  <a class="skip" href="#main">跳转到内容</a>
-  <header class="header"><div class="header-inner">
-    <a class="brand" href="/" aria-label="苏杭小站首页"><span class="brand-word">苏杭小站</span><small>SUHANG'S JOURNAL</small></a>
-    <nav id="main-nav" aria-label="主导航">
-      <a class=""  href="/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10h-6v-7H9v7H3Z"/></svg>首页</a>
-      <a class="" href="/archives/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h5"/></svg>文章手记</a>
-      <a class="active" href="/categories/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/></svg>探索分类</a>
-      <a class="" href="/about/"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21v-3a8 8 0 0 1 16 0v3"/></svg>关于我</a>
-    </nav>
-    <div class="header-actions"><button class="search-open" aria-label="搜索文章"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 6 6"/></svg><span>搜索</span></button><button class="menu-toggle" aria-label="打开导航" aria-controls="main-nav" aria-expanded="false"><span></span><span></span><span></span></button></div>
-  </div></header>
-  <main id="main" class="shell inner-main"><section class="page-intro"><span class="section-kicker">EXPLORE THE JOURNAL</span><h1>热更新<span>.</span></h1><p>每一次思考，都是一次经验值的积累。这里保存着探索的足迹。</p><a class="quiet-link" href="/categories/">分类索引 ↗</a>　<a class="quiet-link" href="/tags/">标签索引 ↗</a></section>
-<div class="article-grid">
+<body data-mermaid="/assets/mermaid.min.js">
 
-  <article class="article-card">
-    <a class="card-art" href="/2026/07/20/Why_JIT_Cannot_Be_Used_for_Hot_Update_on_iOS/" aria-label="阅读：热更新系列-08-为什么无法使用JIT在iOS上实现热更新"><img src="/assets/art/cover-code.webp" width="1200" height="800" alt="" loading="lazy" decoding="async"><span class="art-label">编程</span><span class="art-arrow" aria-hidden="true">↗</span></a>
-    <div class="card-body"><div class="eyebrow"><time datetime="2026-07-20">2026.07.20</time><span>5 分钟阅读</span></div>
-    <h3><a href="/2026/07/20/Why_JIT_Cannot_Be_Used_for_Hot_Update_on_iOS/">热更新系列-08-为什么无法使用JIT在iOS上实现热更新</a></h3>
-    <p>先说结论这里说的 iOS，指的是正常上架的第三方 App。 这类 App 不能把运行时下载的新 IL，再临时编译成新的机器码执行。所以 JIT 可以在某些...</p>
-    <a class="card-read" href="/2026/07/20/Why_JIT_Cannot_Be_Used_for_Hot_Update_on_iOS/" aria-label="继续阅读：热更新系列-08-为什么无法使用JIT在iOS上实现热更新">继续阅读 <span>→</span></a></div>
-  </article>
+<a class="skip-link" href="#main">跳到正文</a>
+<header class="site-header" id="site-header"><div class="container header-inner">
+<a class="brand" href="/" aria-label="苏杭小站 首页"><svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="2" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 3v26M3 16h26" stroke="var(--c-grid)" stroke-width="1.5" stroke-dasharray="2 2"/><rect x="6" y="6" width="8" height="8" fill="var(--c-accent)"/></svg><span class="brand-name">苏杭小站</span></a>
+<nav class="site-nav" id="site-nav" aria-label="主导航"><ul>
 
-  <article class="article-card">
-    <a class="card-art" href="/2026/07/20/How_HybridCLR_Implements_Hot_Update/" aria-label="阅读：热更新系列-09-HybridCLR如何实现热更新"><img src="/assets/art/cover-code.webp" width="1200" height="800" alt="" loading="lazy" decoding="async"><span class="art-label">编程</span><span class="art-arrow" aria-hidden="true">↗</span></a>
-    <div class="card-body"><div class="eyebrow"><time datetime="2026-07-20">2026.07.20</time><span>13 分钟阅读</span></div>
-    <h3><a href="/2026/07/20/How_HybridCLR_Implements_Hot_Update/">热更新系列-09-HybridCLR如何实现热更新</a></h3>
-    <p>什么是热更新在用户没有感知或者低感知的情况下，让用户可以不用安装新的安装包实现功能增加或更新。 Mono 本身就可以热更新Mono 可以在支持 JIT 的...</p>
-    <a class="card-read" href="/2026/07/20/How_HybridCLR_Implements_Hot_Update/" aria-label="继续阅读：热更新系列-09-HybridCLR如何实现热更新">继续阅读 <span>→</span></a></div>
-  </article>
+<li><a href="/">首页</a></li>
 
-  <article class="article-card">
-    <a class="card-art" href="/2026/07/20/Hot_Update_Overview/" aria-label="阅读：热更新系列-00-热更新简介"><img src="/assets/art/cover-code.webp" width="1200" height="800" alt="" loading="lazy" decoding="async"><span class="art-label">编程</span><span class="art-arrow" aria-hidden="true">↗</span></a>
-    <div class="card-body"><div class="eyebrow"><time datetime="2026-07-20">2026.07.20</time><span>1 分钟阅读</span></div>
-    <h3><a href="/2026/07/20/Hot_Update_Overview/">热更新系列-00-热更新简介</a></h3>
-    <p>基础名词解释AOT什么是 AOT JIT什么是 JIT ILIL（Intermediate Language） IL2CPP什么是 IL2CPP 热更新逻...</p>
-    <a class="card-read" href="/2026/07/20/Hot_Update_Overview/" aria-label="继续阅读：热更新系列-00-热更新简介">继续阅读 <span>→</span></a></div>
-  </article>
+<li><a href="/archives/">文章手记</a></li>
 
-  <article class="article-card">
-    <a class="card-art" href="/2026/04/22/What_is_Managed_Code/" aria-label="阅读：热更新系列-01-什么是托管代码(Managed Code)"><img src="/assets/art/cover-code.webp" width="1200" height="800" alt="" loading="lazy" decoding="async"><span class="art-label">编程</span><span class="art-arrow" aria-hidden="true">↗</span></a>
-    <div class="card-body"><div class="eyebrow"><time datetime="2026-04-22">2026.04.22</time><span>1 分钟阅读</span></div>
-    <h3><a href="/2026/04/22/What_is_Managed_Code/">热更新系列-01-什么是托管代码(Managed Code)</a></h3>
-    <p>什么是托管代码托管代码就是：其执行由运行时管理的代码。这种情况下，无论实现（如：Mono、.Net Framework、.Net Core&amp;#x2F;.N...</p>
-    <a class="card-read" href="/2026/04/22/What_is_Managed_Code/" aria-label="继续阅读：热更新系列-01-什么是托管代码(Managed Code)">继续阅读 <span>→</span></a></div>
-  </article>
+<li><a href="/categories/" aria-current="page">探索分类</a></li>
 
-  <article class="article-card">
-    <a class="card-art" href="/2026/04/22/What_is_IL/" aria-label="阅读：热更新系列-02-IL中间语言(Intermediate Language)"><img src="/assets/art/cover-code.webp" width="1200" height="800" alt="" loading="lazy" decoding="async"><span class="art-label">编程</span><span class="art-arrow" aria-hidden="true">↗</span></a>
-    <div class="card-body"><div class="eyebrow"><time datetime="2026-04-22">2026.04.22</time><span>1 分钟阅读</span></div>
-    <h3><a href="/2026/04/22/What_is_IL/">热更新系列-02-IL中间语言(Intermediate Language)</a></h3>
-    <p>什么是 IL（中间语言）什么是”中间语言（IL）”？它是用高级 .NET 语言编写的代码编译的产物。编写其中一种语言编写的代码后，将会收到一个由 IL 编...</p>
-    <a class="card-read" href="/2026/04/22/What_is_IL/" aria-label="继续阅读：热更新系列-02-IL中间语言(Intermediate Language)">继续阅读 <span>→</span></a></div>
-  </article>
+<li><a href="/about/">关于我</a></li>
 
-  <article class="article-card">
-    <a class="card-art" href="/2026/04/22/What_is_CLR/" aria-label="阅读：热更新系列-03-CLR是什么"><img src="/assets/art/cover-code.webp" width="1200" height="800" alt="" loading="lazy" decoding="async"><span class="art-label">编程</span><span class="art-arrow" aria-hidden="true">↗</span></a>
-    <div class="card-body"><div class="eyebrow"><time datetime="2026-04-22">2026.04.22</time><span>1 分钟阅读</span></div>
-    <h3><a href="/2026/04/22/What_is_CLR/">热更新系列-03-CLR是什么</a></h3>
-    <p>CLR 是什么.Net 的运行时环境，类似于 Java 的 JVM。 CLR 做什么 JIT 编译 内存管理 类型系统 异常处理 安全校验 CLR 有哪些...</p>
-    <a class="card-read" href="/2026/04/22/What_is_CLR/" aria-label="继续阅读：热更新系列-03-CLR是什么">继续阅读 <span>→</span></a></div>
-  </article>
+</ul></nav>
+<div class="header-actions">
+<button class="icon-btn search-btn" type="button" aria-label="搜索文章" aria-haspopup="dialog" aria-controls="search-dialog" aria-keyshortcuts="/ Control+K Meta+K"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg><span class="label">搜索</span><kbd aria-hidden="true">/</kbd></button>
+<button class="icon-btn theme-toggle" type="button" aria-pressed="false" aria-label="夜间模式" title="切换到夜间模式"><svg class="icon-moon-line" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg><svg class="icon-moon-fill" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/><circle cx="18" cy="5" r="1.2"/><circle cx="21" cy="9" r=".8"/></svg></button>
+<button class="icon-btn menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="导航菜单"><svg class="icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+</div></div></header>
 
-  <article class="article-card">
-    <a class="card-art" href="/2026/04/22/What_is_Mono/" aria-label="阅读：热更新系列-04-Mono是什么"><img src="/assets/art/cover-code.webp" width="1200" height="800" alt="" loading="lazy" decoding="async"><span class="art-label">编程</span><span class="art-arrow" aria-hidden="true">↗</span></a>
-    <div class="card-body"><div class="eyebrow"><time datetime="2026-04-22">2026.04.22</time><span>2 分钟阅读</span></div>
-    <h3><a href="/2026/04/22/What_is_Mono/">热更新系列-04-Mono是什么</a></h3>
-    <p>Mono 是什么Mono 是一个由 Xamarin 公司（先前是 Novell，最早为 Ximian）所主持的自由开放源码项目。该项目的目标是创建一系列符...</p>
-    <a class="card-read" href="/2026/04/22/What_is_Mono/" aria-label="继续阅读：热更新系列-04-Mono是什么">继续阅读 <span>→</span></a></div>
-  </article>
+<main id="main" tabindex="-1">
+<div class="container"><div class="detail-list"><header class="page-head"><ol class="crumbs" aria-label="位置"><li><a href="/tags/">全部标签</a></li><li>#热更新</li></ol><h1>#热更新</h1><p>共 10 篇</p></header><ol class="post-list">
+<li class="post-item"><div class="post-date"><time datetime="2026-07-20"><span class="md">7月20日</span></time><span class="y">2026</span></div>
+<div class="post-info"><h2 class="post-title"><a href="/2026/07/20/Why_JIT_Cannot_Be_Used_for_Hot_Update_on_iOS/">热更新系列-08-为什么无法使用JIT在iOS上实现热更新</a></h2>
+<p class="post-excerpt">先说结论这里说的 iOS，指的是正常上架的第三方 App。 这类 App 不能把运行时下载的新 IL，再临时编译成新的机器码执行。所以 JIT 可以在某些平台上作为 C# 热更新方案，但不能作为 iOS 游戏的上架方案。 这不是 Unit…</p>
+<div class="post-meta"><a class="meta-cat" href="/categories/%E7%BC%96%E7%A8%8B/">编程</a>
+<span class="meta-tags"><a href="/tags/C/">#C#</a><a href="/tags/Unity/">#Unity</a><a href="/tags/%E7%83%AD%E6%9B%B4%E6%96%B0/">#热更新</a><a href="/tags/iOS/">#iOS</a></span>
+<span>约 5 分钟读完</span></div></div></li>
 
-  <article class="article-card">
-    <a class="card-art" href="/2026/04/22/What_is_JIT/" aria-label="阅读：热更新系列-05-什么是JIT"><img src="/assets/art/cover-code.webp" width="1200" height="800" alt="" loading="lazy" decoding="async"><span class="art-label">编程</span><span class="art-arrow" aria-hidden="true">↗</span></a>
-    <div class="card-body"><div class="eyebrow"><time datetime="2026-04-22">2026.04.22</time><span>1 分钟阅读</span></div>
-    <h3><a href="/2026/04/22/What_is_JIT/">热更新系列-05-什么是JIT</a></h3>
-    <p>什么是 JIT与 AOT 类似，JIT 编译器将 IL 代码翻译成处理器能够理解的机器代码。但与 AOT 不同的是，JIT 编译是按需进行的，并且在代码运...</p>
-    <a class="card-read" href="/2026/04/22/What_is_JIT/" aria-label="继续阅读：热更新系列-05-什么是JIT">继续阅读 <span>→</span></a></div>
-  </article>
+<li class="post-item"><div class="post-date"><time datetime="2026-07-20"><span class="md">7月20日</span></time><span class="y">2026</span></div>
+<div class="post-info"><h2 class="post-title"><a href="/2026/07/20/How_HybridCLR_Implements_Hot_Update/">热更新系列-09-HybridCLR如何实现热更新</a></h2>
+<p class="post-excerpt">什么是热更新在用户没有感知或者低感知的情况下，让用户可以不用安装新的安装包实现功能增加或更新。 Mono 本身就可以热更新Mono 可以在支持 JIT 的平台上执行运行时加载的新 IL，因此具备做 C# 热更新的基础。但是 iOS 等设备…</p>
+<div class="post-meta"><a class="meta-cat" href="/categories/%E7%BC%96%E7%A8%8B/">编程</a>
+<span class="meta-tags"><a href="/tags/C/">#C#</a><a href="/tags/Unity/">#Unity</a><a href="/tags/%E7%83%AD%E6%9B%B4%E6%96%B0/">#热更新</a><a href="/tags/HybridCLR/">#HybridCLR</a></span>
+<span>约 13 分钟读完</span></div></div></li>
 
-  <article class="article-card">
-    <a class="card-art" href="/2026/04/22/What_is_AOT/" aria-label="阅读：热更新系列-06-什么是AOT"><img src="/assets/art/cover-code.webp" width="1200" height="800" alt="" loading="lazy" decoding="async"><span class="art-label">编程</span><span class="art-arrow" aria-hidden="true">↗</span></a>
-    <div class="card-body"><div class="eyebrow"><time datetime="2026-04-22">2026.04.22</time><span>1 分钟阅读</span></div>
-    <h3><a href="/2026/04/22/What_is_AOT/">热更新系列-06-什么是AOT</a></h3>
-    <p>什么是 AOTAOT 编译器也将 IL 代码翻译成机器代码。但与 JIT 编译不同的是，AOT 编译发生在应用程序执行之前，通常在不同的机器上进行。由于 ...</p>
-    <a class="card-read" href="/2026/04/22/What_is_AOT/" aria-label="继续阅读：热更新系列-06-什么是AOT">继续阅读 <span>→</span></a></div>
-  </article>
+<li class="post-item"><div class="post-date"><time datetime="2026-07-20"><span class="md">7月20日</span></time><span class="y">2026</span></div>
+<div class="post-info"><h2 class="post-title"><a href="/2026/07/20/Hot_Update_Overview/">热更新系列-00-热更新简介</a></h2>
+<p class="post-excerpt">基础名词解释AOT什么是 AOT JIT什么是 JIT ILIL（Intermediate Language） IL2CPP什么是 IL2CPP 热更新逻辑Mono 本身就可以热更新Mono 本身支持 AOT + JIT 实现热更新，但是…</p>
+<div class="post-meta"><a class="meta-cat" href="/categories/%E7%BC%96%E7%A8%8B/">编程</a>
+<span class="meta-tags"><a href="/tags/C/">#C#</a><a href="/tags/Unity/">#Unity</a><a href="/tags/%E7%83%AD%E6%9B%B4%E6%96%B0/">#热更新</a></span>
+<span>约 1 分钟读完</span></div></div></li>
 
-  <article class="article-card">
-    <a class="card-art" href="/2026/04/22/What_is_IL2CPP/" aria-label="阅读：热更新系列-07-什么是IL2CPP"><img src="/assets/art/cover-code.webp" width="1200" height="800" alt="" loading="lazy" decoding="async"><span class="art-label">编程</span><span class="art-arrow" aria-hidden="true">↗</span></a>
-    <div class="card-body"><div class="eyebrow"><time datetime="2026-04-22">2026.04.22</time><span>3 分钟阅读</span></div>
-    <h3><a href="/2026/04/22/What_is_IL2CPP/">热更新系列-07-什么是IL2CPP</a></h3>
-    <p>介绍IL2CPP（Intermediate Language To C++）是 Unity 的脚本后端，可在为各个平台构建项目时替代 Mono。使用 IL...</p>
-    <a class="card-read" href="/2026/04/22/What_is_IL2CPP/" aria-label="继续阅读：热更新系列-07-什么是IL2CPP">继续阅读 <span>→</span></a></div>
-  </article>
+<li class="post-item"><div class="post-date"><time datetime="2026-04-22"><span class="md">4月22日</span></time><span class="y">2026</span></div>
+<div class="post-info"><h2 class="post-title"><a href="/2026/04/22/What_is_Managed_Code/">热更新系列-01-什么是托管代码(Managed Code)</a></h2>
+<p class="post-excerpt">什么是托管代码托管代码就是：其执行由运行时管理的代码。这种情况下，无论实现（如：Mono、.Net Framework、.Net Core&amp;#x2F;.Net 5+），都被称为公共语言运行时（CLR）。CLR 负责获取托管代码，将其编译为…</p>
+<div class="post-meta"><a class="meta-cat" href="/categories/%E7%BC%96%E7%A8%8B/">编程</a>
+<span class="meta-tags"><a href="/tags/C/">#C#</a><a href="/tags/Unity/">#Unity</a><a href="/tags/%E7%83%AD%E6%9B%B4%E6%96%B0/">#热更新</a></span>
+<span>约 1 分钟读完</span></div></div></li>
 
-</div>
+<li class="post-item"><div class="post-date"><time datetime="2026-04-22"><span class="md">4月22日</span></time><span class="y">2026</span></div>
+<div class="post-info"><h2 class="post-title"><a href="/2026/04/22/What_is_IL/">热更新系列-02-IL中间语言(Intermediate Language)</a></h2>
+<p class="post-excerpt">什么是 IL（中间语言）什么是”中间语言（IL）”？它是用高级 .NET 语言编写的代码编译的产物。编写其中一种语言编写的代码后，将会收到一个由 IL 编写的二进制文件。 值得注意的是，IL 独立于运行在运行时（Runtime）之上的任何…</p>
+<div class="post-meta"><a class="meta-cat" href="/categories/%E7%BC%96%E7%A8%8B/">编程</a>
+<span class="meta-tags"><a href="/tags/C/">#C#</a><a href="/tags/Unity/">#Unity</a><a href="/tags/%E7%83%AD%E6%9B%B4%E6%96%B0/">#热更新</a></span>
+<span>约 1 分钟读完</span></div></div></li>
 
-<nav class="pagination" aria-label="文章分页"><span class="page-number current">1</span></nav>
+<li class="post-item"><div class="post-date"><time datetime="2026-04-22"><span class="md">4月22日</span></time><span class="y">2026</span></div>
+<div class="post-info"><h2 class="post-title"><a href="/2026/04/22/What_is_CLR/">热更新系列-03-CLR是什么</a></h2>
+<p class="post-excerpt">CLR 是什么.Net 的运行时环境，类似于 Java 的 JVM。 CLR 做什么 JIT 编译 内存管理 类型系统 异常处理 安全校验 CLR 有哪些实现 CoreCLR 微软官方的 CLR 实现 .Net 6&amp;#x2F;7&amp;#x2F…</p>
+<div class="post-meta"><a class="meta-cat" href="/categories/%E7%BC%96%E7%A8%8B/">编程</a>
+<span class="meta-tags"><a href="/tags/C/">#C#</a><a href="/tags/Unity/">#Unity</a><a href="/tags/%E7%83%AD%E6%9B%B4%E6%96%B0/">#热更新</a></span>
+<span>约 1 分钟读完</span></div></div></li>
+
+<li class="post-item"><div class="post-date"><time datetime="2026-04-22"><span class="md">4月22日</span></time><span class="y">2026</span></div>
+<div class="post-info"><h2 class="post-title"><a href="/2026/04/22/What_is_Mono/">热更新系列-04-Mono是什么</a></h2>
+<p class="post-excerpt">Mono 是什么Mono 是一个由 Xamarin 公司（先前是 Novell，最早为 Ximian）所主持的自由开放源码项目。该项目的目标是创建一系列符合 ECMA 标准（Ecma-334 和 Ecma-335）的 .NET 工具，包括…</p>
+<div class="post-meta"><a class="meta-cat" href="/categories/%E7%BC%96%E7%A8%8B/">编程</a>
+<span class="meta-tags"><a href="/tags/C/">#C#</a><a href="/tags/Unity/">#Unity</a><a href="/tags/%E7%83%AD%E6%9B%B4%E6%96%B0/">#热更新</a></span>
+<span>约 2 分钟读完</span></div></div></li>
+
+<li class="post-item"><div class="post-date"><time datetime="2026-04-22"><span class="md">4月22日</span></time><span class="y">2026</span></div>
+<div class="post-info"><h2 class="post-title"><a href="/2026/04/22/What_is_JIT/">热更新系列-05-什么是JIT</a></h2>
+<p class="post-excerpt">什么是 JIT与 AOT 类似，JIT 编译器将 IL 代码翻译成处理器能够理解的机器代码。但与 AOT 不同的是，JIT 编译是按需进行的，并且在代码运行的同一台机器上执行。由于 JIT 编译发生在应用程序执行期间，因此编译时间也包含在…</p>
+<div class="post-meta"><a class="meta-cat" href="/categories/%E7%BC%96%E7%A8%8B/">编程</a>
+<span class="meta-tags"><a href="/tags/C/">#C#</a><a href="/tags/Unity/">#Unity</a><a href="/tags/%E7%83%AD%E6%9B%B4%E6%96%B0/">#热更新</a></span>
+<span>约 1 分钟读完</span></div></div></li>
+
+<li class="post-item"><div class="post-date"><time datetime="2026-04-22"><span class="md">4月22日</span></time><span class="y">2026</span></div>
+<div class="post-info"><h2 class="post-title"><a href="/2026/04/22/What_is_AOT/">热更新系列-06-什么是AOT</a></h2>
+<p class="post-excerpt">什么是 AOTAOT 编译器也将 IL 代码翻译成机器代码。但与 JIT 编译不同的是，AOT 编译发生在应用程序执行之前，通常在不同的机器上进行。由于 AOT 工具链不在运行时进行编译，因此无需最小化编译时间，可以投入更多时间进行优化。…</p>
+<div class="post-meta"><a class="meta-cat" href="/categories/%E7%BC%96%E7%A8%8B/">编程</a>
+<span class="meta-tags"><a href="/tags/C/">#C#</a><a href="/tags/Unity/">#Unity</a><a href="/tags/%E7%83%AD%E6%9B%B4%E6%96%B0/">#热更新</a></span>
+<span>约 1 分钟读完</span></div></div></li>
+
+<li class="post-item"><div class="post-date"><time datetime="2026-04-22"><span class="md">4月22日</span></time><span class="y">2026</span></div>
+<div class="post-info"><h2 class="post-title"><a href="/2026/04/22/What_is_IL2CPP/">热更新系列-07-什么是IL2CPP</a></h2>
+<p class="post-excerpt">介绍IL2CPP（Intermediate Language To C++）是 Unity 的脚本后端，可在为各个平台构建项目时替代 Mono。使用 IL2CPP 构建项目时，Unity 会在为所选平台创建本机二进制文件（例如 .exe、…</p>
+<div class="post-meta"><a class="meta-cat" href="/categories/%E7%BC%96%E7%A8%8B/">编程</a>
+<span class="meta-tags"><a href="/tags/C/">#C#</a><a href="/tags/Unity/">#Unity</a><a href="/tags/%E7%83%AD%E6%9B%B4%E6%96%B0/">#热更新</a></span>
+<span>约 3 分钟读完</span></div></div></li>
+</ol>
+</div></div>
 
 </main>
-  <footer class="footer"><div class="footer-red"><div class="shell"><a class="footer-brand" href="/">苏杭小站</a><span>每一份热爱，都值得存档。</span><a href="#main" class="footer-top" aria-label="返回页面顶部">↑</a></div></div><div class="footer-links shell"><div><a href="/archives/">文章归档</a><a href="/categories/">分类索引</a><a href="/tags/">全部标签</a><a href="/about/">关于与联系</a></div><span>© 2026 SuHang · 用 Hexo 记录日常</span></div></footer>
-  <dialog id="search-dialog" aria-labelledby="search-title" data-index="/journal-search.json" data-root="/">
-    <div class="search-head"><label id="search-title" for="search-input">发现一篇好文章</label><button class="search-close" aria-label="关闭搜索">×</button></div>
-    <input id="search-input" type="search" placeholder="搜索 Unity、热更新、C#…" autocomplete="off">
-    <p id="search-status" role="status">输入关键词，探索所有文章。</p><div id="search-results"></div>
-  </dialog>
-  <dialog id="image-dialog" aria-label="查看文章配图"><button class="image-close" aria-label="关闭配图">×</button><img alt=""><p></p></dialog>
-  <button class="floating-top" aria-label="回到顶部" title="回到顶部">↑</button><div class="toast" role="status"></div>
-  <script src="/assets/journal.js" defer></script>
-</body></html>
+
+<footer class="site-footer"><div class="container footer-inner"><div><a class="footer-brand" href="/">苏杭小站</a><p class="footer-slogan">时间匆匆流逝，希望留下点什么。</p></div>
+<nav aria-label="页脚导航"><ul class="footer-links"><li><a href="/archives/">文章归档</a></li><li><a href="/categories/">分类索引</a></li><li><a href="/tags/">全部标签</a></li><li><a href="/about/">关于与联系</a></li></ul></nav>
+<div class="footer-bottom"><span>© 2024–2026 SuHang，用 Hexo 记录日常</span><a class="back-top" href="#main">回到顶部 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 20V4m-6 6 6-6 6 6"/></svg></a></div></div></footer>
+
+<dialog class="search-dialog" id="search-dialog" aria-labelledby="search-title" data-index="/journal-search.json" data-root="/">
+<h2 id="search-title" class="visually-hidden">搜索文章</h2>
+<form class="search-bar" role="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg><label for="search-input" class="visually-hidden">搜索关键词</label><input id="search-input" type="search" placeholder="搜索标题、标签或正文" autocomplete="off" spellcheck="false" aria-describedby="search-status" aria-controls="search-results"><button type="button" class="search-close" aria-label="关闭搜索">Esc</button></form>
+<p class="search-status" id="search-status" role="status" aria-live="polite"></p><ul class="search-results" id="search-results" aria-label="搜索结果"></ul>
+<div class="search-foot" aria-hidden="true"><span><kbd>↑</kbd> <kbd>↓</kbd> 选择</span><span><kbd>Enter</kbd> 打开</span><span><kbd>Esc</kbd> 关闭</span></div>
+</dialog>
+
+<dialog class="image-dialog" id="image-dialog" aria-label="查看大图">
+<button class="image-close" type="button" aria-label="关闭大图"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+<img alt=""><p hidden></p>
+</dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="/assets/lumen.js" defer></script>
+</body>
+</html>

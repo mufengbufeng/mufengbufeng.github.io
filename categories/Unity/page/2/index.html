@@ -1,122 +1,150 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>苏杭小站</title>
-  <meta name="description" content="苏杭的游戏开发手记，记录 Unity、C#、技术探索与生活。">
-  <meta name="theme-color" content="#e60012"><meta name="color-scheme" content="only light">
-  <link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="/assets/journal.css">
-  <link rel="canonical" href="https://lshgame.com/categories/Unity/page/2/index.html">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#F6F7F5">
+<script>
+(function () {
+  var KEY = 'lumen-theme', root = document.documentElement, mode = null;
+  root.classList.add('js');
+  try { mode = localStorage.getItem(KEY); } catch (e) {}
+  if (mode !== 'light' && mode !== 'dark') {
+    mode = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+  root.setAttribute('data-theme', mode);
+  var meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.setAttribute('content', mode === 'dark' ? '#131922' : '#F6F7F5');
+})();
+</script>
+
+<title>Unity - 探索分类 - 苏杭小站</title>
+<meta name="description" content="苏杭的游戏开发手记，记录 Unity、C#、技术探索与生活。">
+<link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/lumen.css">
+<link rel="canonical" href="https://lshgame.com/categories/Unity/page/2/index.html">
 <meta name="generator" content="Hexo 7.3.0"></head>
-<body>
-  
-  <a class="skip" href="#main">跳转到内容</a>
-  <header class="header"><div class="header-inner">
-    <a class="brand" href="/" aria-label="苏杭小站首页"><span class="brand-word">苏杭小站</span><small>SUHANG'S JOURNAL</small></a>
-    <nav id="main-nav" aria-label="主导航">
-      <a class=""  href="/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10h-6v-7H9v7H3Z"/></svg>首页</a>
-      <a class="" href="/archives/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h5"/></svg>文章手记</a>
-      <a class="active" href="/categories/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/></svg>探索分类</a>
-      <a class="" href="/about/"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21v-3a8 8 0 0 1 16 0v3"/></svg>关于我</a>
-    </nav>
-    <div class="header-actions"><button class="search-open" aria-label="搜索文章"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 6 6"/></svg><span>搜索</span></button><button class="menu-toggle" aria-label="打开导航" aria-controls="main-nav" aria-expanded="false"><span></span><span></span><span></span></button></div>
-  </div></header>
-  <main id="main" class="shell inner-main"><section class="page-intro"><span class="section-kicker">EXPLORE THE JOURNAL</span><h1>Unity<span>.</span></h1><p>每一次思考，都是一次经验值的积累。这里保存着探索的足迹。</p><a class="quiet-link" href="/categories/">分类索引 ↗</a>　<a class="quiet-link" href="/tags/">标签索引 ↗</a></section>
-<div class="article-grid">
+<body data-mermaid="/assets/mermaid.min.js">
 
-  <article class="article-card">
-    <a class="card-art" href="/2025/11/02/Thoughts_on_OOP_to_Component-Based_to_ECS/" aria-label="阅读：关于OOP到组件式到ECS的思考"><img src="/assets/art/cover-orbit.webp" width="1200" height="800" alt="" loading="lazy" decoding="async"><span class="art-label">Unity</span><span class="art-arrow" aria-hidden="true">↗</span></a>
-    <div class="card-body"><div class="eyebrow"><time datetime="2025-11-02">2025.11.02</time><span>11 分钟阅读</span></div>
-    <h3><a href="/2025/11/02/Thoughts_on_OOP_to_Component-Based_to_ECS/">关于OOP到组件式到ECS的思考</a></h3>
-    <p>本文主要总结最近在学习ECS架构时的一些心得体会。主要关于OOP、组件式开发和ECS架构三者之间的联系。 面向对象在面向对象的开发中，如果我们需要复用一些...</p>
-    <a class="card-read" href="/2025/11/02/Thoughts_on_OOP_to_Component-Based_to_ECS/" aria-label="继续阅读：关于OOP到组件式到ECS的思考">继续阅读 <span>→</span></a></div>
-  </article>
+<a class="skip-link" href="#main">跳到正文</a>
+<header class="site-header" id="site-header"><div class="container header-inner">
+<a class="brand" href="/" aria-label="苏杭小站 首页"><svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="2" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 3v26M3 16h26" stroke="var(--c-grid)" stroke-width="1.5" stroke-dasharray="2 2"/><rect x="6" y="6" width="8" height="8" fill="var(--c-accent)"/></svg><span class="brand-name">苏杭小站</span></a>
+<nav class="site-nav" id="site-nav" aria-label="主导航"><ul>
 
-  <article class="article-card">
-    <a class="card-art" href="/2025/09/27/CSharp_Multithreading_RaceCondition/" aria-label="阅读：CSharp多线程之RaceCondition"><img src="/assets/art/cover-code.webp" width="1200" height="800" alt="" loading="lazy" decoding="async"><span class="art-label">Unity</span><span class="art-arrow" aria-hidden="true">↗</span></a>
-    <div class="card-body"><div class="eyebrow"><time datetime="2025-09-27">2025.09.27</time><span>4 分钟阅读</span></div>
-    <h3><a href="/2025/09/27/CSharp_Multithreading_RaceCondition/">CSharp多线程之RaceCondition</a></h3>
-    <p>1. 什么是 Race Condition当多个线程在没有同步机制的情况下同时读写共享数据，就可能导致数据不一致。典型场景： 1234567int cou...</p>
-    <a class="card-read" href="/2025/09/27/CSharp_Multithreading_RaceCondition/" aria-label="继续阅读：CSharp多线程之RaceCondition">继续阅读 <span>→</span></a></div>
-  </article>
+<li><a href="/">首页</a></li>
 
-  <article class="article-card">
-    <a class="card-art" href="/2025/09/27/Blittable_and_Non-Blittable_Typs/" aria-label="阅读：Blittable_and_Non-Blittable_Typs"><img src="/assets/art/cover-world.webp" width="1200" height="800" alt="" loading="lazy" decoding="async"><span class="art-label">Unity</span><span class="art-arrow" aria-hidden="true">↗</span></a>
-    <div class="card-body"><div class="eyebrow"><time datetime="2025-09-27">2025.09.27</time><span>2 分钟阅读</span></div>
-    <h3><a href="/2025/09/27/Blittable_and_Non-Blittable_Typs/">Blittable_and_Non-Blittable_Typs</a></h3>
-    <p>背景在 C# &amp;#x2F; .Net 中，有两种内存环境 托管内存（Managed Memory）由 CLR (Common Lauange Runtim...</p>
-    <a class="card-read" href="/2025/09/27/Blittable_and_Non-Blittable_Typs/" aria-label="继续阅读：Blittable_and_Non-Blittable_Typs">继续阅读 <span>→</span></a></div>
-  </article>
+<li><a href="/archives/">文章手记</a></li>
 
-  <article class="article-card">
-    <a class="card-art" href="/2025/09/27/Dots_Road_Core_Package_JobSystem_01_WaveCube_Example/" aria-label="阅读：Dots之路-核心包_JobSystem_01_WaveCube示例"><img src="/assets/art/cover-world.webp" width="1200" height="800" alt="" loading="lazy" decoding="async"><span class="art-label">Unity</span><span class="art-arrow" aria-hidden="true">↗</span></a>
-    <div class="card-body"><div class="eyebrow"><time datetime="2025-09-27">2025.09.27</time><span>7 分钟阅读</span></div>
-    <h3><a href="/2025/09/27/Dots_Road_Core_Package_JobSystem_01_WaveCube_Example/">Dots之路-核心包_JobSystem_01_WaveCube示例</a></h3>
-    <p>前言本文为 Metaverse大衍神君 Dots 之路的记录。仓库地址 RoadToDotsTutorials 基于 GameObject Compone...</p>
-    <a class="card-read" href="/2025/09/27/Dots_Road_Core_Package_JobSystem_01_WaveCube_Example/" aria-label="继续阅读：Dots之路-核心包_JobSystem_01_WaveCube示例">继续阅读 <span>→</span></a></div>
-  </article>
+<li><a href="/categories/" aria-current="page">探索分类</a></li>
 
-  <article class="article-card">
-    <a class="card-art" href="/2025/09/27/Dots_Road_Core_Package_JobSystem_01/" aria-label="阅读：Dots之路-核心包_JobSystem_01"><img src="/assets/art/cover-world.webp" width="1200" height="800" alt="" loading="lazy" decoding="async"><span class="art-label">Unity</span><span class="art-arrow" aria-hidden="true">↗</span></a>
-    <div class="card-body"><div class="eyebrow"><time datetime="2025-09-27">2025.09.27</time><span>2 分钟阅读</span></div>
-    <h3><a href="/2025/09/27/Dots_Road_Core_Package_JobSystem_01/">Dots之路-核心包_JobSystem_01</a></h3>
-    <p>前言本文为 Metaverse大衍神君 Dots 之路的记录。仓库地址 RoadToDotsTutorials 如何将主线程逻辑转移到 Jobs 工作线程...</p>
-    <a class="card-read" href="/2025/09/27/Dots_Road_Core_Package_JobSystem_01/" aria-label="继续阅读：Dots之路-核心包_JobSystem_01">继续阅读 <span>→</span></a></div>
-  </article>
+<li><a href="/about/">关于我</a></li>
 
-  <article class="article-card">
-    <a class="card-art" href="/2025/09/27/UI_Framework_Get_Other_UI/" aria-label="阅读：UI框架-获取其他界面"><img src="/assets/art/cover-world.webp" width="1200" height="800" alt="" loading="lazy" decoding="async"><span class="art-label">Unity</span><span class="art-arrow" aria-hidden="true">↗</span></a>
-    <div class="card-body"><div class="eyebrow"><time datetime="2025-09-27">2025.09.27</time><span>3 分钟阅读</span></div>
-    <h3><a href="/2025/09/27/UI_Framework_Get_Other_UI/">UI框架-获取其他界面</a></h3>
-    <p>在最近的开发中，因为最开始在设定框架的时候，在 UIManager 中开放了获取指定 UI 的接口，导致最近重构异常痛苦 为什么不要有获取其他界面的接口如...</p>
-    <a class="card-read" href="/2025/09/27/UI_Framework_Get_Other_UI/" aria-label="继续阅读：UI框架-获取其他界面">继续阅读 <span>→</span></a></div>
-  </article>
+</ul></nav>
+<div class="header-actions">
+<button class="icon-btn search-btn" type="button" aria-label="搜索文章" aria-haspopup="dialog" aria-controls="search-dialog" aria-keyshortcuts="/ Control+K Meta+K"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg><span class="label">搜索</span><kbd aria-hidden="true">/</kbd></button>
+<button class="icon-btn theme-toggle" type="button" aria-pressed="false" aria-label="夜间模式" title="切换到夜间模式"><svg class="icon-moon-line" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg><svg class="icon-moon-fill" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/><circle cx="18" cy="5" r="1.2"/><circle cx="21" cy="9" r=".8"/></svg></button>
+<button class="icon-btn menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="导航菜单"><svg class="icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+</div></div></header>
 
-  <article class="article-card">
-    <a class="card-art" href="/2025/08/25/YooAsset_Code_Reading_Resource_Loading_and_Unloading/" aria-label="阅读：YooAsset源码阅读-资源加载与卸载"><img src="/assets/art/cover-world.webp" width="1200" height="800" alt="" loading="lazy" decoding="async"><span class="art-label">Unity</span><span class="art-arrow" aria-hidden="true">↗</span></a>
-    <div class="card-body"><div class="eyebrow"><time datetime="2025-08-25">2025.08.25</time><span>62 分钟阅读</span></div>
-    <h3><a href="/2025/08/25/YooAsset_Code_Reading_Resource_Loading_and_Unloading/">YooAsset源码阅读-资源加载与卸载</a></h3>
-    <p>YooAsset源码阅读-资源加载卸载继续 YooAsset 的源码研究，本文将详细分析资源加载系统的核心机制，包括ResourcePackage、Res...</p>
-    <a class="card-read" href="/2025/08/25/YooAsset_Code_Reading_Resource_Loading_and_Unloading/" aria-label="继续阅读：YooAsset源码阅读-资源加载与卸载">继续阅读 <span>→</span></a></div>
-  </article>
+<main id="main" tabindex="-1">
+<div class="container"><div class="detail-list"><header class="page-head"><ol class="crumbs" aria-label="位置"><li><a href="/categories/">探索分类</a></li><li>Unity</li></ol><h1>Unity</h1><p>共 24 篇</p></header><ol class="post-list">
+<li class="post-item"><div class="post-date"><time datetime="2025-11-02"><span class="md">11月2日</span></time><span class="y">2025</span></div>
+<div class="post-info"><h2 class="post-title"><a href="/2025/11/02/Thoughts_on_OOP_to_Component-Based_to_ECS/">关于OOP到组件式到ECS的思考</a></h2>
+<p class="post-excerpt">本文主要总结最近在学习ECS架构时的一些心得体会。主要关于OOP、组件式开发和ECS架构三者之间的联系。 面向对象在面向对象的开发中，如果我们需要复用一些代码，通常会用到类的集成和多态。示例： 1234567891011121314151…</p>
+<div class="post-meta"><a class="meta-cat" href="/categories/Unity/">Unity</a>
+<span class="meta-tags"><a href="/tags/ECS/">#ECS</a><a href="/tags/OOP/">#OOP</a><a href="/tags/%E7%BB%84%E4%BB%B6%E5%BC%8F/">#组件式</a></span>
+<span>约 10 分钟读完</span></div></div></li>
 
-  <article class="article-card">
-    <a class="card-art" href="/2025/08/25/YooAsset_Code_Reading_Download/" aria-label="阅读：YooAsset源码阅读-Download"><img src="/assets/art/cover-world.webp" width="1200" height="800" alt="" loading="lazy" decoding="async"><span class="art-label">Unity</span><span class="art-arrow" aria-hidden="true">↗</span></a>
-    <div class="card-body"><div class="eyebrow"><time datetime="2025-08-25">2025.08.25</time><span>49 分钟阅读</span></div>
-    <h3><a href="/2025/08/25/YooAsset_Code_Reading_Download/">YooAsset源码阅读-Download</a></h3>
-    <p>继续 YooAsset 的下载系统代码研究，本文将详细介绍如何创建下载器相关代码 CreateResourceDownloaderByAll关键类 Pla...</p>
-    <a class="card-read" href="/2025/08/25/YooAsset_Code_Reading_Download/" aria-label="继续阅读：YooAsset源码阅读-Download">继续阅读 <span>→</span></a></div>
-  </article>
+<li class="post-item"><div class="post-date"><time datetime="2025-09-27"><span class="md">9月27日</span></time><span class="y">2025</span></div>
+<div class="post-info"><h2 class="post-title"><a href="/2025/09/27/CSharp_Multithreading_RaceCondition/">CSharp多线程之RaceCondition</a></h2>
+<p class="post-excerpt">1. 什么是 Race Condition当多个线程在没有同步机制的情况下同时读写共享数据，就可能导致数据不一致。典型场景： 1234567int counter = 0;void Increment()&amp;#123; // 多个线程同时运…</p>
+<div class="post-meta"><a class="meta-cat" href="/categories/Unity/">Unity</a>
+<span class="meta-tags"><a href="/tags/C/">#C#</a></span>
+<span>约 3 分钟读完</span></div></div></li>
 
-  <article class="article-card">
-    <a class="card-art" href="/2025/08/01/YooAssets_Source_Code_Reading_Initialization/" aria-label="阅读：YooAssets源码解读-初始化"><img src="/assets/art/cover-world.webp" width="1200" height="800" alt="" loading="lazy" decoding="async"><span class="art-label">Unity</span><span class="art-arrow" aria-hidden="true">↗</span></a>
-    <div class="card-body"><div class="eyebrow"><time datetime="2025-08-01">2025.08.01</time><span>22 分钟阅读</span></div>
-    <h3><a href="/2025/08/01/YooAssets_Source_Code_Reading_Initialization/">YooAssets源码解读-初始化</a></h3>
-    <p>YooAssets源码解读 - 初始化最近打完包，刚好有空，看一下项目中使用的 YooAsset 源码，这部分是关于初始化的代码。 YooAsset.In...</p>
-    <a class="card-read" href="/2025/08/01/YooAssets_Source_Code_Reading_Initialization/" aria-label="继续阅读：YooAssets源码解读-初始化">继续阅读 <span>→</span></a></div>
-  </article>
+<li class="post-item"><div class="post-date"><time datetime="2025-09-27"><span class="md">9月27日</span></time><span class="y">2025</span></div>
+<div class="post-info"><h2 class="post-title"><a href="/2025/09/27/Blittable_and_Non-Blittable_Typs/">Blittable_and_Non-Blittable_Typs</a></h2>
+<p class="post-excerpt">背景在 C# &amp;#x2F; .Net 中，有两种内存环境 托管内存（Managed Memory）由 CLR (Common Lauange Runtime) 管理，GC 可移动对象的位置 非托管内存（Unmanaged Memory）原…</p>
+<div class="post-meta"><a class="meta-cat" href="/categories/Unity/">Unity</a>
+<span class="meta-tags"><a href="/tags/C/">#C#</a></span>
+<span>约 2 分钟读完</span></div></div></li>
 
-  <article class="article-card">
-    <a class="card-art" href="/2025/07/14/Unity_Preload_System_Design_and_Implementation/" aria-label="阅读：Unity 预加载系统设计与实现"><img src="/assets/art/cover-world.webp" width="1200" height="800" alt="" loading="lazy" decoding="async"><span class="art-label">Unity</span><span class="art-arrow" aria-hidden="true">↗</span></a>
-    <div class="card-body"><div class="eyebrow"><time datetime="2025-07-14">2025.07.14</time><span>60 分钟阅读</span></div>
-    <h3><a href="/2025/07/14/Unity_Preload_System_Design_and_Implementation/">Unity 预加载系统设计与实现</a></h3>
-    <p>概述最近在开发一个微信小游戏，因为是 3D + 关卡制的，并且希望保证一个流畅的游戏体验，希望在关卡切换的时候没有 loading 过程，因此设计了一个预...</p>
-    <a class="card-read" href="/2025/07/14/Unity_Preload_System_Design_and_Implementation/" aria-label="继续阅读：Unity 预加载系统设计与实现">继续阅读 <span>→</span></a></div>
-  </article>
+<li class="post-item"><div class="post-date"><time datetime="2025-09-27"><span class="md">9月27日</span></time><span class="y">2025</span></div>
+<div class="post-info"><h2 class="post-title"><a href="/2025/09/27/Dots_Road_Core_Package_JobSystem_01_WaveCube_Example/">Dots之路-核心包_JobSystem_01_WaveCube示例</a></h2>
+<p class="post-excerpt">前言本文为 Metaverse大衍神君 Dots 之路的记录。仓库地址 RoadToDotsTutorials 基于 GameObject Component 方式1234567891011121314151617181920212223…</p>
+<div class="post-meta"><a class="meta-cat" href="/categories/Unity/">Unity</a>
+<span class="meta-tags"><a href="/tags/DOTS/">#DOTS</a></span>
+<span>约 6 分钟读完</span></div></div></li>
 
-</div>
+<li class="post-item"><div class="post-date"><time datetime="2025-09-27"><span class="md">9月27日</span></time><span class="y">2025</span></div>
+<div class="post-info"><h2 class="post-title"><a href="/2025/09/27/Dots_Road_Core_Package_JobSystem_01/">Dots之路-核心包_JobSystem_01</a></h2>
+<p class="post-excerpt">前言本文为 Metaverse大衍神君 Dots 之路的记录。仓库地址 RoadToDotsTutorials 如何将主线程逻辑转移到 Jobs 工作线程中执行TODO： Unity Jobs System 是什么 包含 C# Jobs …</p>
+<div class="post-meta"><a class="meta-cat" href="/categories/Unity/">Unity</a>
+<span class="meta-tags"><a href="/tags/DOTS/">#DOTS</a></span>
+<span>约 2 分钟读完</span></div></div></li>
 
-<nav class="pagination" aria-label="文章分页"><a class="extend prev" rel="prev" href="/categories/Unity/">← 上一页</a><a class="page-number" href="/categories/Unity/">1</a><span class="page-number current">2</span><a class="page-number" href="/categories/Unity/page/3/">3</a><a class="extend next" rel="next" href="/categories/Unity/page/3/">下一页 →</a></nav>
+<li class="post-item"><div class="post-date"><time datetime="2025-09-27"><span class="md">9月27日</span></time><span class="y">2025</span></div>
+<div class="post-info"><h2 class="post-title"><a href="/2025/09/27/UI_Framework_Get_Other_UI/">UI框架-获取其他界面</a></h2>
+<p class="post-excerpt">在最近的开发中，因为最开始在设定框架的时候，在 UIManager 中开放了获取指定 UI 的接口，导致最近重构异常痛苦 为什么不要有获取其他界面的接口如果开放了这类接口会让代码耦合度上升。 12345678910111213141516…</p>
+<div class="post-meta"><a class="meta-cat" href="/categories/Unity/">Unity</a>
+<span class="meta-tags"><a href="/tags/UGUI/">#UGUI</a></span>
+<span>约 2 分钟读完</span></div></div></li>
+
+<li class="post-item"><div class="post-date"><time datetime="2025-08-25"><span class="md">8月25日</span></time><span class="y">2025</span></div>
+<div class="post-info"><h2 class="post-title"><a href="/2025/08/25/YooAsset_Code_Reading_Resource_Loading_and_Unloading/">YooAsset源码阅读-资源加载与卸载</a></h2>
+<p class="post-excerpt">YooAsset源码阅读-资源加载卸载继续 YooAsset 的源码研究，本文将详细分析资源加载系统的核心机制，包括ResourcePackage、ResourceManager以及各种资源加载Provider的工作原理。 资源加载系统架…</p>
+<div class="post-meta"><a class="meta-cat" href="/categories/Unity/">Unity</a>
+<span class="meta-tags"><a href="/tags/YooAssets/">#YooAssets</a></span>
+<span>约 60 分钟读完</span></div></div></li>
+
+<li class="post-item"><div class="post-date"><time datetime="2025-08-25"><span class="md">8月25日</span></time><span class="y">2025</span></div>
+<div class="post-info"><h2 class="post-title"><a href="/2025/08/25/YooAsset_Code_Reading_Download/">YooAsset源码阅读-Download</a></h2>
+<p class="post-excerpt">继续 YooAsset 的下载系统代码研究，本文将详细介绍如何创建下载器相关代码 CreateResourceDownloaderByAll关键类 PlayModeImpl.cs ResourceDownloaderOperation.c…</p>
+<div class="post-meta"><a class="meta-cat" href="/categories/Unity/">Unity</a>
+<span class="meta-tags"><a href="/tags/YooAssets/">#YooAssets</a></span>
+<span>约 48 分钟读完</span></div></div></li>
+
+<li class="post-item"><div class="post-date"><time datetime="2025-08-01"><span class="md">8月1日</span></time><span class="y">2025</span></div>
+<div class="post-info"><h2 class="post-title"><a href="/2025/08/01/YooAssets_Source_Code_Reading_Initialization/">YooAssets源码解读-初始化</a></h2>
+<p class="post-excerpt">YooAssets源码解读 - 初始化最近打完包，刚好有空，看一下项目中使用的 YooAsset 源码，这部分是关于初始化的代码。 YooAsset.Initialize()初始化，主要记录 YooAsset 在初始化时做了什么 关键类 …</p>
+<div class="post-meta"><a class="meta-cat" href="/categories/Unity/">Unity</a>
+<span class="meta-tags"><a href="/tags/YooAssets/">#YooAssets</a></span>
+<span>约 20 分钟读完</span></div></div></li>
+
+<li class="post-item"><div class="post-date"><time datetime="2025-07-14"><span class="md">7月14日</span></time><span class="y">2025</span></div>
+<div class="post-info"><h2 class="post-title"><a href="/2025/07/14/Unity_Preload_System_Design_and_Implementation/">Unity 预加载系统设计与实现</a></h2>
+<p class="post-excerpt">概述最近在开发一个微信小游戏，因为是 3D + 关卡制的，并且希望保证一个流畅的游戏体验，希望在关卡切换的时候没有 loading 过程，因此设计了一个预加载系统。 系统架构设计核心组件预加载系统主要由三个核心组件构成： PreloadC…</p>
+<div class="post-meta"><a class="meta-cat" href="/categories/Unity/">Unity</a>
+<span class="meta-tags"><a href="/tags/%E4%BC%98%E5%8C%96/">#优化</a><a href="/tags/Unity/">#Unity</a></span>
+<span>约 46 分钟读完</span></div></div></li>
+</ol>
+<nav class="pagination" aria-label="文章分页">
+<a class="page-step" rel="prev" href="/categories/Unity/"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m14 6-6 6 6 6"/></svg>上一页</a>
+<ol class="page-cells"><li><a href="/categories/Unity/" aria-label="第 1 页">1</a></li><li><a href="/categories/Unity/page/2/" aria-current="page" aria-label="第 2 页，当前页">2</a></li><li><a href="/categories/Unity/page/3/" aria-label="第 3 页">3</a></li></ol>
+<span class="page-count">2 / 3</span>
+<a class="page-step" rel="next" href="/categories/Unity/page/3/">下一页<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m10 6 6 6-6 6"/></svg></a>
+</nav>
+</div></div>
 
 </main>
-  <footer class="footer"><div class="footer-red"><div class="shell"><a class="footer-brand" href="/">苏杭小站</a><span>每一份热爱，都值得存档。</span><a href="#main" class="footer-top" aria-label="返回页面顶部">↑</a></div></div><div class="footer-links shell"><div><a href="/archives/">文章归档</a><a href="/categories/">分类索引</a><a href="/tags/">全部标签</a><a href="/about/">关于与联系</a></div><span>© 2026 SuHang · 用 Hexo 记录日常</span></div></footer>
-  <dialog id="search-dialog" aria-labelledby="search-title" data-index="/journal-search.json" data-root="/">
-    <div class="search-head"><label id="search-title" for="search-input">发现一篇好文章</label><button class="search-close" aria-label="关闭搜索">×</button></div>
-    <input id="search-input" type="search" placeholder="搜索 Unity、热更新、C#…" autocomplete="off">
-    <p id="search-status" role="status">输入关键词，探索所有文章。</p><div id="search-results"></div>
-  </dialog>
-  <dialog id="image-dialog" aria-label="查看文章配图"><button class="image-close" aria-label="关闭配图">×</button><img alt=""><p></p></dialog>
-  <button class="floating-top" aria-label="回到顶部" title="回到顶部">↑</button><div class="toast" role="status"></div>
-  <script src="/assets/journal.js" defer></script>
-</body></html>
+
+<footer class="site-footer"><div class="container footer-inner"><div><a class="footer-brand" href="/">苏杭小站</a><p class="footer-slogan">时间匆匆流逝，希望留下点什么。</p></div>
+<nav aria-label="页脚导航"><ul class="footer-links"><li><a href="/archives/">文章归档</a></li><li><a href="/categories/">分类索引</a></li><li><a href="/tags/">全部标签</a></li><li><a href="/about/">关于与联系</a></li></ul></nav>
+<div class="footer-bottom"><span>© 2024–2026 SuHang，用 Hexo 记录日常</span><a class="back-top" href="#main">回到顶部 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 20V4m-6 6 6-6 6 6"/></svg></a></div></div></footer>
+
+<dialog class="search-dialog" id="search-dialog" aria-labelledby="search-title" data-index="/journal-search.json" data-root="/">
+<h2 id="search-title" class="visually-hidden">搜索文章</h2>
+<form class="search-bar" role="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg><label for="search-input" class="visually-hidden">搜索关键词</label><input id="search-input" type="search" placeholder="搜索标题、标签或正文" autocomplete="off" spellcheck="false" aria-describedby="search-status" aria-controls="search-results"><button type="button" class="search-close" aria-label="关闭搜索">Esc</button></form>
+<p class="search-status" id="search-status" role="status" aria-live="polite"></p><ul class="search-results" id="search-results" aria-label="搜索结果"></ul>
+<div class="search-foot" aria-hidden="true"><span><kbd>↑</kbd> <kbd>↓</kbd> 选择</span><span><kbd>Enter</kbd> 打开</span><span><kbd>Esc</kbd> 关闭</span></div>
+</dialog>
+
+<dialog class="image-dialog" id="image-dialog" aria-label="查看大图">
+<button class="image-close" type="button" aria-label="关闭大图"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+<img alt=""><p hidden></p>
+</dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="/assets/lumen.js" defer></script>
+</body>
+</html>
