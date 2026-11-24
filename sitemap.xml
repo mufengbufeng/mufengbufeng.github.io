@@ -317,7 +317,7 @@
   </url>
   
   <url>
-    <loc>https://lshgame.com/tags/index.html</loc>
+    <loc>https://lshgame.com/categories/index.html</loc>
     
     <lastmod>2025-11-19</lastmod>
     
@@ -326,7 +326,7 @@
   </url>
   
   <url>
-    <loc>https://lshgame.com/categories/index.html</loc>
+    <loc>https://lshgame.com/tags/index.html</loc>
     
     <lastmod>2025-11-19</lastmod>
     
@@ -665,14 +665,14 @@
   </url>
   
   <url>
-    <loc>https://lshgame.com/tags/AI-Memory/</loc>
+    <loc>https://lshgame.com/tags/GPU/</loc>
     <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://lshgame.com/tags/GPU/</loc>
+    <loc>https://lshgame.com/tags/AI-Memory/</loc>
     <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -714,6 +714,13 @@
   </url>
   
   <url>
+    <loc>https://lshgame.com/tags/%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2/</loc>
+    <lastmod>2026-11-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://lshgame.com/tags/%E5%AD%A6%E4%B9%A0/</loc>
     <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
@@ -736,13 +743,6 @@
   
   <url>
     <loc>https://lshgame.com/tags/CSharp/</loc>
-    <lastmod>2026-11-24</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://lshgame.com/tags/%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2/</loc>
     <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>

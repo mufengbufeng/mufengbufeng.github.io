@@ -478,6 +478,17 @@ a.page-step:hover { background: var(--c-sunken); color: var(--c-ink); }
 .about-card dl { display: grid; grid-template-columns: auto 1fr; gap: var(--sp-1) var(--sp-4); margin: 0; font-size: var(--fs-sm); }
 .about-card dt { color: var(--c-ink-3); }
 .about-card dd { margin: 0; font-variant-numeric: tabular-nums; }
+.about-contact { margin-top: var(--sp-5); padding-top: var(--sp-3); border-top: 1px dashed var(--c-grid); }
+.about-contact__list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-2); }
+.about-contact__link { display: flex; align-items: baseline; gap: var(--sp-2); color: var(--c-ink-2); font-size: var(--fs-sm); line-height: var(--lh-snug); }
+.about-contact__icon { flex: none; width: 15px; height: 15px; align-self: center; color: var(--c-ink-3); }
+.about-contact__label { flex: none; color: var(--c-ink-3); font-size: var(--fs-xs); letter-spacing: .04em; }
+.about-contact__value { min-width: 0; color: var(--c-ink); overflow-wrap: anywhere; }
+.about-contact__link:hover { color: var(--c-accent); }
+.about-contact__link:hover .about-contact__icon,
+.about-contact__link:hover .about-contact__label,
+.about-contact__link:hover .about-contact__value { color: var(--c-accent); }
+.about-contact__link:hover .about-contact__value { text-decoration: underline; text-underline-offset: 3px; }
 @media (max-width: 1023.98px) { .about-layout { grid-template-columns: minmax(0, 1fr); gap: var(--sp-6); } .about-card { position: static; } }
 
 /* =========================================================
