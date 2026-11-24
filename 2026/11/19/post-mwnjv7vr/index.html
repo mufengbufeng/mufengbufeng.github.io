@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#F6F7F5">
+<script>
+(function () {
+  var KEY = 'lumen-theme', root = document.documentElement, mode = null;
+  root.classList.add('js');
+  try { mode = localStorage.getItem(KEY); } catch (e) {}
+  if (mode !== 'light' && mode !== 'dark') {
+    mode = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+  root.setAttribute('data-theme', mode);
+  var meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.setAttribute('content', mode === 'dark' ? '#131922' : '#F6F7F5');
+})();
+</script>
+
+<title>引擎的模块结构 - 苏杭小站</title>
+<meta name="description" content="基础组件引擎的基础代码模块，包括线程管理机制、委托机制、智能指针工具、常用数学库、容器库、算法库、反射机制、宏定义、与模板工具、离线代码生成器及文件 I&amp;#x2F;O 库等。 输入设备模块负责处理来自键盘、鼠标、触摸屏、游戏手柄等输入设备的数据。例如在射击游戏中，输入设备模块会响应玩家按下扳机键的…">
+<link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/lumen.css">
+<link rel="canonical" href="https://lshgame.com/2026/11/19/post-mwnjv7vr/">
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body data-mermaid="/assets/mermaid.min.js">
+<div class="reading-progress" aria-hidden="true"></div>
+<a class="skip-link" href="#main">跳到正文</a>
+<header class="site-header" id="site-header"><div class="container header-inner">
+<a class="brand" href="/" aria-label="苏杭小站 首页"><svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="2" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 3v26M3 16h26" stroke="var(--c-grid)" stroke-width="1.5" stroke-dasharray="2 2"/><rect x="6" y="6" width="8" height="8" fill="var(--c-accent)"/></svg><span class="brand-name">苏杭小站</span></a>
+<nav class="site-nav" id="site-nav" aria-label="主导航"><ul>
+
+<li><a href="/">首页</a></li>
+
+<li><a href="/archives/" aria-current="page">文章手记</a></li>
+
+<li><a href="/categories/">探索分类</a></li>
+
+<li><a href="/about/">关于我</a></li>
+
+</ul></nav>
+<div class="header-actions">
+<button class="icon-btn search-btn" type="button" aria-label="搜索文章" aria-haspopup="dialog" aria-controls="search-dialog" aria-keyshortcuts="/ Control+K Meta+K"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg><span class="label">搜索</span><kbd aria-hidden="true">/</kbd></button>
+<button class="icon-btn theme-toggle" type="button" aria-pressed="false" aria-label="夜间模式" title="切换到夜间模式"><svg class="icon-moon-line" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg><svg class="icon-moon-fill" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/><circle cx="18" cy="5" r="1.2"/><circle cx="21" cy="9" r=".8"/></svg></button>
+<button class="icon-btn menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="导航菜单"><svg class="icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+</div></div></header>
+
+<main id="main" tabindex="-1">
+<article class="container post-shell"><header class="post-header"><ol class="crumbs" aria-label="位置"><li><a href="/archives/">文章手记</a></li></ol><h1>引擎的模块结构</h1><div class="post-meta"><time datetime="2026-11-19">2026 年 11 月 19 日</time><span>更新于 2026 年 11 月 24 日</span><span>约 3 分钟读完</span></div></header>
+<nav class="post-toc" aria-labelledby="toc-title"><p class="toc-title" id="toc-title">本文目录</p><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E7%BB%84%E4%BB%B6"><span class="toc-text">基础组件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BE%93%E5%85%A5%E8%AE%BE%E5%A4%87%E6%A8%A1%E5%9D%97"><span class="toc-text">输入设备模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF"><span class="toc-text">渲染管线</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B8%B2%E6%9F%93%E7%A1%AC%E4%BB%B6%E6%8E%A5%E5%8F%A3%E6%A8%A1%E5%9D%97"><span class="toc-text">渲染硬件接口模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%A8%E7%94%BB%E6%A8%A1%E5%9D%97"><span class="toc-text">动画模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%89%A9%E7%90%86%E5%BC%95%E6%93%8E"><span class="toc-text">物理引擎</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B2%92%E5%AD%90%E7%B3%BB%E7%BB%9F"><span class="toc-text">粒子系统</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#UI-%E6%A8%A1%E5%9D%97"><span class="toc-text">UI 模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86%E6%A8%A1%E5%9D%97"><span class="toc-text">资源管理模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9F%B3%E9%A2%91%E6%A8%A1%E5%9D%97"><span class="toc-text">音频模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AI-%E6%A8%A1%E5%9D%97"><span class="toc-text">AI 模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%84%9A%E6%9C%AC%E6%A8%A1%E5%9D%97"><span class="toc-text">脚本模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9D%97"><span class="toc-text">网络模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">总结</span></a></li></ol></nav>
+<div class="post-body"><details class="toc-inline"><summary>本文目录</summary><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E7%BB%84%E4%BB%B6"><span class="toc-text">基础组件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BE%93%E5%85%A5%E8%AE%BE%E5%A4%87%E6%A8%A1%E5%9D%97"><span class="toc-text">输入设备模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF"><span class="toc-text">渲染管线</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B8%B2%E6%9F%93%E7%A1%AC%E4%BB%B6%E6%8E%A5%E5%8F%A3%E6%A8%A1%E5%9D%97"><span class="toc-text">渲染硬件接口模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%A8%E7%94%BB%E6%A8%A1%E5%9D%97"><span class="toc-text">动画模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%89%A9%E7%90%86%E5%BC%95%E6%93%8E"><span class="toc-text">物理引擎</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B2%92%E5%AD%90%E7%B3%BB%E7%BB%9F"><span class="toc-text">粒子系统</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#UI-%E6%A8%A1%E5%9D%97"><span class="toc-text">UI 模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86%E6%A8%A1%E5%9D%97"><span class="toc-text">资源管理模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9F%B3%E9%A2%91%E6%A8%A1%E5%9D%97"><span class="toc-text">音频模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AI-%E6%A8%A1%E5%9D%97"><span class="toc-text">AI 模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%84%9A%E6%9C%AC%E6%A8%A1%E5%9D%97"><span class="toc-text">脚本模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9D%97"><span class="toc-text">网络模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">总结</span></a></li></ol></details><div class="prose" id="prose"><h2 id="基础组件"><a href="#基础组件" class="headerlink" title="基础组件"></a>基础组件</h2><p>引擎的基础代码模块，包括线程管理机制、委托机制、智能指针工具、常用数学库、容器库、算法库、反射机制、宏定义、与模板工具、离线代码生成器及文件 I&#x2F;O 库等。</p>
+<h2 id="输入设备模块"><a href="#输入设备模块" class="headerlink" title="输入设备模块"></a>输入设备模块</h2><p>负责处理来自键盘、鼠标、触摸屏、游戏手柄等输入设备的数据。例如在射击游戏中，输入设备模块会响应玩家按下扳机键的动作，从而触发玩家发射子弹。</p>
+<h2 id="渲染管线"><a href="#渲染管线" class="headerlink" title="渲染管线"></a>渲染管线</h2><p>这是处理游戏中图形渲染的核心部分，包括几何处理、光照计算、阴影绘制、纹理贴图及后处理效果等。</p>
+<h2 id="渲染硬件接口模块"><a href="#渲染硬件接口模块" class="headerlink" title="渲染硬件接口模块"></a>渲染硬件接口模块</h2><p>负责封装底层图形 API（如 OpenGL、DirectX、Vulkan 等）的调用，并提供统一接口，方便引擎在不同平台上执行渲染操作。例如，在赛车游戏中，该模块可根据平台硬件性能优化配置，如果底层支持，可实现高质量的光线追踪效果。</p>
+<h2 id="动画模块"><a href="#动画模块" class="headerlink" title="动画模块"></a>动画模块</h2><p>负责处理游戏角色和物体的动画效果，包括骨骼动画、顶点动画、精灵动画等。例如，在动作游戏中，动画模块确保主角攻击动作的流畅性和逼真度。</p>
+<h2 id="物理引擎"><a href="#物理引擎" class="headerlink" title="物理引擎"></a>物理引擎</h2><p>模拟现实世界的物理现象（包括碰撞检测、刚体动力学、布料模拟、流体模拟等），并将其应用到 游戏世界中。例如，在足球游戏中，物理引擎负责计算球员与足球的碰撞，以及足球在空中的运动轨迹</p>
+<h2 id="粒子系统"><a href="#粒子系统" class="headerlink" title="粒子系统"></a>粒子系统</h2><p>负责生成与控制大规模粒子效果，用于模拟自然现象活特殊视觉效果（烟雾、火焰、雨滴等）。</p>
+<h2 id="UI-模块"><a href="#UI-模块" class="headerlink" title="UI 模块"></a>UI 模块</h2><p>负责游戏用户界面的设计和显示，包括按钮、文本、图像等用户界面元素的布局和渲染。例如，在策略游戏中，UI 模块会负责显示玩家的资源、建筑菜单等信息</p>
+<h2 id="资源管理模块"><a href="#资源管理模块" class="headerlink" title="资源管理模块"></a>资源管理模块</h2><p>负责游戏资源（如模型、纹理、声音等）的加载、卸载和内存管理。例如，在角色扮演游戏中，自愿管理模块会在需要时加载场景自愿，并在不需要时卸载旧场景自愿</p>
+<h2 id="音频模块"><a href="#音频模块" class="headerlink" title="音频模块"></a>音频模块</h2><p>处理游戏中的声音效果，包括背景音乐、音效、语音等。例如，在恐怖游戏中，音频模块会根据游戏情景播放紧张的背景音乐和突发的恐怖音效</p>
+<h2 id="AI-模块"><a href="#AI-模块" class="headerlink" title="AI 模块"></a>AI 模块</h2><p>控制游戏中非玩家角色（NPC）的行为，包括决策制定、路径规划和设置反应机制等</p>
+<h2 id="脚本模块"><a href="#脚本模块" class="headerlink" title="脚本模块"></a>脚本模块</h2><p>为开发者提供编写游戏逻辑的接口，通常使用脚本语言 Lua、Python 等，便于快速迭代和调试，减少重新编译的时间，提升开发效率。</p>
+<h2 id="网络模块"><a href="#网络模块" class="headerlink" title="网络模块"></a>网络模块</h2><p>负责处理游戏中的网络通信，如客户端与服务器之间的数据传输，同人游戏同步等。例如，在多人竞技类游戏中，网络模块可同步玩家位置、动作、攻击信息，确保公平的游戏模块。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这些模块共同构成了游戏引擎的基本框架，使得游戏开发者能够在此基础上快速构建出各种类型的游戏。<br>游戏引擎通常由工具套件和运行时组件两部分组成，这里主要介绍的是运行时套件。与所有软件系统一样，游戏引擎是由多个软件层构建的，通常才用“上层依赖下层，下层不依赖上层”的分层设计结构。每层中各模块尽量保持独立，避免相互依赖，以实现低耦合、高重用的架构。这种设计理念在大型软件系统架构中非常关键。</p>
+</div>
+<footer class="post-foot">
+<nav class="post-nav" aria-label="相邻文章"><a rel="prev" class="prev is-only" style="grid-column: 1 / -1" href="/2026/10/16/post-mvae8joc/"><small>上一篇</small><span>与智能体的协作</span></a></nav></footer></div></article>
+</main>
+
+<footer class="site-footer"><div class="container footer-inner"><div><a class="footer-brand" href="/">苏杭小站</a><p class="footer-slogan">时间匆匆流逝，希望留下点什么。</p></div>
+<nav aria-label="页脚导航"><ul class="footer-links"><li><a href="/archives/">文章归档</a></li><li><a href="/categories/">分类索引</a></li><li><a href="/tags/">全部标签</a></li><li><a href="/about/">关于与联系</a></li></ul></nav>
+<div class="footer-bottom"><span>© 2024–2026 SuHang，用 Hexo 记录日常</span><a class="back-top" href="#main">回到顶部 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 20V4m-6 6 6-6 6 6"/></svg></a></div></div></footer>
+
+<dialog class="search-dialog" id="search-dialog" aria-labelledby="search-title" data-index="/journal-search.json" data-root="/">
+<h2 id="search-title" class="visually-hidden">搜索文章</h2>
+<form class="search-bar" role="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg><label for="search-input" class="visually-hidden">搜索关键词</label><input id="search-input" type="search" placeholder="搜索标题、标签或正文" autocomplete="off" spellcheck="false" aria-describedby="search-status" aria-controls="search-results"><button type="button" class="search-close" aria-label="关闭搜索">Esc</button></form>
+<p class="search-status" id="search-status" role="status" aria-live="polite"></p><ul class="search-results" id="search-results" aria-label="搜索结果"></ul>
+<div class="search-foot" aria-hidden="true"><span><kbd>↑</kbd> <kbd>↓</kbd> 选择</span><span><kbd>Enter</kbd> 打开</span><span><kbd>Esc</kbd> 关闭</span></div>
+</dialog>
+
+<dialog class="image-dialog" id="image-dialog" aria-label="查看大图">
+<button class="image-close" type="button" aria-label="关闭大图"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+<img alt=""><p hidden></p>
+</dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="/assets/lumen.js" defer></script>
+</body>
+</html>
