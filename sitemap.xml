@@ -11,18 +11,18 @@
   </url>
   
   <url>
-    <loc>https://lshgame.com/2026/10/16/post-mvae8joc/</loc>
+    <loc>https://lshgame.com/2026/10/09/post-mv0jwbet/</loc>
     
-    <lastmod>2026-10-16</lastmod>
+    <lastmod>2026-11-24</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://lshgame.com/2026/10/09/post-mv0jwbet/</loc>
+    <loc>https://lshgame.com/2026/10/16/post-mvae8joc/</loc>
     
-    <lastmod>2026-10-09</lastmod>
+    <lastmod>2026-11-24</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -637,7 +637,21 @@
   </url>
   
   <url>
-    <loc>https://lshgame.com/tags/%E5%BC%95%E6%93%8E%E5%BC%80%E5%8F%91/</loc>
+    <loc>https://lshgame.com/tags/English/</loc>
+    <lastmod>2026-11-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://lshgame.com/tags/AI/</loc>
+    <lastmod>2026-11-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://lshgame.com/tags/%E5%BC%95%E6%93%8E%E7%9F%A5%E8%AF%86/</loc>
     <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -756,6 +770,13 @@
   </url>
   
   <url>
+    <loc>https://lshgame.com/tags/%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F/</loc>
+    <lastmod>2026-11-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://lshgame.com/tags/%E7%AE%97%E6%B3%95/</loc>
     <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
@@ -764,13 +785,6 @@
   
   <url>
     <loc>https://lshgame.com/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</loc>
-    <lastmod>2026-11-24</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://lshgame.com/tags/%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F/</loc>
     <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -827,13 +841,6 @@
   
   <url>
     <loc>https://lshgame.com/tags/HybridCLR/</loc>
-    <lastmod>2026-11-24</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://lshgame.com/tags/AI/</loc>
     <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -926,7 +933,14 @@
   </url>
   
   <url>
-    <loc>https://lshgame.com/categories/%E5%BC%95%E6%93%8E%E5%BC%80%E5%8F%91/</loc>
+    <loc>https://lshgame.com/categories/English/</loc>
+    <lastmod>2026-11-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://lshgame.com/categories/%E6%B8%B8%E6%88%8F%E5%BC%95%E6%93%8E/</loc>
     <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
